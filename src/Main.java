@@ -4,7 +4,8 @@ public class Main {
 
 
     public static void main(String[] args) {
-    File sourceCode = new File("/Users/mac/IdeaProjects/Scanner-Compiler/Step1/inputs/sqrt.micro");
+    File sourceCode = new File(System.getProperty("user.dir") + "/Step1/inputs/sqrt.micro");
+    
     if (!sourceCode.exists()) {
         System.out.println("File does not exist.");
         return;
