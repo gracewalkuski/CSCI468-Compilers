@@ -32,7 +32,7 @@ func_body: decl stmt_list;
 /*STATEMENT LIST*/
 stmt_list: stmt stmt_list | /*EPSILON*/;
 stmt: base_stmt | if_stmt | while_stmt;
-base_stmt: decl stmt_list;
+base_stmt: assign_stmt | read_stmt | write_stmt | return_stmt;
 
 /*BASIC STATEMENTS*/
 assign_stmt: assign_expr;
