@@ -29,6 +29,17 @@ FLOAT:      'FLOAT';
 
 // Operators
 
+ASSIGN: ':=';
+ADD: '+';
+SUBTRACT: '-';
+MULTIPLY: '*';
+DIVIDE: '/';
+EQUAL: '=';
+NOTEQUAL: '!=';
+GT: '>';
+LT: '<';
+GTE: '>=';
+LTE: '<=';
 
 
 // Whitespace and Comments
