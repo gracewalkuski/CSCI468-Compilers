@@ -1,5 +1,6 @@
 /*
 
+
 THIS IS FOR LATER
 
 
@@ -29,8 +30,11 @@ public class Builder {
 
         CharStream input = new ANTLRInputStream(contents);
         LittleGrammarLexer lexer = new LittleGrammarLexer(input);
+
         //System.out.println("Tokens: " + lexer.getAllTokens() + "#");
+
         out.print(lexer.getAllTokens());
+        out.close();
 
         File out2 = new File(System.getProperty("user.dir") + "/OUTPUT.txt");
         String contents2 = fileToString(out2);
@@ -51,9 +55,8 @@ public class Builder {
 
         }
 
-        PrintWriter out3 = new PrintWriter(System.getProperty("user.dir") + "/OUTPUT.txt");
-        out3.print("");
-        out3.close();
+        out.close();
+        out = new PrintStream(System.getProperty("user.dir") + "/OUTPUT.txt");
 
         while(matcher.find()) {
 
@@ -64,7 +67,7 @@ public class Builder {
             //Print to console
             System.out.println("Token type: " + tokenReference.get(Integer.parseInt(tokenType)) + "\nValue: " + token);
 
-            out.print("Token type: " + tokenReference.get(Integer.parseInt(tokenType)) + "\nValue: " + token);
+            out.print("Token type: " + tokenReference.get(Integer.parseInt(tokenType)) + "\nValue: " + token + "\n\n");
 
             System.out.println();
         } } catch (FileNotFoundException fnfe) {
