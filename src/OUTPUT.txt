@@ -13,24 +13,6 @@ Value: STRING
 Token type: IDENTIFIER
 Value: dummy
 
-Token type: IDENTIFIER
-Value: is
-
-Token type: IDENTIFIER
-Value: dummy
-
-Token type: IDENTIFIER
-Value: to
-
-Token type: IDENTIFIER
-Value: satisfy
-
-Token type: IDENTIFIER
-Value: the
-
-Token type: IDENTIFIER
-Value: grammar
-
 Token type: KEYWORD
 Value: FLOAT
 
