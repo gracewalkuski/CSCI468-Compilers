@@ -15,14 +15,21 @@ import java.util.Scanner;
 
 public class Builder {
     public static void main(String[] args) {
-        File sourceCode = new File(System.getProperty("user.dir").replace("/src", "") + "/Step1/inputs/sqrt.micro");
 
+        File sourceCode = new File(System.getProperty("user.dir").replace("/src", "") + "/Step1/inputs/sqrt.micro");
+        PrintStream out = null;
+        try {
+            out = new PrintStream(System.getProperty("user.dir") + "/OUTPUT.txt");
+        } catch (FileNotFoundException fnfe) {
+            System.out.println("File does not exist.");
+        }
         String contents = fileToString(sourceCode);
 
         CharStream input = new ANTLRInputStream(contents);
         LittleGrammarLexer lexer = new LittleGrammarLexer(input);
+        //System.out.println("Tokens: " + lexer.getAllTokens() + "#");
+        out.print(lexer.getAllTokens());
         TokenStream tokens = new CommonTokenStream(lexer);
-        System.out.println(tokens.getText());
         //ExprParser parser = new ExprParser(tokens);
         //ExprParser.ExpressionContext uu = parser.expression();
         //for (int i = 0; i < uu.getChildCount(); ++i)
