@@ -1,4 +1,4 @@
-grammar LittleGrammar;
+lexer grammar LittleGrammar;
 /*
 //PROGRAM
 program: PROGRAM id BEGIN pgm_body END;
