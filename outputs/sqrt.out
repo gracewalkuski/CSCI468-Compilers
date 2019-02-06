@@ -24,7 +24,7 @@ Token Type: KEYWORD
 Value: FLOAT
 Token Type: IDENTIFIER
 Value: x1
-Token Type: null
+Token Type: OPERATOR
 Value: ,
 Token Type: IDENTIFIER
 Value: x2
@@ -34,7 +34,7 @@ Token Type: KEYWORD
 Value: FLOAT
 Token Type: IDENTIFIER
 Value: fx
-Token Type: null
+Token Type: OPERATOR
 Value: ,
 Token Type: IDENTIFIER
 Value: dfx
@@ -69,9 +69,7 @@ Value: error
 Token Type: OPERATOR
 Value: :=
 Token Type: FLOATLITERAL
-Value:  0
-Token Type: FLOATLITERAL
-Value: .001
+Value: 0.001
 Token Type: OPERATOR
 Value: ;
 Token Type: KEYWORD
@@ -90,11 +88,11 @@ Token Type: OPERATOR
 Value: :=
 Token Type: IDENTIFIER
 Value: x1
-Token Type: null
+Token Type: OPERATOR
 Value: *
 Token Type: IDENTIFIER
 Value: x1
-Token Type: null
+Token Type: OPERATOR
 Value: -
 Token Type: IDENTIFIER
 Value: n
@@ -105,10 +103,8 @@ Value: dfx
 Token Type: OPERATOR
 Value: :=
 Token Type: FLOATLITERAL
-Value:  2
-Token Type: FLOATLITERAL
-Value: .0
-Token Type: null
+Value: 2.0
+Token Type: OPERATOR
 Value: *
 Token Type: IDENTIFIER
 Value: x1
@@ -120,11 +116,11 @@ Token Type: OPERATOR
 Value: :=
 Token Type: IDENTIFIER
 Value: x1
-Token Type: null
+Token Type: OPERATOR
 Value: -
 Token Type: IDENTIFIER
 Value: fx
-Token Type: null
+Token Type: OPERATOR
 Value: /
 Token Type: IDENTIFIER
 Value: dfx
@@ -144,11 +140,11 @@ Token Type: OPERATOR
 Value: :=
 Token Type: IDENTIFIER
 Value: x1
-Token Type: null
+Token Type: OPERATOR
 Value: *
 Token Type: IDENTIFIER
 Value: x1
-Token Type: null
+Token Type: OPERATOR
 Value: -
 Token Type: IDENTIFIER
 Value: n
@@ -159,10 +155,8 @@ Value: dfx
 Token Type: OPERATOR
 Value: :=
 Token Type: FLOATLITERAL
-Value:  2
-Token Type: FLOATLITERAL
-Value: .0
-Token Type: null
+Value: 2.0
+Token Type: OPERATOR
 Value: *
 Token Type: IDENTIFIER
 Value: x1
@@ -174,11 +168,11 @@ Token Type: OPERATOR
 Value: :=
 Token Type: IDENTIFIER
 Value: x1
-Token Type: null
+Token Type: OPERATOR
 Value: -
 Token Type: IDENTIFIER
 Value: fx
-Token Type: null
+Token Type: OPERATOR
 Value: /
 Token Type: IDENTIFIER
 Value: dfx
@@ -192,13 +186,13 @@ Token Type: OPERATOR
 Value: (
 Token Type: IDENTIFIER
 Value: x1
-Token Type: null
+Token Type: OPERATOR
 Value: -
 Token Type: IDENTIFIER
 Value: x2
 Token Type: OPERATOR
 Value: )
-Token Type: null
+Token Type: OPERATOR
 Value: >
 Token Type: IDENTIFIER
 Value: error
@@ -218,11 +212,11 @@ Token Type: OPERATOR
 Value: :=
 Token Type: IDENTIFIER
 Value: x1
-Token Type: null
+Token Type: OPERATOR
 Value: *
 Token Type: IDENTIFIER
 Value: x1
-Token Type: null
+Token Type: OPERATOR
 Value: -
 Token Type: IDENTIFIER
 Value: n
@@ -233,10 +227,8 @@ Value: dfx
 Token Type: OPERATOR
 Value: :=
 Token Type: FLOATLITERAL
-Value:  2
-Token Type: FLOATLITERAL
-Value: .0
-Token Type: null
+Value: 2.0
+Token Type: OPERATOR
 Value: *
 Token Type: IDENTIFIER
 Value: x1
@@ -248,11 +240,11 @@ Token Type: OPERATOR
 Value: :=
 Token Type: IDENTIFIER
 Value: x1
-Token Type: null
+Token Type: OPERATOR
 Value: -
 Token Type: IDENTIFIER
 Value: fx
-Token Type: null
+Token Type: OPERATOR
 Value: /
 Token Type: IDENTIFIER
 Value: dfx

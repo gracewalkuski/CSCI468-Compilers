@@ -18,7 +18,7 @@ public class LittleGrammarParser extends Parser {
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, T__10=11, KEYWORD=12, STRINGLITERAL=13, IDENTIFIER=14, COMMENT=15, 
-		INTLITERAL=16, FLOATLITERAL=17, OPERATOR=18, WS=19, PROGRAM=20, BEGIN=21, 
+		FLOATLITERAL=16, INTLITERAL=17, OPERATOR=18, WS=19, PROGRAM=20, BEGIN=21, 
 		END=22, STRING=23, ASSIGNMENT=24, STRLITERAL=25, FLOAT=26, INT=27, VOID=28, 
 		FUNCTION=29, READ=30, WRITE=31, RETURN=32, IF=33, ENDIF=34, ELSE=35, WHILE=36, 
 		ENDWHILE=37, NEWLINE=38, DIGIT=39, LETTER=40;
@@ -58,10 +58,11 @@ public class LittleGrammarParser extends Parser {
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			"KEYWORD", "STRINGLITERAL", "IDENTIFIER", "COMMENT", "INTLITERAL", "FLOATLITERAL", 
-			"OPERATOR", "WS", "PROGRAM", "BEGIN", "END", "STRING", "ASSIGNMENT", 
-			"STRLITERAL", "FLOAT", "INT", "VOID", "FUNCTION", "READ", "WRITE", "RETURN", 
-			"IF", "ENDIF", "ELSE", "WHILE", "ENDWHILE", "NEWLINE", "DIGIT", "LETTER"
+			"KEYWORD", "STRINGLITERAL", "IDENTIFIER", "COMMENT", "FLOATLITERAL", 
+			"INTLITERAL", "OPERATOR", "WS", "PROGRAM", "BEGIN", "END", "STRING", 
+			"ASSIGNMENT", "STRLITERAL", "FLOAT", "INT", "VOID", "FUNCTION", "READ", 
+			"WRITE", "RETURN", "IF", "ENDIF", "ELSE", "WHILE", "ENDWHILE", "NEWLINE", 
+			"DIGIT", "LETTER"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -2447,13 +2448,13 @@ public class LittleGrammarParser extends Parser {
 		"\64\33\2\u00c1-\3\2\2\2\u00c2\u00c3\7 \2\2\u00c3\u00c4\5\24\13\2\u00c4"+
 		"/\3\2\2\2\u00c5\u00c6\7!\2\2\u00c6\u00c7\5\24\13\2\u00c7\61\3\2\2\2\u00c8"+
 		"\u00c9\7\"\2\2\u00c9\u00ca\5\64\33\2\u00ca\63\3\2\2\2\u00cb\u00cf\5\4"+
-		"\3\2\u00cc\u00cf\7\22\2\2\u00cd\u00cf\7\23\2\2\u00ce\u00cb\3\2\2\2\u00ce"+
+		"\3\2\u00cc\u00cf\7\23\2\2\u00cd\u00cf\7\22\2\2\u00ce\u00cb\3\2\2\2\u00ce"+
 		"\u00cc\3\2\2\2\u00ce\u00cd\3\2\2\2\u00cf\u00d2\3\2\2\2\u00d0\u00d3\5:"+
 		"\36\2\u00d1\u00d3\5<\37\2\u00d2\u00d0\3\2\2\2\u00d2\u00d1\3\2\2\2\u00d3"+
 		"\65\3\2\2\2\u00d4\u00d5\7\3\2\2\u00d5\u00d6\5\64\33\2\u00d6\u00d7\5\66"+
 		"\34\2\u00d7\u00da\3\2\2\2\u00d8\u00da\3\2\2\2\u00d9\u00d4\3\2\2\2\u00d9"+
 		"\u00d8\3\2\2\2\u00da\67\3\2\2\2\u00db\u00e0\5\64\33\2\u00dc\u00e0\5\4"+
-		"\3\2\u00dd\u00e0\7\22\2\2\u00de\u00e0\7\23\2\2\u00df\u00db\3\2\2\2\u00df"+
+		"\3\2\u00dd\u00e0\7\23\2\2\u00de\u00e0\7\22\2\2\u00df\u00db\3\2\2\2\u00df"+
 		"\u00dc\3\2\2\2\u00df\u00dd\3\2\2\2\u00df\u00de\3\2\2\2\u00e09\3\2\2\2"+
 		"\u00e1\u00e2\t\3\2\2\u00e2;\3\2\2\2\u00e3\u00e4\t\4\2\2\u00e4=\3\2\2\2"+
 		"\u00e5\u00e6\7#\2\2\u00e6\u00e7\5B\"\2\u00e7\u00e8\5\b\5\2\u00e8\u00e9"+
@@ -2463,7 +2464,7 @@ public class LittleGrammarParser extends Parser {
 		"\u00f3\u00f4\5\64\33\2\u00f4\u00f5\5D#\2\u00f5\u00f6\5\64\33\2\u00f6C"+
 		"\3\2\2\2\u00f7\u00f8\t\5\2\2\u00f8E\3\2\2\2\u00f9\u00fa\7&\2\2\u00fa\u00fb"+
 		"\5B\"\2\u00fb\u00fc\5\b\5\2\u00fc\u00fd\5$\23\2\u00fd\u00fe\7\'\2\2\u00fe"+
-		"G\3\2\2\2\u00ff\u0100\7\22\2\2\u0100I\3\2\2\2\u0101\u0102\7\23\2\2\u0102"+
+		"G\3\2\2\2\u00ff\u0100\7\23\2\2\u0100I\3\2\2\2\u0101\u0102\7\22\2\2\u0102"+
 		"K\3\2\2\2\u0103\u0104\7\33\2\2\u0104M\3\2\2\2\u0105\u0106\7(\2\2\u0106"+
 		"O\3\2\2\2\u0107\u0108\7\21\2\2\u0108Q\3\2\2\2\u0109\u010a\7\16\2\2\u010a"+
 		"S\3\2\2\2\u010b\u010c\7\24\2\2\u010cU\3\2\2\2\u010d\u010e\7\25\2\2\u010e"+
