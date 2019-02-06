@@ -5,9 +5,9 @@ java -jar ../lib/antlr-4.7.2-complete.jar LittleGrammar.g4
 javac LittleGrammar*.java
 javac Builder.java
 
-java Builder ../inputs/sqrt.micro
-java Builder ../inputs/fibonacci.micro
-java Builder ../inputs/loop.micro
-java Builder ..//inputs/nested.micro
+java Builder ../inputs/sqrt.micro sqrt
+java Builder ../inputs/fibonacci.micro fibonacci
+java Builder ../inputs/loop.micro loop
+java Builder ..//inputs/nested.micro nested
 
 cmd /k
