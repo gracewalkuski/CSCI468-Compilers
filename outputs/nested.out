@@ -2,9 +2,6 @@ Token Type: KEYWORD
 Value: PROGRAM
 Token Type: IDENTIFIER
 Value: sqrt
-Token Type: NEWLINE
-Value: 
-
 Token Type: KEYWORD
 Value: BEGIN
 Token Type: KEYWORD
@@ -13,7 +10,7 @@ Token Type: IDENTIFIER
 Value: dummy
 Token Type: OPERATOR
 Value: :=
-Token Type: STRLITERAL
+Token Type: STRINGLITERAL
 Value: "abcde"
 Token Type: OPERATOR
 Value: ;
@@ -177,11 +174,5 @@ Token Type: OPERATOR
 Value: ;
 Token Type: KEYWORD
 Value: END
-Token Type: NEWLINE
-Value: 
-
 Token Type: KEYWORD
 Value: END
-Token Type: NEWLINE
-Value: 
-

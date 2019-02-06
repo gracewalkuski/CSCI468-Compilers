@@ -17,11 +17,11 @@ public class LittleGrammarParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, T__10=11, KEYWORD=12, IDENTIFIER=13, COMMENT=14, INTLITERAL=15, 
-		FLOATLITERAL=16, STRLITERAL=17, NEWLINE=18, OPERATOR=19, WS=20, PROGRAM=21, 
-		BEGIN=22, END=23, STRING=24, ASSIGNMENT=25, FLOAT=26, INT=27, VOID=28, 
+		T__9=10, T__10=11, KEYWORD=12, STRINGLITERAL=13, IDENTIFIER=14, COMMENT=15, 
+		INTLITERAL=16, FLOATLITERAL=17, OPERATOR=18, WS=19, PROGRAM=20, BEGIN=21, 
+		END=22, STRING=23, ASSIGNMENT=24, STRLITERAL=25, FLOAT=26, INT=27, VOID=28, 
 		FUNCTION=29, READ=30, WRITE=31, RETURN=32, IF=33, ENDIF=34, ELSE=35, WHILE=36, 
-		ENDWHILE=37, DIGIT=38, LETTER=39;
+		ENDWHILE=37, NEWLINE=38, DIGIT=39, LETTER=40;
 	public static final int
 		RULE_program = 0, RULE_id = 1, RULE_pgm_body = 2, RULE_decl = 3, RULE_string_decl = 4, 
 		RULE_str = 5, RULE_var_decl = 6, RULE_var_type = 7, RULE_any_type = 8, 
@@ -58,10 +58,10 @@ public class LittleGrammarParser extends Parser {
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			"KEYWORD", "IDENTIFIER", "COMMENT", "INTLITERAL", "FLOATLITERAL", "STRLITERAL", 
-			"NEWLINE", "OPERATOR", "WS", "PROGRAM", "BEGIN", "END", "STRING", "ASSIGNMENT", 
-			"FLOAT", "INT", "VOID", "FUNCTION", "READ", "WRITE", "RETURN", "IF", 
-			"ENDIF", "ELSE", "WHILE", "ENDWHILE", "DIGIT", "LETTER"
+			"KEYWORD", "STRINGLITERAL", "IDENTIFIER", "COMMENT", "INTLITERAL", "FLOATLITERAL", 
+			"OPERATOR", "WS", "PROGRAM", "BEGIN", "END", "STRING", "ASSIGNMENT", 
+			"STRLITERAL", "FLOAT", "INT", "VOID", "FUNCTION", "READ", "WRITE", "RETURN", 
+			"IF", "ENDIF", "ELSE", "WHILE", "ENDWHILE", "NEWLINE", "DIGIT", "LETTER"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -2387,7 +2387,7 @@ public class LittleGrammarParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3)\u0114\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3*\u0114\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -2417,11 +2417,11 @@ public class LittleGrammarParser extends Parser {
 		"\3\2\2\2B\u00f3\3\2\2\2D\u00f7\3\2\2\2F\u00f9\3\2\2\2H\u00ff\3\2\2\2J"+
 		"\u0101\3\2\2\2L\u0103\3\2\2\2N\u0105\3\2\2\2P\u0107\3\2\2\2R\u0109\3\2"+
 		"\2\2T\u010b\3\2\2\2V\u010d\3\2\2\2X\u010f\3\2\2\2Z\u0111\3\2\2\2\\]\7"+
-		"\27\2\2]^\5\4\3\2^_\7\30\2\2_`\5\6\4\2`a\7\31\2\2a\3\3\2\2\2bc\7\17\2"+
+		"\26\2\2]^\5\4\3\2^_\7\27\2\2_`\5\6\4\2`a\7\30\2\2a\3\3\2\2\2bc\7\20\2"+
 		"\2c\5\3\2\2\2de\5\b\5\2ef\5\36\20\2f\7\3\2\2\2gh\5\n\6\2hi\5\b\5\2io\3"+
 		"\2\2\2jk\5\16\b\2kl\5\b\5\2lo\3\2\2\2mo\3\2\2\2ng\3\2\2\2nj\3\2\2\2nm"+
-		"\3\2\2\2o\t\3\2\2\2pq\7\32\2\2qr\5\4\3\2rs\7\33\2\2st\5\f\7\2t\13\3\2"+
-		"\2\2uv\7\23\2\2v\r\3\2\2\2wx\5\20\t\2xy\5\24\13\2y\17\3\2\2\2z{\t\2\2"+
+		"\3\2\2\2o\t\3\2\2\2pq\7\31\2\2qr\5\4\3\2rs\7\32\2\2st\5\f\7\2t\13\3\2"+
+		"\2\2uv\7\33\2\2v\r\3\2\2\2wx\5\20\t\2xy\5\24\13\2y\17\3\2\2\2z{\t\2\2"+
 		"\2{\21\3\2\2\2|\177\5\20\t\2}\177\7\36\2\2~|\3\2\2\2~}\3\2\2\2\177\23"+
 		"\3\2\2\2\u0080\u0081\5\4\3\2\u0081\u0082\5\26\f\2\u0082\25\3\2\2\2\u0083"+
 		"\u0084\7\3\2\2\u0084\u0085\5\4\3\2\u0085\u0086\5\26\f\2\u0086\u0089\3"+
@@ -2434,8 +2434,8 @@ public class LittleGrammarParser extends Parser {
 		"\2\2\u0099\35\3\2\2\2\u009a\u009b\5 \21\2\u009b\u009c\5\36\20\2\u009c"+
 		"\u009f\3\2\2\2\u009d\u009f\3\2\2\2\u009e\u009a\3\2\2\2\u009e\u009d\3\2"+
 		"\2\2\u009f\37\3\2\2\2\u00a0\u00a1\7\37\2\2\u00a1\u00a2\5\22\n\2\u00a2"+
-		"\u00a3\5\4\3\2\u00a3\u00a4\5\30\r\2\u00a4\u00a5\7\30\2\2\u00a5\u00a6\5"+
-		"\"\22\2\u00a6\u00a7\7\31\2\2\u00a7!\3\2\2\2\u00a8\u00a9\5\b\5\2\u00a9"+
+		"\u00a3\5\4\3\2\u00a3\u00a4\5\30\r\2\u00a4\u00a5\7\27\2\2\u00a5\u00a6\5"+
+		"\"\22\2\u00a6\u00a7\7\30\2\2\u00a7!\3\2\2\2\u00a8\u00a9\5\b\5\2\u00a9"+
 		"\u00aa\5$\23\2\u00aa#\3\2\2\2\u00ab\u00ac\5&\24\2\u00ac\u00ad\5$\23\2"+
 		"\u00ad\u00b0\3\2\2\2\u00ae\u00b0\3\2\2\2\u00af\u00ab\3\2\2\2\u00af\u00ae"+
 		"\3\2\2\2\u00b0%\3\2\2\2\u00b1\u00b5\5(\25\2\u00b2\u00b5\5> \2\u00b3\u00b5"+
@@ -2443,17 +2443,17 @@ public class LittleGrammarParser extends Parser {
 		"\'\3\2\2\2\u00b6\u00bb\5*\26\2\u00b7\u00bb\5.\30\2\u00b8\u00bb\5\60\31"+
 		"\2\u00b9\u00bb\5\62\32\2\u00ba\u00b6\3\2\2\2\u00ba\u00b7\3\2\2\2\u00ba"+
 		"\u00b8\3\2\2\2\u00ba\u00b9\3\2\2\2\u00bb)\3\2\2\2\u00bc\u00bd\5,\27\2"+
-		"\u00bd+\3\2\2\2\u00be\u00bf\5\4\3\2\u00bf\u00c0\7\33\2\2\u00c0\u00c1\5"+
+		"\u00bd+\3\2\2\2\u00be\u00bf\5\4\3\2\u00bf\u00c0\7\32\2\2\u00c0\u00c1\5"+
 		"\64\33\2\u00c1-\3\2\2\2\u00c2\u00c3\7 \2\2\u00c3\u00c4\5\24\13\2\u00c4"+
 		"/\3\2\2\2\u00c5\u00c6\7!\2\2\u00c6\u00c7\5\24\13\2\u00c7\61\3\2\2\2\u00c8"+
 		"\u00c9\7\"\2\2\u00c9\u00ca\5\64\33\2\u00ca\63\3\2\2\2\u00cb\u00cf\5\4"+
-		"\3\2\u00cc\u00cf\7\21\2\2\u00cd\u00cf\7\22\2\2\u00ce\u00cb\3\2\2\2\u00ce"+
+		"\3\2\u00cc\u00cf\7\22\2\2\u00cd\u00cf\7\23\2\2\u00ce\u00cb\3\2\2\2\u00ce"+
 		"\u00cc\3\2\2\2\u00ce\u00cd\3\2\2\2\u00cf\u00d2\3\2\2\2\u00d0\u00d3\5:"+
 		"\36\2\u00d1\u00d3\5<\37\2\u00d2\u00d0\3\2\2\2\u00d2\u00d1\3\2\2\2\u00d3"+
 		"\65\3\2\2\2\u00d4\u00d5\7\3\2\2\u00d5\u00d6\5\64\33\2\u00d6\u00d7\5\66"+
 		"\34\2\u00d7\u00da\3\2\2\2\u00d8\u00da\3\2\2\2\u00d9\u00d4\3\2\2\2\u00d9"+
 		"\u00d8\3\2\2\2\u00da\67\3\2\2\2\u00db\u00e0\5\64\33\2\u00dc\u00e0\5\4"+
-		"\3\2\u00dd\u00e0\7\21\2\2\u00de\u00e0\7\22\2\2\u00df\u00db\3\2\2\2\u00df"+
+		"\3\2\u00dd\u00e0\7\22\2\2\u00de\u00e0\7\23\2\2\u00df\u00db\3\2\2\2\u00df"+
 		"\u00dc\3\2\2\2\u00df\u00dd\3\2\2\2\u00df\u00de\3\2\2\2\u00e09\3\2\2\2"+
 		"\u00e1\u00e2\t\3\2\2\u00e2;\3\2\2\2\u00e3\u00e4\t\4\2\2\u00e4=\3\2\2\2"+
 		"\u00e5\u00e6\7#\2\2\u00e6\u00e7\5B\"\2\u00e7\u00e8\5\b\5\2\u00e8\u00e9"+
@@ -2463,11 +2463,11 @@ public class LittleGrammarParser extends Parser {
 		"\u00f3\u00f4\5\64\33\2\u00f4\u00f5\5D#\2\u00f5\u00f6\5\64\33\2\u00f6C"+
 		"\3\2\2\2\u00f7\u00f8\t\5\2\2\u00f8E\3\2\2\2\u00f9\u00fa\7&\2\2\u00fa\u00fb"+
 		"\5B\"\2\u00fb\u00fc\5\b\5\2\u00fc\u00fd\5$\23\2\u00fd\u00fe\7\'\2\2\u00fe"+
-		"G\3\2\2\2\u00ff\u0100\7\21\2\2\u0100I\3\2\2\2\u0101\u0102\7\22\2\2\u0102"+
-		"K\3\2\2\2\u0103\u0104\7\23\2\2\u0104M\3\2\2\2\u0105\u0106\7\24\2\2\u0106"+
-		"O\3\2\2\2\u0107\u0108\7\20\2\2\u0108Q\3\2\2\2\u0109\u010a\7\16\2\2\u010a"+
-		"S\3\2\2\2\u010b\u010c\7\25\2\2\u010cU\3\2\2\2\u010d\u010e\7\26\2\2\u010e"+
-		"W\3\2\2\2\u010f\u0110\7(\2\2\u0110Y\3\2\2\2\u0111\u0112\7)\2\2\u0112["+
+		"G\3\2\2\2\u00ff\u0100\7\22\2\2\u0100I\3\2\2\2\u0101\u0102\7\23\2\2\u0102"+
+		"K\3\2\2\2\u0103\u0104\7\33\2\2\u0104M\3\2\2\2\u0105\u0106\7(\2\2\u0106"+
+		"O\3\2\2\2\u0107\u0108\7\21\2\2\u0108Q\3\2\2\2\u0109\u010a\7\16\2\2\u010a"+
+		"S\3\2\2\2\u010b\u010c\7\24\2\2\u010cU\3\2\2\2\u010d\u010e\7\25\2\2\u010e"+
+		"W\3\2\2\2\u010f\u0110\7)\2\2\u0110Y\3\2\2\2\u0111\u0112\7*\2\2\u0112["+
 		"\3\2\2\2\20n~\u0088\u008e\u0098\u009e\u00af\u00b4\u00ba\u00ce\u00d2\u00d9"+
 		"\u00df\u00f1";
 	public static final ATN _ATN =

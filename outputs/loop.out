@@ -2,9 +2,6 @@ Token Type: KEYWORD
 Value: PROGRAM
 Token Type: IDENTIFIER
 Value: loop
-Token Type: NEWLINE
-Value: 
-
 Token Type: KEYWORD
 Value: BEGIN
 Token Type: KEYWORD
@@ -13,7 +10,7 @@ Token Type: IDENTIFIER
 Value: guess
 Token Type: OPERATOR
 Value: :=
-Token Type: STRLITERAL
+Token Type: STRINGLITERAL
 Value: "Guess a number: "
 Token Type: OPERATOR
 Value: ;
@@ -23,23 +20,27 @@ Token Type: IDENTIFIER
 Value: correct
 Token Type: OPERATOR
 Value: :=
-Token Type: IDENTIFIER
-Value: n
+Token Type: STRINGLITERAL
+Value: "Correct!\n"
+Token Type: OPERATOR
+Value: ;
 Token Type: KEYWORD
 Value: STRING
 Token Type: IDENTIFIER
 Value: wrong
 Token Type: OPERATOR
 Value: :=
-Token Type: IDENTIFIER
-Value: n
+Token Type: STRINGLITERAL
+Value: "Wrong!\n"
+Token Type: OPERATOR
+Value: ;
 Token Type: KEYWORD
 Value: STRING
 Token Type: IDENTIFIER
 Value: out1
 Token Type: OPERATOR
 Value: :=
-Token Type: STRLITERAL
+Token Type: STRINGLITERAL
 Value: "It took you "
 Token Type: OPERATOR
 Value: ;
@@ -49,7 +50,7 @@ Token Type: IDENTIFIER
 Value: out2
 Token Type: OPERATOR
 Value: :=
-Token Type: STRLITERAL
+Token Type: STRINGLITERAL
 Value: " guesses"
 Token Type: OPERATOR
 Value: ;
@@ -203,11 +204,5 @@ Token Type: OPERATOR
 Value: ;
 Token Type: KEYWORD
 Value: END
-Token Type: NEWLINE
-Value: 
-
 Token Type: KEYWORD
 Value: END
-Token Type: NEWLINE
-Value: 
-

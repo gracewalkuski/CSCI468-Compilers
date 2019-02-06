@@ -2,9 +2,6 @@ Token Type: KEYWORD
 Value: PROGRAM
 Token Type: IDENTIFIER
 Value: fibonacci
-Token Type: NEWLINE
-Value: 
-
 Token Type: KEYWORD
 Value: BEGIN
 Token Type: KEYWORD
@@ -13,7 +10,7 @@ Token Type: IDENTIFIER
 Value: input
 Token Type: OPERATOR
 Value: :=
-Token Type: STRLITERAL
+Token Type: STRINGLITERAL
 Value: "Please input an integer number: "
 Token Type: OPERATOR
 Value: ;
@@ -23,7 +20,7 @@ Token Type: IDENTIFIER
 Value: space
 Token Type: OPERATOR
 Value: :=
-Token Type: STRLITERAL
+Token Type: STRINGLITERAL
 Value: " "
 Token Type: OPERATOR
 Value: ;
@@ -33,8 +30,10 @@ Token Type: IDENTIFIER
 Value: eol
 Token Type: OPERATOR
 Value: :=
-Token Type: IDENTIFIER
-Value: n
+Token Type: STRINGLITERAL
+Value: "\n"
+Token Type: OPERATOR
+Value: ;
 Token Type: KEYWORD
 Value: FUNCTION
 Token Type: KEYWORD
@@ -225,9 +224,5 @@ Token Type: KEYWORD
 Value: ENDWHILE
 Token Type: KEYWORD
 Value: END
-Token Type: NEWLINE
-Value: 
-
-
 Token Type: KEYWORD
 Value: END

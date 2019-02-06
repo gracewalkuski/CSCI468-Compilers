@@ -77,21 +77,21 @@ letter: LETTER;
 //---------------------------------------------------//
 
 KEYWORD: 'PROGRAM' | 'BEGIN'| 'END' | 'FUNCTION' | 'READ' | 'WRITE' | 'IF' | 'ELSE' | 'ENDIF' | 'WHILE' | 'ENDWHILE' | 'CONTINUE' | 'BREAK' | 'RETURN' | 'INT' | 'VOID' | 'STRING' | 'FLOAT';
+STRINGLITERAL : '"'( LETTER | '_' | ' ' | SPECIALCHAR)+ '"' ;
 IDENTIFIER: LETTER+(LETTER | DIGIT)*;
-COMMENT: '--'(.)*?NEWLINE -> skip;
+COMMENT: '--'(.)*?(('\r'? '\n' | '\r')+) -> skip;
 INTLITERAL : DIGIT+;
 FLOATLITERAL : DIGIT*.DIGIT+;
-STRLITERAL : '"' + ( LETTER | '_' | ' ' | SPECIALCHAR) + '"' ;
-NEWLINE: ('\r'? '\n' | '\r')+;
+//NEWLINE: ('\r'? '\n' | '\r')+;
 
 OPERATOR: ':=' | '+' | '-' | '*' | '/' | '=' | '!=' | '<' | '>' | '(' | ')' | ';' | ','| '<=' | '>=' | '|';
 
 
-fragment DIGIT: [0-9]+ ;
+fragment DIGIT: [0-9];
 fragment LETTER: (UPPERCASE | LOWERCASE);
 fragment LOWERCASE: [a-z] ;
 fragment UPPERCASE: [A-Z] ;
-fragment SPECIALCHAR: (' ' | '!' | '$' | '%' | '&' | '(' | ')' | '*' | '+' | ',' | '-' | '.' | ':' | ';' | '<' | '>' | '?' | '@' | '_' );
+fragment SPECIALCHAR: (' ' | '!' | '$' | '%' | '&' | '(' | ')' | '*' | '+' | ',' | '-' | '.' | ':' | ';' | '<' | '>' | '?' | '@' | '_' | '\\' );
 
 
 WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines
