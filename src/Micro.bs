@@ -1,8 +1,9 @@
  #!/bin/bash
 export CLASSPATH="../lib/antlr-4.7.2-complete.jar:$CLASSPATH"
-java -Xmx500M -cp "../lib/antlr-4.7.2-complete.jar:$CLASSPATH" org.antlr.v4.Tool LittleGrammar.g4
-javac LittleGrammar*.java
-javac Builder.java
+java -Xmx500M -cp "../lib/antlr-4.7.2-complete.jar:$CLASSPATH" org.antlr.v4.Tool ../gen/LittleGrammar.g4
+javac -d ../gen/ Builder.java ../gen/LittleGrammar*.java
+
+cd ../gen/
 
 java Builder ../inputs/fibonacci.micro fibonacci
 java Builder ../inputs/loop.micro loop
