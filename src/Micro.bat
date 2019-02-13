@@ -1,5 +1,6 @@
 ::This is the batch file that compiles all java files, and runs the java
 ::Driver file Builder.java with the four provided .micro files
+SET CLASSPATH=.;../lib/antlr-4.7.2-complete.jar;%CLASSPATH%
 java -jar ../lib/antlr-4.7.2-complete.jar -o ../gen LittleGrammar.g4
 
 javac -d ../gen Builder.java ../gen/LittleGrammar*.java
