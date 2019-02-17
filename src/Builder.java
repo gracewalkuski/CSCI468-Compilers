@@ -7,6 +7,7 @@ THIS IS FOR LATER
  */
 
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.tree.*;
 import java.io.PrintWriter;
 
 
@@ -28,9 +29,12 @@ public class Builder {
             //Create a lexer using the compiled (name of file)lexer.class from the .g4 file
             LittleGrammarLexer lexer = new LittleGrammarLexer(cs);
             //Create a token stream from output of the lexer
-            //CommonTokenStream tokens = new CommonTokenStream(lexer);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            LittleGrammarParser parser = new LittleGrammarParser(tokens);
+            ParseTree tree = parser.program();
+            System.out.println(tree.toStringTree(parser));
 
-            printTokens(lexer, outFile);
+            //printTokens(lexer, outFile);
         }
         else{
             System.out.println("File Path or outfile name not provided");
