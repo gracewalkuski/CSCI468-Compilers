@@ -13,7 +13,7 @@ str: STRINGLITERAL;
 //VARIABLE DECLARATION
 var_decl: var_type id_list ';';
 var_type: 'FLOAT' | 'INT';
-any_type: var_type | VOID;
+any_type: var_type | 'VOID';
 id_list: id id_tail;
 id_tail: ',' id id_tail | /*EPSILON*/;
 
@@ -33,22 +33,22 @@ stmt: base_stmt | if_stmt | while_stmt;
 base_stmt: assign_stmt | read_stmt | write_stmt | return_stmt;
 
 //BASIC STATEMENTS
-assign_stmt: assign_expr;
+assign_stmt: assign_expr ';';
 assign_expr: id ':=' expr;
-read_stmt: 'READ' ( id_list );
-write_stmt: 'WRITE' ( id_list );
-return_stmt: 'RETURN' expr ;
+read_stmt: 'READ' '(' id_list ')'';';
+write_stmt: 'WRITE' '(' id_list ')'';';
+return_stmt: 'RETURN' expr ';';
 
 
 //EXPRESSIONS
-//expr: expr_prefix factor;
-expr: (id | INTLITERAL | FLOATLITERAL) (addop | mulop | compop);
-//expr_prefix: expr_prefix factor addop | /*EPSILON*/;
-//factor: factor_prefix postfix_expr;
-//factor_prefix: factor_prefix postfix_expr mulop | /*EPSILON*/;
-//postfix_expr: primary | call_expr;
-//call_expr: id ( expr_list );
-//expr_list: expr expr_list_tail | /*EPSILON*/;
+expr: expr_prefix factor; //THIS
+//expr: (id | INTLITERAL | FLOATLITERAL) (addop | mulop | compop);
+expr_prefix: expr_prefix factor addop | /*EPSILON*/; //THIS
+factor: factor_prefix postfix_expr; //THIS
+factor_prefix: factor_prefix postfix_expr mulop | /*EPSILON*/; //THIS
+postfix_expr: primary | call_expr; //THIS
+call_expr: id '(' expr_list ')'; //THIS
+expr_list: expr expr_list_tail | /*EPSILON*/; //THIS
 expr_list_tail: ',' expr expr_list_tail | /*EPSILON*/;
 primary: '(' expr ')' | id | INTLITERAL | FLOATLITERAL;
 addop: '+' | '-';
@@ -61,7 +61,7 @@ cond: expr compop expr;
 compop: '<' | '>' | '=' | '!=' | '<=' | '>=';
 
 //WHILE STATEMENTS
-while_stmt: 'WHILE' ( cond ) decl stmt_list 'ENDWHILE';
+while_stmt: 'WHILE' '(' cond ')' decl stmt_list 'ENDWHILE';
 
 
 //---------------------------------------------------//
