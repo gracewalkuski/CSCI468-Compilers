@@ -1,24 +1,16 @@
-/*
-
-
-THIS IS FOR LATER
-
-
- */
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import java.io.PrintWriter;
 
-
-public class Builder {
+public class Step1 {
 
     public static void main(String[] args) throws Exception {
         String filePath = "null";
         String outFile = "null";
 
-        if (args.length > 1) {
-            //System.out.println(args[0]);
+        //If only one argument given, check the output of the parser
+        if (args.length == 2) {
             //args[0] is the next string after the name of the Java file:
             //$ java Builder apple -> agrs[0] == apple
             filePath = args[0];
@@ -26,23 +18,22 @@ public class Builder {
 
             //Create a char stream for input into the lexer
             CharStream cs = CharStreams.fromFileName(filePath);//input string here
+
             //Create a lexer using the compiled (name of file)lexer.class from the .g4 file
             LittleGrammarLexer lexer = new LittleGrammarLexer(cs);
+
             //Create a token stream from output of the lexer
             CommonTokenStream tokens = new CommonTokenStream(lexer);
-            LittleGrammarParser parser = new LittleGrammarParser(tokens);
-            ParseTree tree = parser.program();
-            System.out.println(tree.toStringTree(parser));
 
-            //printTokens(lexer, outFile);
+            //Create a parser from the output of tokens from the CommonTokenStream
+            LittleGrammarParser parser = new LittleGrammarParser(tokens);
+
+            printTokens(lexer, outFile);
         }
-        else{
+        else {
             System.out.println("File Path or outfile name not provided");
         }
-
-
-        //Use the parser on the tokens to check the semantics
-        //LittleGrammarParser parser = new LittleGrammarParser(tokens);
+        
     }
 
     private static void printTokens(LittleGrammarLexer l, String o) throws Exception {

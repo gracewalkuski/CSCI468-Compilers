@@ -2,12 +2,12 @@
 export CLASSPATH="../lib/antlr-4.7.2-complete.jar:$CLASSPATH"
 # java -Xmx500M -cp "../lib/antlr-4.7.2-complete.jar:$CLASSPATH" org.antlr.v4.Tool ../gen/LittleGrammar.g4
 java -jar ../lib/antlr-4.7.2-complete.jar -o ../gen LittleGrammar.g4
-javac -d ../gen/ Builder.java ../gen/LittleGrammar*.java
+javac -d ../gen/ Step1.java ../gen/LittleGrammar*.java
 
 cd ../gen/
 
-java Builder ../inputs/fibonacci.micro fibonacci
-java Builder ../inputs/loop.micro loop
-java Builder ../inputs/nested.micro nested
-java Builder ../inputs/sqrt.micro sqrt
+java Step1 ../inputs/fibonacci.micro fibonacci
+java Step1 ../inputs/loop.micro loop
+java Step1 ../inputs/nested.micro nested
+java Step1 ../inputs/sqrt.micro sqrt
 
