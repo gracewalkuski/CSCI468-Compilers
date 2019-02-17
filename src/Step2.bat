@@ -2,7 +2,7 @@
 ::Driver file Step1.java with the four provided .micro files
 SET CLASSPATH=.;../lib/antlr-4.7.2-complete.jar;%CLASSPATH%
 java -jar ../lib/antlr-4.7.2-complete.jar -o ../gen LittleGrammar.g4
-
+javac ../gen/LittleGrammar*.java
 javac -d ../gen/ Step2.java -cp ../gen/;../lib/antlr-4.7.2-complete.jar
 
 cd ../gen
