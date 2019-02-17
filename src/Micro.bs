@@ -1,6 +1,7 @@
  #!/bin/bash
 export CLASSPATH="../lib/antlr-4.7.2-complete.jar:$CLASSPATH"
-java -Xmx500M -cp "../lib/antlr-4.7.2-complete.jar:$CLASSPATH" org.antlr.v4.Tool ../gen/LittleGrammar.g4
+# java -Xmx500M -cp "../lib/antlr-4.7.2-complete.jar:$CLASSPATH" org.antlr.v4.Tool ../gen/LittleGrammar.g4
+java -jar ../lib/antlr-4.7.2-complete.jar -o ../gen LittleGrammar.g4
 javac -d ../gen/ Builder.java ../gen/LittleGrammar*.java
 
 cd ../gen/
