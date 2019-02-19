@@ -48,6 +48,7 @@ public class Step2 {
         //Create file writer, to write new file with outFile name to directory /outputs
         PrintWriter writer = new PrintWriter("../outputs/" + outFile,"UTF-8");
 
+        //Compare number of syntax errors from parse tree
         if (p.getNumberOfSyntaxErrors() == 0) {
             writer.printf("Accepted");
         }
