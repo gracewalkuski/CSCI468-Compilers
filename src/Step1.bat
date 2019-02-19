@@ -5,6 +5,7 @@ java -jar ../lib/antlr-4.7.2-complete.jar -o ../gen LittleGrammar.g4
 
 javac -d ../gen Step1.java ../gen/LittleGrammar*.java
 
+mkdir "../outputs"
 cd ../gen
 
 java Step1 ../inputs/sqrt.micro sqrt
@@ -12,4 +13,5 @@ java Step1 ../inputs/fibonacci.micro fibonacci
 java Step1 ../inputs/loop.micro loop
 java Step1 ../inputs/nested.micro nested
 
+cd ../src
 cmd /k
