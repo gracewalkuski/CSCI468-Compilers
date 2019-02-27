@@ -1,4 +1,4 @@
- #!/bin/bash
+ #!/bin/sh
 export CLASSPATH="../lib/antlr-4.7.2-complete.jar:$CLASSPATH"
 
 java -jar ../lib/antlr-4.7.2-complete.jar -o ../gen LittleGrammar.g4
