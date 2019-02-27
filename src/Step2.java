@@ -8,14 +8,12 @@ public class Step2 {
 
     public static void main(String[] args) throws Exception {
         String filePath = "null";
-        String outFile = "null";
 
         //If only one argument given, check the output of the parser
-        if (args.length == 2) {
+        if (args.length == 1) {
             //args[0] is the next string after the name of the Java file:
             //$ java Builder apple -> agrs[0] == apple
             filePath = args[0];
-            outFile = args[1];
             //Create a char stream for input into the lexer
             CharStream cs = CharStreams.fromFileName(filePath);//input string here
 
@@ -28,7 +26,7 @@ public class Step2 {
             //Create a parser from the output of tokens from the CommonTokenStream
             LittleGrammarParser parser = new LittleGrammarParser(tokens);
 
-            printParserStatus(parser, outFile);
+            printParserStatus(parser);
         }
         else {
             System.out.println("File Path or outfile name not provided");
@@ -36,27 +34,20 @@ public class Step2 {
     }
 
 
-    private static void printParserStatus(LittleGrammarParser p, String o) throws Exception {
+    private static void printParserStatus(LittleGrammarParser p) throws Exception {
         LittleGrammarBaseListener listener = new LittleGrammarBaseListener();
         //p.addParseListener(listener);
         ParseTree tree = p.program();
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(listener, tree);
 
-        //make outfile name
-        String outFile = o + "Test.out";
-	File file = new File("../src/usertest/" + outFile);
-        //System.out.println(outFile);
-        //Create file writer, to write new file with outFile name to directory /outputs
-        PrintWriter writer = new PrintWriter(file,"UTF-8");
 
         //Compare number of syntax errors from parse tree
         if (p.getNumberOfSyntaxErrors() == 0) {
-            writer.printf("Accepted");
+            System.out.printf("Accepted\n");
         }
         else {
-            writer.printf("Not Accepted");
+            System.out.printf("Not Accepted\n");
         }
-        writer.close();
     }
 }
