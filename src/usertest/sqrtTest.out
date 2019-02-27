@@ -1,0 +1,268 @@
+Token Type: null
+Value: PROGRAM
+Token Type: IDENTIFIER
+Value: sqrt
+Token Type: null
+Value: BEGIN
+Token Type: null
+Value: STRING
+Token Type: IDENTIFIER
+Value: dummy
+Token Type: null
+Value: :=
+Token Type: STRINGLITERAL
+Value: "abcde"
+Token Type: null
+Value: ;
+Token Type: null
+Value: FLOAT
+Token Type: IDENTIFIER
+Value: n
+Token Type: null
+Value: ;
+Token Type: null
+Value: FLOAT
+Token Type: IDENTIFIER
+Value: x1
+Token Type: null
+Value: ,
+Token Type: IDENTIFIER
+Value: x2
+Token Type: null
+Value: ;
+Token Type: null
+Value: FLOAT
+Token Type: IDENTIFIER
+Value: fx
+Token Type: null
+Value: ,
+Token Type: IDENTIFIER
+Value: dfx
+Token Type: null
+Value: ;
+Token Type: null
+Value: FLOAT
+Token Type: IDENTIFIER
+Value: error
+Token Type: null
+Value: ;
+Token Type: null
+Value: INT
+Token Type: IDENTIFIER
+Value: i
+Token Type: null
+Value: ;
+Token Type: null
+Value: FUNCTION
+Token Type: null
+Value: VOID
+Token Type: IDENTIFIER
+Value: main
+Token Type: null
+Value: (
+Token Type: null
+Value: )
+Token Type: null
+Value: BEGIN
+Token Type: IDENTIFIER
+Value: error
+Token Type: null
+Value: :=
+Token Type: FLOATLITERAL
+Value: 0.001
+Token Type: null
+Value: ;
+Token Type: null
+Value: READ
+Token Type: null
+Value: (
+Token Type: IDENTIFIER
+Value: x1
+Token Type: null
+Value: )
+Token Type: null
+Value: ;
+Token Type: IDENTIFIER
+Value: fx
+Token Type: null
+Value: :=
+Token Type: IDENTIFIER
+Value: x1
+Token Type: null
+Value: *
+Token Type: IDENTIFIER
+Value: x1
+Token Type: null
+Value: -
+Token Type: IDENTIFIER
+Value: n
+Token Type: null
+Value: ;
+Token Type: IDENTIFIER
+Value: dfx
+Token Type: null
+Value: :=
+Token Type: FLOATLITERAL
+Value: 2.0
+Token Type: null
+Value: *
+Token Type: IDENTIFIER
+Value: x1
+Token Type: null
+Value: ;
+Token Type: IDENTIFIER
+Value: x2
+Token Type: null
+Value: :=
+Token Type: IDENTIFIER
+Value: x1
+Token Type: null
+Value: -
+Token Type: IDENTIFIER
+Value: fx
+Token Type: null
+Value: /
+Token Type: IDENTIFIER
+Value: dfx
+Token Type: null
+Value: ;
+Token Type: IDENTIFIER
+Value: x1
+Token Type: null
+Value: :=
+Token Type: IDENTIFIER
+Value: x2
+Token Type: null
+Value: ;
+Token Type: IDENTIFIER
+Value: fx
+Token Type: null
+Value: :=
+Token Type: IDENTIFIER
+Value: x1
+Token Type: null
+Value: *
+Token Type: IDENTIFIER
+Value: x1
+Token Type: null
+Value: -
+Token Type: IDENTIFIER
+Value: n
+Token Type: null
+Value: ;
+Token Type: IDENTIFIER
+Value: dfx
+Token Type: null
+Value: :=
+Token Type: FLOATLITERAL
+Value: 2.0
+Token Type: null
+Value: *
+Token Type: IDENTIFIER
+Value: x1
+Token Type: null
+Value: ;
+Token Type: IDENTIFIER
+Value: x2
+Token Type: null
+Value: :=
+Token Type: IDENTIFIER
+Value: x1
+Token Type: null
+Value: -
+Token Type: IDENTIFIER
+Value: fx
+Token Type: null
+Value: /
+Token Type: IDENTIFIER
+Value: dfx
+Token Type: null
+Value: ;
+Token Type: null
+Value: WHILE
+Token Type: null
+Value: (
+Token Type: null
+Value: (
+Token Type: IDENTIFIER
+Value: x1
+Token Type: null
+Value: -
+Token Type: IDENTIFIER
+Value: x2
+Token Type: null
+Value: )
+Token Type: null
+Value: >
+Token Type: IDENTIFIER
+Value: error
+Token Type: null
+Value: )
+Token Type: IDENTIFIER
+Value: x1
+Token Type: null
+Value: :=
+Token Type: IDENTIFIER
+Value: x2
+Token Type: null
+Value: ;
+Token Type: IDENTIFIER
+Value: fx
+Token Type: null
+Value: :=
+Token Type: IDENTIFIER
+Value: x1
+Token Type: null
+Value: *
+Token Type: IDENTIFIER
+Value: x1
+Token Type: null
+Value: -
+Token Type: IDENTIFIER
+Value: n
+Token Type: null
+Value: ;
+Token Type: IDENTIFIER
+Value: dfx
+Token Type: null
+Value: :=
+Token Type: FLOATLITERAL
+Value: 2.0
+Token Type: null
+Value: *
+Token Type: IDENTIFIER
+Value: x1
+Token Type: null
+Value: ;
+Token Type: IDENTIFIER
+Value: x2
+Token Type: null
+Value: :=
+Token Type: IDENTIFIER
+Value: x1
+Token Type: null
+Value: -
+Token Type: IDENTIFIER
+Value: fx
+Token Type: null
+Value: /
+Token Type: IDENTIFIER
+Value: dfx
+Token Type: null
+Value: ;
+Token Type: null
+Value: ENDWHILE
+Token Type: null
+Value: WRITE
+Token Type: null
+Value: (
+Token Type: IDENTIFIER
+Value: x2
+Token Type: null
+Value: )
+Token Type: null
+Value: ;
+Token Type: null
+Value: END
+Token Type: null
+Value: END

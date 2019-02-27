@@ -1,0 +1,232 @@
+Token Type: null
+Value: PROGRAM
+Token Type: IDENTIFIER
+Value: fibonacci
+Token Type: null
+Value: BEGIN
+Token Type: null
+Value: STRING
+Token Type: IDENTIFIER
+Value: input
+Token Type: null
+Value: :=
+Token Type: STRINGLITERAL
+Value: "Please input an integer number: "
+Token Type: null
+Value: ;
+Token Type: null
+Value: STRING
+Token Type: IDENTIFIER
+Value: space
+Token Type: null
+Value: :=
+Token Type: STRINGLITERAL
+Value: " "
+Token Type: null
+Value: ;
+Token Type: null
+Value: STRING
+Token Type: IDENTIFIER
+Value: eol
+Token Type: null
+Value: :=
+Token Type: STRINGLITERAL
+Value: "\n"
+Token Type: null
+Value: ;
+Token Type: null
+Value: FUNCTION
+Token Type: null
+Value: INT
+Token Type: IDENTIFIER
+Value: F
+Token Type: null
+Value: (
+Token Type: null
+Value: INT
+Token Type: IDENTIFIER
+Value: n
+Token Type: null
+Value: )
+Token Type: null
+Value: BEGIN
+Token Type: null
+Value: IF
+Token Type: null
+Value: (
+Token Type: IDENTIFIER
+Value: n
+Token Type: null
+Value: >
+Token Type: INTLITERAL
+Value: 2
+Token Type: null
+Value: )
+Token Type: null
+Value: RETURN
+Token Type: IDENTIFIER
+Value: F
+Token Type: null
+Value: (
+Token Type: IDENTIFIER
+Value: n
+Token Type: null
+Value: -
+Token Type: INTLITERAL
+Value: 1
+Token Type: null
+Value: )
+Token Type: null
+Value: +
+Token Type: IDENTIFIER
+Value: F
+Token Type: null
+Value: (
+Token Type: IDENTIFIER
+Value: n
+Token Type: null
+Value: -
+Token Type: INTLITERAL
+Value: 2
+Token Type: null
+Value: )
+Token Type: null
+Value: ;
+Token Type: null
+Value: ELSE
+Token Type: null
+Value: RETURN
+Token Type: INTLITERAL
+Value: 1
+Token Type: null
+Value: ;
+Token Type: null
+Value: ENDIF
+Token Type: null
+Value: END
+Token Type: null
+Value: FUNCTION
+Token Type: null
+Value: VOID
+Token Type: IDENTIFIER
+Value: main
+Token Type: null
+Value: (
+Token Type: null
+Value: )
+Token Type: null
+Value: BEGIN
+Token Type: null
+Value: INT
+Token Type: IDENTIFIER
+Value: i
+Token Type: null
+Value: ,
+Token Type: IDENTIFIER
+Value: end
+Token Type: null
+Value: ,
+Token Type: IDENTIFIER
+Value: result
+Token Type: null
+Value: ;
+Token Type: null
+Value: WRITE
+Token Type: null
+Value: (
+Token Type: IDENTIFIER
+Value: input
+Token Type: null
+Value: )
+Token Type: null
+Value: ;
+Token Type: null
+Value: READ
+Token Type: null
+Value: (
+Token Type: IDENTIFIER
+Value: end
+Token Type: null
+Value: )
+Token Type: null
+Value: ;
+Token Type: IDENTIFIER
+Value: i
+Token Type: null
+Value: :=
+Token Type: INTLITERAL
+Value: 0
+Token Type: null
+Value: ;
+Token Type: null
+Value: WHILE
+Token Type: null
+Value: (
+Token Type: IDENTIFIER
+Value: i
+Token Type: null
+Value: !=
+Token Type: IDENTIFIER
+Value: end
+Token Type: null
+Value: )
+Token Type: IDENTIFIER
+Value: result
+Token Type: null
+Value: :=
+Token Type: IDENTIFIER
+Value: F
+Token Type: null
+Value: (
+Token Type: IDENTIFIER
+Value: i
+Token Type: null
+Value: )
+Token Type: null
+Value: ;
+Token Type: null
+Value: WRITE
+Token Type: null
+Value: (
+Token Type: IDENTIFIER
+Value: i
+Token Type: null
+Value: ,
+Token Type: IDENTIFIER
+Value: space
+Token Type: null
+Value: )
+Token Type: null
+Value: ;
+Token Type: null
+Value: WRITE
+Token Type: null
+Value: (
+Token Type: IDENTIFIER
+Value: result
+Token Type: null
+Value: ,
+Token Type: IDENTIFIER
+Value: eol
+Token Type: null
+Value: )
+Token Type: null
+Value: ;
+Token Type: IDENTIFIER
+Value: i
+Token Type: null
+Value: :=
+Token Type: IDENTIFIER
+Value: i
+Token Type: null
+Value: +
+Token Type: INTLITERAL
+Value: 1
+Token Type: null
+Value: ;
+Token Type: null
+Value: ENDWHILE
+Token Type: null
+Value: END
+Token Type: null
+Value: END

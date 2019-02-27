@@ -2,6 +2,7 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import java.io.PrintWriter;
+import java.io.File;
 
 public class Step1 {
 
@@ -42,10 +43,11 @@ public class Step1 {
         //Get Lexer vocabulary
         Vocabulary v = l.getVocabulary();
         //make outfile name
-        String outFile = o + ".out";
-        System.out.println(outFile);
+        String outFile = o + "Test.out";
+	File file = new File("../src/usertest/" + outFile);
+        //System.out.println(outFile);
         //Create file writer, to write new file with outFile name to directory /outputs
-        PrintWriter writer = new PrintWriter("../outputs/" + outFile,"UTF-8");
+        PrintWriter writer = new PrintWriter(file,"UTF-8");
 
         //Iterate through all tokens from lexer
         while (true) {

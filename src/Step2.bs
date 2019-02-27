@@ -5,6 +5,7 @@ java -jar ../lib/antlr-4.7.2-complete.jar -o ../gen LittleGrammar.g4
 javac ../gen/LittleGrammar*.java
 javac -d ../gen/ Step2.java -cp ../gen/:../lib/antlr-4.7.2-complete.jar
 
+mkdir -p "../outputs"
 cd ../gen
 
 java Step2 ../inputs/test1.micro ../outputs/test1.out

@@ -2,6 +2,7 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import java.io.PrintWriter;
+import java.io.File;
 
 public class Step2 {
 
@@ -35,7 +36,7 @@ public class Step2 {
     }
 
 
-    private static void printParserStatus(LittleGrammarParser p, String outputFileName) throws Exception {
+    private static void printParserStatus(LittleGrammarParser p, String o) throws Exception {
         LittleGrammarBaseListener listener = new LittleGrammarBaseListener();
         //p.addParseListener(listener);
         ParseTree tree = p.program();
@@ -43,10 +44,11 @@ public class Step2 {
         walker.walk(listener, tree);
 
         //make outfile name
-        String outFile = outputFileName;
-        System.out.println(outFile);
+        String outFile = o + "Test.out";
+	File file = new File("../src/usertest/" + outFile);
+        //System.out.println(outFile);
         //Create file writer, to write new file with outFile name to directory /outputs
-        PrintWriter writer = new PrintWriter("../outputs/" + outFile,"UTF-8");
+        PrintWriter writer = new PrintWriter(file,"UTF-8");
 
         //Compare number of syntax errors from parse tree
         if (p.getNumberOfSyntaxErrors() == 0) {
