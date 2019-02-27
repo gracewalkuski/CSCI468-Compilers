@@ -19,12 +19,13 @@ public class Step2 {
 
             //Create a lexer using the compiled (name of file)lexer.class from the .g4 file
             LittleGrammarLexer lexer = new LittleGrammarLexer(cs);
-
+	    
             //Create a token stream from output of the lexer
             CommonTokenStream tokens = new CommonTokenStream(lexer);
 
             //Create a parser from the output of tokens from the CommonTokenStream
             LittleGrammarParser parser = new LittleGrammarParser(tokens);
+	    parser.removeErrorListener(ConsoleErrorListener.INSTANCE);
 
             printParserStatus(parser);
         }
@@ -47,7 +48,7 @@ public class Step2 {
             System.out.printf("Accepted\n");
         }
         else {
-            System.out.printf("Not Accepted\n");
+            System.out.printf("Not accepted\n");
         }
     }
 }
