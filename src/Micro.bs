@@ -1,0 +1,17 @@
+ #!/bin/bash
+export CLASSPATH="../lib/antlr-4.7.2-complete.jar:$CLASSPATH"
+
+java -jar ../lib/antlr-4.7.2-complete.jar -o ../gen LittleGrammar.g4
+javac -d ../gen/ Step1.java ../gen/LittleGrammar*.java
+
+mkdir -p "../outputs"
+
+cd "../gen"
+
+#Removing the "." and file extension from string for java file argument
+TMP=${1%.*}
+#Removing the file path extension from string for java file argument
+FILENAME=${TMP##*/}
+
+#Execute Java file to run built grammar files on input file
+java Step1 $1 $FILENAME

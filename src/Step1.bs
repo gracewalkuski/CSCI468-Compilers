@@ -4,6 +4,7 @@ export CLASSPATH="../lib/antlr-4.7.2-complete.jar:$CLASSPATH"
 java -jar ../lib/antlr-4.7.2-complete.jar -o ../gen LittleGrammar.g4
 javac -d ../gen/ Step1.java ../gen/LittleGrammar*.java
 
+mkdir "../outputs"
 cd ../gen/
 
 java Step1 ../inputs/fibonacci.micro fibonacci
