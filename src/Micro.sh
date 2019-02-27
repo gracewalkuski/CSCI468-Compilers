@@ -9,13 +9,5 @@ mkdir -p "outputs"
 
 cd "../gen"
 
-#Removing the "." and file extension from string for java file argument
-TMP=${1%.*}
-#Removing the file path extension from string for java file argument
-FILENAME=${TMP##*/}
-
-echo $1
-echo $FILENAME
-
 #Execute Java file to run built grammar files on input file
-java Step1 ../src/$1 $FILENAME
+java Step1 ../src/$1

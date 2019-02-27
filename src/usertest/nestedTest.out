@@ -1,178 +1,178 @@
-Token Type: null
+Token Type: KEYWORD
 Value: PROGRAM
 Token Type: IDENTIFIER
 Value: sqrt
-Token Type: null
+Token Type: KEYWORD
 Value: BEGIN
-Token Type: null
+Token Type: KEYWORD
 Value: STRING
 Token Type: IDENTIFIER
 Value: dummy
-Token Type: null
+Token Type: OPERATOR
 Value: :=
 Token Type: STRINGLITERAL
 Value: "abcde"
-Token Type: null
+Token Type: OPERATOR
 Value: ;
-Token Type: null
+Token Type: KEYWORD
 Value: INT
 Token Type: IDENTIFIER
 Value: i
-Token Type: null
+Token Type: OPERATOR
 Value: ,
 Token Type: IDENTIFIER
 Value: j
-Token Type: null
+Token Type: OPERATOR
 Value: ,
 Token Type: IDENTIFIER
 Value: k
-Token Type: null
+Token Type: OPERATOR
 Value: ;
-Token Type: null
+Token Type: KEYWORD
 Value: FUNCTION
-Token Type: null
+Token Type: KEYWORD
 Value: VOID
 Token Type: IDENTIFIER
 Value: main
-Token Type: null
+Token Type: OPERATOR
 Value: (
-Token Type: null
+Token Type: OPERATOR
 Value: )
-Token Type: null
+Token Type: KEYWORD
 Value: BEGIN
 Token Type: IDENTIFIER
 Value: i
-Token Type: null
+Token Type: OPERATOR
 Value: :=
 Token Type: INTLITERAL
 Value: 0
-Token Type: null
+Token Type: OPERATOR
 Value: ;
 Token Type: IDENTIFIER
 Value: j
-Token Type: null
+Token Type: OPERATOR
 Value: :=
 Token Type: INTLITERAL
 Value: 0
-Token Type: null
+Token Type: OPERATOR
 Value: ;
 Token Type: IDENTIFIER
 Value: k
-Token Type: null
+Token Type: OPERATOR
 Value: :=
 Token Type: INTLITERAL
 Value: 0
-Token Type: null
+Token Type: OPERATOR
 Value: ;
 Token Type: IDENTIFIER
 Value: result
-Token Type: null
+Token Type: OPERATOR
 Value: :=
 Token Type: INTLITERAL
 Value: 0
-Token Type: null
+Token Type: OPERATOR
 Value: ;
-Token Type: null
+Token Type: KEYWORD
 Value: WHILE
-Token Type: null
+Token Type: OPERATOR
 Value: (
 Token Type: IDENTIFIER
 Value: i
-Token Type: null
+Token Type: OPERATOR
 Value: <=
 Token Type: INTLITERAL
 Value: 99
-Token Type: null
+Token Type: OPERATOR
 Value: )
 Token Type: IDENTIFIER
 Value: i
-Token Type: null
+Token Type: OPERATOR
 Value: :=
 Token Type: IDENTIFIER
 Value: i
-Token Type: null
+Token Type: OPERATOR
 Value: +
 Token Type: INTLITERAL
 Value: 1
-Token Type: null
+Token Type: OPERATOR
 Value: ;
-Token Type: null
+Token Type: KEYWORD
 Value: WHILE
-Token Type: null
+Token Type: OPERATOR
 Value: (
 Token Type: IDENTIFIER
 Value: j
-Token Type: null
+Token Type: OPERATOR
 Value: <=
 Token Type: INTLITERAL
 Value: 99
-Token Type: null
+Token Type: OPERATOR
 Value: )
 Token Type: IDENTIFIER
 Value: j
-Token Type: null
+Token Type: OPERATOR
 Value: :=
 Token Type: IDENTIFIER
 Value: j
-Token Type: null
+Token Type: OPERATOR
 Value: +
 Token Type: INTLITERAL
 Value: 1
-Token Type: null
+Token Type: OPERATOR
 Value: ;
-Token Type: null
+Token Type: KEYWORD
 Value: WHILE
-Token Type: null
+Token Type: OPERATOR
 Value: (
 Token Type: IDENTIFIER
 Value: k
-Token Type: null
+Token Type: OPERATOR
 Value: <
 Token Type: INTLITERAL
 Value: 100
-Token Type: null
+Token Type: OPERATOR
 Value: )
 Token Type: IDENTIFIER
 Value: k
-Token Type: null
+Token Type: OPERATOR
 Value: :=
 Token Type: IDENTIFIER
 Value: k
-Token Type: null
+Token Type: OPERATOR
 Value: +
 Token Type: INTLITERAL
 Value: 1
-Token Type: null
+Token Type: OPERATOR
 Value: ;
 Token Type: IDENTIFIER
 Value: result
-Token Type: null
+Token Type: OPERATOR
 Value: :=
 Token Type: IDENTIFIER
 Value: result
-Token Type: null
+Token Type: OPERATOR
 Value: +
 Token Type: INTLITERAL
 Value: 1
-Token Type: null
+Token Type: OPERATOR
 Value: ;
-Token Type: null
+Token Type: KEYWORD
 Value: ENDWHILE
-Token Type: null
+Token Type: KEYWORD
 Value: ENDWHILE
-Token Type: null
+Token Type: KEYWORD
 Value: ENDWHILE
-Token Type: null
+Token Type: KEYWORD
 Value: WRITE
-Token Type: null
+Token Type: OPERATOR
 Value: (
 Token Type: IDENTIFIER
 Value: result
-Token Type: null
+Token Type: OPERATOR
 Value: )
-Token Type: null
+Token Type: OPERATOR
 Value: ;
-Token Type: null
+Token Type: KEYWORD
 Value: END
-Token Type: null
+Token Type: KEYWORD
 Value: END
