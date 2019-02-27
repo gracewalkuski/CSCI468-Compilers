@@ -8,14 +8,12 @@ public class Step1 {
 
     public static void main(String[] args) throws Exception {
         String filePath = "null";
-        String outFile = "null";
 
         //If only one argument given, check the output of the parser
-        if (args.length == 2) {
+        if (args.length == 1) {
             //args[0] is the next string after the name of the Java file:
             //$ java Builder apple -> agrs[0] == apple
             filePath = args[0];
-            outFile  = args[1];
 
             //Create a char stream for input into the lexer
             CharStream cs = CharStreams.fromFileName(filePath);//input string here
@@ -29,7 +27,7 @@ public class Step1 {
             //Create a parser from the output of tokens from the CommonTokenStream
             LittleGrammarParser parser = new LittleGrammarParser(tokens);
 
-            printTokens(lexer, outFile);
+            printTokens(lexer);
         }
         else {
             System.out.println("File Path or outfile name not provided");
@@ -37,17 +35,11 @@ public class Step1 {
         
     }
 
-    private static void printTokens(LittleGrammarLexer l, String o) throws Exception {
+    private static void printTokens(LittleGrammarLexer l) throws Exception {
         //Create TokenSource from lexer
         TokenSource tokenSource = l;
         //Get Lexer vocabulary
         Vocabulary v = l.getVocabulary();
-        //make outfile name
-        String outFile = o + "Test.out";
-	File file = new File("../src/usertest/" + outFile);
-        //System.out.println(outFile);
-        //Create file writer, to write new file with outFile name to directory /outputs
-        PrintWriter writer = new PrintWriter(file,"UTF-8");
 
         //Iterate through all tokens from lexer
         while (true) {
@@ -62,15 +54,9 @@ public class Step1 {
             //Get value of specific token
             String tokenValue = t.getText();
 
-            //Print out tokenType and tokenValue
-            //System.out.printf("Token Type: %s\n", tokenType);
-            //System.out.printf("Value: %s\n", tokenValue);
-
-            //Write to directory 'output' a new file using outFile name
-            writer.printf("Token Type: %s\n", tokenType);
-            writer.printf("Value: %s\n", tokenValue);
+            //Write to command line
+            System.out.printf("Token Type: %s\n", tokenType);
+            System.out.printf("Value: %s\n", tokenValue);
         }
-        writer.close();
-
     }
 }
