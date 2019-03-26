@@ -31,10 +31,10 @@ public class SymbolTable {
             for (Map.Entry<String, String> typeNameKey : varNameKey.getValue().entrySet()) {
                 String typeName = typeNameKey.getKey();
                 String stringValue = typeNameKey.getValue();
-                if (typeName != "str") {
+                if (typeName != "STRING") {
                     System.out.println("name " + varName + " type " + typeName);
                 } else {
-                    System.out.println("name " + varName + " type " + typeName + " value \"" + stringValue + "\'");
+                    System.out.println("name " + varName + " type " + typeName + " value \"" + stringValue + "\"");
                 }
             }
 
