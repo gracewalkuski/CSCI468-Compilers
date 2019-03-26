@@ -27,7 +27,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	}
 
 	@Override public void enterProgram(LittleGrammarParser.ProgramContext ctx) {
-		HashMap<String, String> GLOBAL = new HashMap<String, String>();
+		SymbolTable GLOBAL = new SymbolTable("GLOBAL");
 		//System.out.println("enterProgram ctx: " + ctx.getText());
 	}
 	/**

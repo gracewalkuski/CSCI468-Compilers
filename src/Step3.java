@@ -43,18 +43,18 @@ public class Step3 {
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(listener, tree);
 
-        //Stack symbolTableStack = listener.getSymbolTableStack();
-        Stack symbolTableStack = new Stack();
-        SymbolTable sym1 = new SymbolTable("GLOBAL");
-        sym1.insert("a", "INT", "");
-        sym1.insert("b", "STRING", "this is a string");
-
-        SymbolTable sym2 = new SymbolTable("BLOCK 0");
-        sym2.insert("c", "INT", "");
-        sym2.insert("d", "INT", "");
-
-        symbolTableStack.push(sym1);
-        symbolTableStack.push(sym2);
+        Stack symbolTableStack = listener.getSymbolTableStack();
+//        Stack symbolTableStack = new Stack();
+//        SymbolTable sym1 = new SymbolTable("GLOBAL");
+//        sym1.insert("a", "INT", "");
+//        sym1.insert("b", "STRING", "this is a string");
+//
+//        SymbolTable sym2 = new SymbolTable("BLOCK 0");
+//        sym2.insert("c", "INT", "");
+//        sym2.insert("d", "INT", "");
+//
+//        symbolTableStack.push(sym1);
+//        symbolTableStack.push(sym2);
 
         while (!symbolTableStack.empty()) {
             SymbolTable symbolTable = (SymbolTable)symbolTableStack.pop();
