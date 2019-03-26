@@ -15,6 +15,7 @@ mkdir -p "outputs"
 cd "../gen"
 
 #Execute Java file to run built grammar files on input file
-java Step3 ../src/$1
+java Step3 ../src/inputs/test5.micro > ../src/usertest/test5Test.out
+diff -B -b -s ../src/usertest/test5Test.out ../src/outputs/test5.out
 
 
