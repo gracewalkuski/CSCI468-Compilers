@@ -1,9 +1,10 @@
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
-import java.io.PrintWriter;
-import java.io.File;
-import java.util.Stack;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Queue;
 
 public class Step3 {
 
@@ -30,8 +31,7 @@ public class Step3 {
             parser.removeErrorListener(ConsoleErrorListener.INSTANCE);
 
             printSymbolTables(parser);
-        }
-        else {
+        } else {
             System.out.println("File Path or outfile name not provided");
         }
     }
@@ -43,7 +43,7 @@ public class Step3 {
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(listener, tree);
 
-        Stack symbolTableStack = listener.getSymbolTableStack();
+        ArrayList<SymbolTable> symbolTableList = listener.getSymbolTableList();
 //        Stack symbolTableStack = new Stack();
 //        SymbolTable sym1 = new SymbolTable("GLOBAL");
 //        sym1.insert("a", "INT", "");
@@ -56,10 +56,10 @@ public class Step3 {
 //        symbolTableStack.push(sym1);
 //        symbolTableStack.push(sym2);
 
-        while (!symbolTableStack.empty()) {
-            SymbolTable symbolTable = (SymbolTable)symbolTableStack.pop();
-            symbolTable.prettyPrint();
+        for (SymbolTable symTable : symbolTableList) {
+            symTable.prettyPrint();
         }
     }
-
 }
+
+

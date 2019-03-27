@@ -3,8 +3,10 @@
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import java.util.HashMap;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -15,20 +17,31 @@ import java.util.Stack;
 public class LittleGrammarBaseListener implements LittleGrammarListener {
 
 	private int block;
-	private Stack symbolTableStack;
+	private ArrayList<SymbolTable> symbolTableList;
+	private Stack symbols;
+	private String currentVarType;
+	private SymbolTable currentSymbolTable;
 
 	LittleGrammarBaseListener() {
 		this.block = 0;
-		this.symbolTableStack = new Stack();
+		this.symbolTableList = new ArrayList<>();
+		this.symbols = new Stack();
+		this.currentVarType = null;
+		this.currentSymbolTable = null;
 	}
 
-	public Stack getSymbolTableStack() {
-		return this.symbolTableStack;
+	public ArrayList<SymbolTable> getSymbolTableList() {
+		return this.symbolTableList;
 	}
 
 	@Override public void enterProgram(LittleGrammarParser.ProgramContext ctx) {
-		SymbolTable GLOBAL = new SymbolTable("GLOBAL");
-		//System.out.println("enterProgram ctx: " + ctx.getText());
+
+		if (ctx.id() != null ) {
+			SymbolTable GLOBAL = new SymbolTable("GLOBAL");
+			this.symbolTableList.add(GLOBAL);
+			this.currentSymbolTable = GLOBAL;
+			//System.out.println("enterProgram ctx: " + ctx.getText());
+		}
 	}
 	/**
 	 * {@inheritDoc}
@@ -68,7 +81,25 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDecl(LittleGrammarParser.DeclContext ctx) { }
+	@Override public void enterDecl(LittleGrammarParser.DeclContext ctx) {
+
+		if (ctx.string_decl() != null) {
+			this.currentVarType = "STRING";
+			String stringDecl = ctx.string_decl().getText();
+			String decl = ctx.decl().getText();
+			//System.out.println("stringDecl:" + stringDecl + " \ndecl: " + decl);
+
+		}
+		else if (ctx.var_decl() != null){
+			this.currentVarType = "INT";
+			String varDecl = ctx.var_decl().getText();
+			String decl = ctx.decl().getText();
+
+			//System.out.println("varDecl:" + varDecl + "\ndecl: " + decl);
+
+		}
+		//System.out.println();
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -80,7 +111,18 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterString_decl(LittleGrammarParser.String_declContext ctx) { }
+	@Override public void enterString_decl(LittleGrammarParser.String_declContext ctx) {
+
+		if (ctx.id() != null) {
+			String id = ctx.id().getText();
+			String str = ctx.str().getText();
+			//System.out.println("id: " + id + " \nstr: " + str);
+			this.currentSymbolTable.insert(id, this.currentVarType, str);
+
+
+		}
+
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -104,7 +146,16 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVar_decl(LittleGrammarParser.Var_declContext ctx) { }
+	@Override public void enterVar_decl(LittleGrammarParser.Var_declContext ctx) {
+
+		if (ctx.var_type() != null) {
+			String varType = ctx.var_type().getText();
+			String id_list = ctx.id_list().getText();
+			//System.out.println("Var type: " + varType + " \nid list: " + id_list);
+
+		}
+
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -140,7 +191,17 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterId_list(LittleGrammarParser.Id_listContext ctx) { }
+	@Override public void enterId_list(LittleGrammarParser.Id_listContext ctx) {
+
+		if (ctx.id() != null) {
+
+			String id = ctx.id().getText();
+			//System.out.println("id: " + id);
+			this.currentSymbolTable.insert(id, this.currentVarType, "");
+		}
+
+
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -152,7 +213,17 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterId_tail(LittleGrammarParser.Id_tailContext ctx) { }
+	@Override public void enterId_tail(LittleGrammarParser.Id_tailContext ctx) {
+		//System.out.print("enterId_tail");
+
+		if (ctx.id() != null) {
+			String id = ctx.id().getText();
+			//System.out.println("id: " + id);
+			this.currentSymbolTable.insert(id, this.currentVarType, "");
+
+		}
+
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -176,7 +247,17 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParam_decl(LittleGrammarParser.Param_declContext ctx) { }
+	@Override public void enterParam_decl(LittleGrammarParser.Param_declContext ctx) {
+
+		if (ctx.var_type() != null) {
+			String varType = ctx.var_type().getText();
+			String id = ctx.id().getText();
+			this.currentSymbolTable.insert(id, varType, "");
+
+		}
+
+
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -201,16 +282,23 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterFunc_declarations(LittleGrammarParser.Func_declarationsContext ctx) {
+
+	}
+
+	@Override public void exitFunc_declarations(LittleGrammarParser.Func_declarationsContext ctx) {
+
 		//System.out.println(ctx.getText());
 	}
 
-	@Override public void exitFunc_declarations(LittleGrammarParser.Func_declarationsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFunc_decl(LittleGrammarParser.Func_declContext ctx) { }
+	@Override public void enterFunc_decl(LittleGrammarParser.Func_declContext ctx) {
+		if (ctx.any_type() != null) {
+			String funcName = ctx.id().getText();
+			//System.out.println("FUNC NAME: " + funcName);
+			SymbolTable funcSymbolTable = new SymbolTable(funcName);
+			this.symbolTableList.add(funcSymbolTable);
+			this.currentSymbolTable = funcSymbolTable;
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -462,7 +550,9 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIf_stmt(LittleGrammarParser.If_stmtContext ctx) { }
+	@Override public void enterIf_stmt(LittleGrammarParser.If_stmtContext ctx) {
+
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -510,7 +600,16 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterWhile_stmt(LittleGrammarParser.While_stmtContext ctx) { }
+	@Override public void enterWhile_stmt(LittleGrammarParser.While_stmtContext ctx) {
+
+		if (ctx.cond() != null) {
+			this.block += 1;
+			SymbolTable newBlockSymTable = new SymbolTable("BLOCK " + block);
+			this.symbolTableList.add(newBlockSymTable);
+			this.currentSymbolTable = newBlockSymTable;
+		}
+
+	}
 	/**
 	 * {@inheritDoc}
 	 *

@@ -1,18 +1,19 @@
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SymbolTable {
 
     String scopeName;
-    HashMap<String, HashMap<String, String>> symbolTable;
+    LinkedHashMap<String, LinkedHashMap<String, String>> symbolTable;
 
     SymbolTable(String scopeName) {
         this.scopeName = scopeName;
-        this.symbolTable = new HashMap<String, HashMap<String, String>>();
+        this.symbolTable = new LinkedHashMap<String, LinkedHashMap<String, String>>();
     }
 
     public void insert(String varName, String typeName, String stringValue) {
-        symbolTable.put(varName, new HashMap<String, String>());
+        symbolTable.put(varName, new LinkedHashMap<String, String>());
         symbolTable.get(varName).put(typeName, stringValue);
     }
 
@@ -25,7 +26,7 @@ public class SymbolTable {
 
         System.out.println("Symbol table " + this.scopeName);
 
-        for (Map.Entry<String, HashMap<String, String>> varNameKey : this.symbolTable.entrySet()) {
+        for (Map.Entry<String, LinkedHashMap<String, String>> varNameKey : this.symbolTable.entrySet()) {
             String varName = varNameKey.getKey();
 
             for (Map.Entry<String, String> typeNameKey : varNameKey.getValue().entrySet()) {
@@ -34,11 +35,12 @@ public class SymbolTable {
                 if (typeName != "STRING") {
                     System.out.println("name " + varName + " type " + typeName);
                 } else {
-                    System.out.println("name " + varName + " type " + typeName + " value \"" + stringValue + "\"");
+                    System.out.println("name " + varName + " type " + typeName + " value " + stringValue);
                 }
             }
 
 
         }
+        System.out.println();
     }
 }
