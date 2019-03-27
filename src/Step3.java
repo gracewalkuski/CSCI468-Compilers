@@ -37,7 +37,7 @@ public class Step3 {
                 System.out.println("File Path or outfile name not provided");
             }
         } catch (IOException ioe) {
-            System.out.println("IOEXception");
+            System.out.println("IO EXception");
         }
     }
 
