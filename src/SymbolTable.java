@@ -1,32 +1,42 @@
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class SymbolTable {
+class SymbolTable {
 
-    private String scopeName;
+    private final String scopeName;
+
+    // a linked hashmap retains order so we can print our symbol tables correctly
     private LinkedHashMap<String, LinkedHashMap<String, String>> symbolTable;
 
     SymbolTable(String scopeName) {
         this.scopeName = scopeName;
-        this.symbolTable = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+        this.symbolTable = new LinkedHashMap<>();
     }
 
     public void insert(String varName, String typeName, String stringValue) throws DeclarationError{
 
+        // if a variable name is declared more than once in the same scope, throw a declaration error
         if (this.symbolTable.keySet().contains(varName)) {
             throw new DeclarationError(varName);
 
         }
+        // else we insert the variable name into our symbol table as normal
+        // format of the symbol table:
+        //              {*Variable Name*: {Variable Type : String value}}
         else {
-            symbolTable.put(varName, new LinkedHashMap<String, String>());
+            symbolTable.put(varName, new LinkedHashMap<>());
             symbolTable.get(varName).put(typeName, stringValue);
         }
     }
 
-    public String lookup() {
-        // if the symbol does not exist
-        return "0";
+    public LinkedHashMap<String, String> lookup(String varName) {
+
+        if (this.symbolTable.keySet().contains(varName)) {
+            return this.symbolTable.get(varName);
+        }
+        else {
+            return null;
+        }
     }
     public void prettyPrint() {
 
@@ -38,7 +48,7 @@ public class SymbolTable {
             for (Map.Entry<String, String> typeNameKey : varNameKey.getValue().entrySet()) {
                 String typeName = typeNameKey.getKey();
                 String stringValue = typeNameKey.getValue();
-                if (typeName != "STRING") {
+                if (!typeName.equals("STRING")) {
                     System.out.println("name " + varName + " type " + typeName);
                 } else {
                     System.out.println("name " + varName + " type " + typeName + " value " + stringValue);
