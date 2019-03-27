@@ -21,6 +21,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	private Stack symbols;
 	private String currentVarType;
 	private SymbolTable currentSymbolTable;
+	private boolean insideDeclaration;
 
 	LittleGrammarBaseListener() {
 		this.block = 0;
@@ -28,6 +29,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		this.symbols = new Stack();
 		this.currentVarType = null;
 		this.currentSymbolTable = null;
+		this.insideDeclaration = false;
 	}
 
 	public ArrayList<SymbolTable> getSymbolTableList() {
@@ -113,6 +115,8 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 */
 	@Override public void enterString_decl(LittleGrammarParser.String_declContext ctx) {
 
+		this.insideDeclaration = true;
+
 		if (ctx.id() != null) {
 			String id = ctx.id().getText();
 			String str = ctx.str().getText();
@@ -128,7 +132,9 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitString_decl(LittleGrammarParser.String_declContext ctx) { }
+	@Override public void exitString_decl(LittleGrammarParser.String_declContext ctx) {
+		this.insideDeclaration = false;
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -148,6 +154,8 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 */
 	@Override public void enterVar_decl(LittleGrammarParser.Var_declContext ctx) {
 
+		this.insideDeclaration = true;
+
 		if (ctx.var_type() != null) {
 			String varType = ctx.var_type().getText();
 			String id_list = ctx.id_list().getText();
@@ -161,13 +169,22 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVar_decl(LittleGrammarParser.Var_declContext ctx) { }
+	@Override public void exitVar_decl(LittleGrammarParser.Var_declContext ctx) {
+		this.insideDeclaration = false;
+
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVar_type(LittleGrammarParser.Var_typeContext ctx) { }
+	@Override public void enterVar_type(LittleGrammarParser.Var_typeContext ctx) {
+		if (ctx != null) {
+			String varType = ctx.getText();
+			this.currentVarType = varType;
+
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -193,7 +210,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 */
 	@Override public void enterId_list(LittleGrammarParser.Id_listContext ctx) {
 
-		if (ctx.id() != null) {
+		if (ctx.id() != null && this.insideDeclaration) {
 
 			String id = ctx.id().getText();
 			//System.out.println("id: " + id);
@@ -213,10 +230,10 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterId_tail(LittleGrammarParser.Id_tailContext ctx) {
+	@Override public void enterId_tail(LittleGrammarParser.Id_tailContext ctx){
 		//System.out.print("enterId_tail");
 
-		if (ctx.id() != null) {
+		if (ctx.id() != null && this.insideDeclaration) {
 			String id = ctx.id().getText();
 			//System.out.println("id: " + id);
 			this.currentSymbolTable.insert(id, this.currentVarType, "");
@@ -247,7 +264,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParam_decl(LittleGrammarParser.Param_declContext ctx) {
+	@Override public void enterParam_decl(LittleGrammarParser.Param_declContext ctx){
 
 		if (ctx.var_type() != null) {
 			String varType = ctx.var_type().getText();
@@ -394,7 +411,10 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterWrite_stmt(LittleGrammarParser.Write_stmtContext ctx) { }
+	@Override public void enterWrite_stmt(LittleGrammarParser.Write_stmtContext ctx) {
+
+
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -551,20 +571,33 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterIf_stmt(LittleGrammarParser.If_stmtContext ctx) {
-
+		if (ctx.cond() != null) {
+			this.block += 1;
+			SymbolTable newBlockSymTable = new SymbolTable("BLOCK " + block);
+			this.symbolTableList.add(newBlockSymTable);
+			this.currentSymbolTable = newBlockSymTable;
+		}
 	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIf_stmt(LittleGrammarParser.If_stmtContext ctx) { }
+	@Override public void exitIf_stmt(LittleGrammarParser.If_stmtContext ctx) {
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterElse_part(LittleGrammarParser.Else_partContext ctx) { }
+	@Override public void enterElse_part(LittleGrammarParser.Else_partContext ctx) {
+		if (ctx.decl() != null) {
+			this.block += 1;
+			SymbolTable newBlockSymTable = new SymbolTable("BLOCK " + block);
+			this.symbolTableList.add(newBlockSymTable);
+			this.currentSymbolTable = newBlockSymTable;
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *

@@ -4,21 +4,27 @@ import java.util.Map;
 
 public class SymbolTable {
 
-    String scopeName;
-    LinkedHashMap<String, LinkedHashMap<String, String>> symbolTable;
+    private String scopeName;
+    private LinkedHashMap<String, LinkedHashMap<String, String>> symbolTable;
 
     SymbolTable(String scopeName) {
         this.scopeName = scopeName;
         this.symbolTable = new LinkedHashMap<String, LinkedHashMap<String, String>>();
     }
 
-    public void insert(String varName, String typeName, String stringValue) {
-        symbolTable.put(varName, new LinkedHashMap<String, String>());
-        symbolTable.get(varName).put(typeName, stringValue);
+    public void insert(String varName, String typeName, String stringValue) throws DeclarationError{
+
+        if (this.symbolTable.keySet().contains(varName)) {
+            throw new DeclarationError(varName);
+
+        }
+        else {
+            symbolTable.put(varName, new LinkedHashMap<String, String>());
+            symbolTable.get(varName).put(typeName, stringValue);
+        }
     }
 
     public String lookup() {
-
         // if the symbol does not exist
         return "0";
     }
