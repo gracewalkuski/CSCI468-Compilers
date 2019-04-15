@@ -35,8 +35,10 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The default implementation for ALL enter/exit does nothing.</p>
-	 */
+	 * The default implementation for ALL enter/exit methods does nothing.
+	 *
+	 *
+	 **/
 
 	@Override public void enterProgram(LittleGrammarParser.ProgramContext ctx) {
 
@@ -242,7 +244,9 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void exitPrimary(LittleGrammarParser.PrimaryContext ctx) { }
 	
-	@Override public void enterAddop(LittleGrammarParser.AddopContext ctx) { }
+	@Override public void enterAddop(LittleGrammarParser.AddopContext ctx) {
+		System.out.println(ctx.getText());
+	}
 	
 	@Override public void exitAddop(LittleGrammarParser.AddopContext ctx) { }
 	
