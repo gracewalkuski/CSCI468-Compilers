@@ -1,18 +1,16 @@
 class ASTNode {
 
     enum ASTNodeType {
-        AddExpr, MulExpr, VarRef;
+        AddExpr, MulExpr, VarRef, AssignExpr;
     }
 
     ASTNode leftChild, rightChild;
     ASTNodeType nodeType;
-    String varName;
-    String varType;
+    String value;
 
-    ASTNode(ASTNodeType nodeType, String varName, String varType) {
+    ASTNode(ASTNodeType nodeType, String value) {
         this.nodeType = nodeType;
-        this.varName = varName;
-        this.varType = varType;
+        this.value = value;
     }
 
 }
