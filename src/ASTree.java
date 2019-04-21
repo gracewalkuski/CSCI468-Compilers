@@ -56,15 +56,16 @@ class ASTree {
 
         postOrderTraversal(node.rightChild);
 
+        System.out.printf("Node Value: %s (%s)\n", node.value, node.nodeType);
+
         // we will print out the nodes differently depending on their type
-        switch(node.nodeType) {
-            case VarRef:
-                System.out.printf("Node Type: %s\nNode Value: %s\n", node.nodeType, node.value);
-                break;
-            default:
-                //System.out.println("ASTree default");
-                System.out.println("Node Type: " + node.nodeType);
-        }
+//        switch(node.nodeType) {
+//            case VarRef:
+//                break;
+//            default:
+//                System.out.printf("Node Value: %s (%s)\n", node.value, node.nodeType);
+//        }
 
     }
+
 }
