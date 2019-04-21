@@ -5,6 +5,8 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * This class provides an empty implementation of {LittleGrammarListener},
@@ -18,8 +20,8 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	private ArrayList<SymbolTable> symbolTableList;
 	private String currentVarType;
 	private SymbolTable currentSymbolTable;
-	private ASTree abstractSyntaxTree;
 	private ASTNode currentASTNode;
+	private Queue<ASTNode> inUseASTNodes;
 	private boolean insideDeclaration;
 	private boolean insideExpression;
 	private boolean insideAssignment;
@@ -34,21 +36,13 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		this.insideExpression = false;
 		this.insideAssignment = false;
 
-		this.abstractSyntaxTree = new ASTree();
+		this.inUseASTNodes = new LinkedList<>();
+
+
 	}
 
 	public ArrayList<SymbolTable> getSymbolTableList() {
 		return this.symbolTableList;
-	}
-
-	public void insertASTNode(ASTree tree) {
-		if (abstractSyntaxTree.root != null) {
-
-		}
-		else {
-			abstractSyntaxTree.root = tree.root;
-		}
-
 	}
 
 	/**
@@ -158,7 +152,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		}
 		if (ctx.id() != null && this.insideExpression) {
 			String id = ctx.id().getText();
-			System.out.println("Created VarRef " + currentVarType + " " + id);
+			//System.out.println("Created VarRef " + currentVarType + " " + id);
 		}
 	}
 	
@@ -227,7 +221,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void enterAssign_expr(LittleGrammarParser.Assign_exprContext ctx) {
 		if (ctx.id() != null) {
-			System.out.println("Created ASSIGNMENT NODE: " + ctx.id().getText() + " " + ctx.expr().getText());
+			//System.out.println("Created ASSIGNMENT NODE: " + ctx.id().getText() + " " + ctx.expr().getText());
 		}
 	}
 	
@@ -253,11 +247,62 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		this.insideExpression = false;
 	}
 	
-	@Override public void enterExpr_prefix(LittleGrammarParser.Expr_prefixContext ctx) { }
+	@Override public void enterExpr_prefix(LittleGrammarParser.Expr_prefixContext ctx) {
+		//TODO MAKE EXPR_PREFIX'S RIGHT CHILD FACTOR, MAKE ADDOP ITS PARENT (ADDOPS LEFT CHILD) might be done, not sure about order
+		if (ctx.expr_prefix() != null && ctx.addop() != null) {
+			ASTNode addOp = new ASTNode(ASTNode.ASTNodeType.AddExpr, ctx.addop().getText());
+
+			ASTNode exprPrefixTree = this.inUseASTNodes.poll();
+			ASTNode factorTree = this.inUseASTNodes.poll();
+
+			if (factorTree != null) exprPrefixTree.rightChild = factorTree;
+			if (exprPrefixTree != null) addOp.leftChild = exprPrefixTree;
+
+			this.inUseASTNodes.add(addOp);
+			ASTree addOpTree = new ASTree(addOp);
+
+			System.out.println("BEGIN POSTORDER TRAVERSAL");
+			addOpTree.postOrderTraversal(addOp);
+			System.out.println("END POSTORDER TRAVERSAL");
+
+
+//			String varName = ctx.expr_prefix().getText();
+//			exprPrefixTree.insertLeftChild(new ASTNode(ASTNode.ASTNodeType.VarRef, varName));
+//
+//			System.out.printf("\n-EXPR PREFIX ENTERED-\nEXPR_PREFIX: %s\nFACTOR: %s\nADDOP: %s" +
+//					"\n", ctx.expr_prefix().getText(), ctx.factor().getText(), ctx.addop().getText());
+
+
+		}
+		else if (ctx.expr_prefix() == null && ctx.addop() != null) {
+			System.out.println("null expr prefix");
+
+			ASTNode exprPrefixNode = new ASTNode(ASTNode.ASTNodeType.AddExpr, ctx.addop().getText());
+			ASTree exprPrefixTree = new ASTree(exprPrefixNode);
+			exprPrefixNode.leftChild = this.inUseASTNodes.poll();
+			this.inUseASTNodes.add(exprPrefixNode);
+		}
+		}
+
 	
 	@Override public void exitExpr_prefix(LittleGrammarParser.Expr_prefixContext ctx) { }
 	
-	@Override public void enterFactor(LittleGrammarParser.FactorContext ctx) { }
+	@Override public void enterFactor(LittleGrammarParser.FactorContext ctx) {
+		if (ctx.factor_prefix() != null) {
+//			System.out.printf("\n-ENTERFACTOR-\nFACTOR PREFIX: %s\nPOSTFIX_EXPR: %s\n\n", ctx.factor_prefix().getText(), ctx.postfix_expr().getText());
+			if (ctx.factor_prefix().mulop() != null) {
+//				System.out.printf("FACTORPREFIX>POSTFIX EXPR: %s", ctx.factor_prefix().postfix_expr().getText());
+//				System.out.println("MULOP: " + ctx.factor_prefix().mulop().getText());
+				ASTNode mulNode = new ASTNode(ASTNode.ASTNodeType.MulExpr, ctx.factor_prefix().mulop().getText());
+				ASTree factorTree = new ASTree(mulNode);
+				mulNode.leftChild = new ASTNode(ASTNode.ASTNodeType.VarRef, ctx.factor_prefix().postfix_expr().getText());
+				mulNode.rightChild = new ASTNode(ASTNode.ASTNodeType.VarRef, ctx.postfix_expr().getText());
+
+				this.inUseASTNodes.add(mulNode);
+//				System.out.printf("ROOT: %s\nLEFT CHILD: %s\nRIGHT CHILD: %s\n", mulNode.value, mulNode.leftChild.value, mulNode.rightChild.value);
+			}
+		}
+	}
 	
 	@Override public void exitFactor(LittleGrammarParser.FactorContext ctx) { }
 	
@@ -283,7 +328,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void enterPrimary(LittleGrammarParser.PrimaryContext ctx) {
 		if (!ctx.getText().equals("") && this.insideExpression) {
-			System.out.println("Created PRIMARY node: " + ctx.getText());
+			//System.out.println("Created PRIMARY node: " + ctx.getText());
 		}
 	}
 	
@@ -291,11 +336,12 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void enterAddop(LittleGrammarParser.AddopContext ctx) {
 		if (!ctx.getText().equals("") && this.insideExpression) {
+			System.out.printf("-ENTER ADDOP-\nADDOP: %s\n", ctx.getText());
 			ASTNode addopNode = new ASTNode(ASTNode.ASTNodeType.AddExpr, ctx.getText());
 			ASTree tree = new ASTree(addopNode);
 			this.currentASTNode = addopNode;
 			//this.abstractSyntaxTree.insert(addopNode);
-			System.out.println("Created ADDOP node: " + ctx.getText());
+			//System.out.println("Created ADDOP node: " + ctx.getText());
 		}
 	}
 	
@@ -303,7 +349,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void enterMulop(LittleGrammarParser.MulopContext ctx) {
 		if (!ctx.getText().equals("") && this.insideExpression) {
-			System.out.println("Created MULOP node: " + ctx.getText());
+			//System.out.println("Created MULOP node: " + ctx.getText());
 		}
 
 	}
