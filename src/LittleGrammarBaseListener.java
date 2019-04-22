@@ -37,7 +37,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		this.insideExpression = false;
 		this.insideAssignment = false;
 
-
+		this.ir = new IR();
 	}
 
 	public ArrayList<SymbolTable> getSymbolTableList() {
@@ -60,20 +60,23 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 			this.currentSymbolTable = globalSymbolTable;
 
 			//Create an IR to generate 3AC
-			ir = new IR();
+			this.ir.beginProgram();
 		}
 	}
 	
 	@Override public void exitProgram(LittleGrammarParser.ProgramContext ctx) {
+		this.ir.exitProgram();
 	}
 	
 	@Override public void enterId(LittleGrammarParser.IdContext ctx) { }
 	
 	@Override public void exitId(LittleGrammarParser.IdContext ctx) { }
 	
-	@Override public void enterPgm_body(LittleGrammarParser.Pgm_bodyContext ctx) { }
+	@Override public void enterPgm_body(LittleGrammarParser.Pgm_bodyContext ctx) {
+	}
 	
-	@Override public void exitPgm_body(LittleGrammarParser.Pgm_bodyContext ctx) { }
+	@Override public void exitPgm_body(LittleGrammarParser.Pgm_bodyContext ctx) {
+	}
 	
 	@Override public void enterDecl(LittleGrammarParser.DeclContext ctx) { }
 	
@@ -192,6 +195,9 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 			SymbolTable funcSymbolTable = new SymbolTable(funcName);
 			this.symbolTableList.add(funcSymbolTable);
 			this.currentSymbolTable = funcSymbolTable;
+
+			//add label to IR
+			ir.generateLabel(funcName);
 		}
 	}
 	
