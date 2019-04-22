@@ -21,6 +21,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	private ArrayList<SymbolTable> symbolTableList;
 	private String currentVarType;
 	private SymbolTable currentSymbolTable;
+	private IR ir;
 
 	private boolean insideDeclaration;
 	private boolean insideExpression;
@@ -57,6 +58,9 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 			SymbolTable globalSymbolTable = new SymbolTable("GLOBAL");
 			this.symbolTableList.add(globalSymbolTable);
 			this.currentSymbolTable = globalSymbolTable;
+
+			//Create an IR to generate 3AC
+			ir = new IR();
 		}
 	}
 	
