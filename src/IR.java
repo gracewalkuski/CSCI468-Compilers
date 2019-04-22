@@ -23,10 +23,10 @@ class IR {
 
     public void generateLabel(String l) {
         tac.add(";LABEL " + l);
-        labelNum++;
     }
 
     public void generateLabel() {
+        //generate labels for if, else, that can be used for jumps
         tac.add(";LABEL label" + labelNum);
         labelNum++;
     }
@@ -48,6 +48,14 @@ class IR {
     }
 
     public void generateLoad(float f) {
+
+    }
+
+    public void generateRead(int i) {
+
+    }
+
+    public void generateRead(float f) {
 
     }
 
