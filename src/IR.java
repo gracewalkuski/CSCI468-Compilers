@@ -23,6 +23,12 @@ class IR {
 
     public void generateLabel(String l) {
         tac.add(";LABEL " + l);
+        labelNum++;
+    }
+
+    public void generateLabel() {
+        tac.add(";LABEL label" + labelNum);
+        labelNum++;
     }
 
     public void generateVariable(String v) {

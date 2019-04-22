@@ -307,6 +307,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 			SymbolTable newBlockSymTable = new SymbolTable("BLOCK " + block);
 			this.symbolTableList.add(newBlockSymTable);
 			this.currentSymbolTable = newBlockSymTable;
+			ir.generateLabel()
 		}
 	}
 	
