@@ -31,12 +31,18 @@ class IR {
         labelNum++;
     }
 
-    public void generateVariable(String v) {
-        tac.add("");
+    private String generateRegister() {
+        String reg = "$T" + regNum + " ";
+        regNum++;
+        return reg;
     }
 
-    public void generateStore(int i) {
+    public void generateVariable(String v) {
+    }
 
+    public void generateStore(int i, String var) {
+        String store = ";STOREI " + generateRegister() + var;
+        tac.add(store);
     }
 
     public void generateStore(float f) {

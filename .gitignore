@@ -2,3 +2,6 @@
 outputs/*
 gen/*
 src/usertest/*
+/.metadata
+src/.classpath
+src/.project
