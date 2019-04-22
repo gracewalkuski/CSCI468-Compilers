@@ -44,13 +44,9 @@ return_stmt: 'RETURN' expr ';';
 //EXPRESSIONS
 expr: expr_prefix factor; //THIS
 //expr: (id | INTLITERAL | FLOATLITERAL) (addop | mulop | compop);
-expr_prefix: expr_prefix factor addop #validExprPrefix
-           | /*EPSILON*/              #nullExprPrefix
-           ; //THIS
+expr_prefix: expr_prefix factor addop | /*EPSILON*/; //THIS
 factor: factor_prefix postfix_expr; //THIS
-factor_prefix: factor_prefix postfix_expr mulop
-            | /*EPSILON*/
-            ;
+factor_prefix: factor_prefix postfix_expr mulop | /*EPSILON*/; //THIS
 postfix_expr: primary | call_expr; //THIS
 call_expr: id '(' expr_list ')'; //THIS
 expr_list: expr expr_list_tail | /*EPSILON*/; //THIS
