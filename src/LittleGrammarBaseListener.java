@@ -66,13 +66,13 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void exitProgram(LittleGrammarParser.ProgramContext ctx) {
 		if (ctx.id() != null) {
-			for (ASTNode node : this.inUseASTNodes) {
-				System.out.println("BEGIN LIST POSTORDER TRAVERSAL");
-				ASTree tree = new ASTree(node);
-				tree.postOrderTraversal(node);
-				System.out.println("END LIST POSTORDER TRAVERSAL");
-
-			}
+//			for (ASTNode node : this.inUseASTNodes) {
+//				System.out.println("BEGIN LIST POSTORDER TRAVERSAL");
+//				ASTree tree = new ASTree(node);
+//				tree.postOrderTraversal(node);
+//				System.out.println("END LIST POSTORDER TRAVERSAL");
+//
+//			}
 //			if (this.exprPrefixNode != null) {
 //                System.out.println("EXPR PREFIX NODE: BEGIN POSTORDER TRAVERSAL");
 //				ASTree tree = new ASTree(this.exprPrefixNode);
@@ -266,34 +266,82 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		this.insideExpression = false;
 	}
 	
-	@Override public void enterExpr_prefix(LittleGrammarParser.Expr_prefixContext ctx) {
-		//TODO MAKE EXPR_PREFIX'S RIGHT CHILD FACTOR, MAKE ADDOP ITS PARENT (ADDOPS LEFT CHILD) might be done, not sure about order
+//	@Override public void enterExpr_prefix(LittleGrammarParser.Expr_prefixContext ctx) {
+//		//TODO MAKE EXPR_PREFIX'S RIGHT CHILD FACTOR, MAKE ADDOP ITS PARENT (ADDOPS LEFT CHILD) might be done, not sure about order
+//
+//			if (this.exprPrefixNode != null && this.addOpNode != null) {
+////				ASTNode addOpNode = new ASTNode(ASTNode.ASTNodeType.AddExpr, ctx.addop().getText());
+////				String factorNode = ctx.factor().getText();
+////				String exprPrefixNode = ctx.expr_prefix().getText();
+////				System.out.println("EXPR PREFIX!=(NULL)\naddop(): " + ctx.addop().getText() + "\nfactor(): " + factorNode + "\nexpr_prefix(): " + exprPrefixNode);
+//				assert(this.exprPrefixNode.rightChild == null);
+//                this.exprPrefixNode.rightChild = this.factorNode;
+//                this.addOpNode.leftChild = this.exprPrefixNode;
+//                this.exprPrefixNode = addOpNode;
+//
+//
+//			}
+//			else if (this.exprPrefixNode == null && ctx.addop() != null && this.factorNode != null) {
+////				ASTNode addOpNode = new ASTNode(ASTNode.ASTNodeType.AddExpr, ctx.addop().getText());
+////				String factorNode = ctx.factor().getText();
+////				System.out.println("EXPR PREFIX==(NULL)\naddop(): " + ctx.addop().getText() + "\nfactor(): " + factorNode);
+//                ASTNode addOpNode = new ASTNode(ASTNode.ASTNodeType.AddExpr, ctx.addop().getText());
+//                addOpNode.leftChild = this.factorNode;
+//				this.exprPrefixNode = addOpNode;
+//			}
+//		}
 
-			if (this.exprPrefixNode != null && this.addOpNode != null) {
-//				ASTNode addOpNode = new ASTNode(ASTNode.ASTNodeType.AddExpr, ctx.addop().getText());
-//				String factorNode = ctx.factor().getText();
-//				String exprPrefixNode = ctx.expr_prefix().getText();
-//				System.out.println("EXPR PREFIX!=(NULL)\naddop(): " + ctx.addop().getText() + "\nfactor(): " + factorNode + "\nexpr_prefix(): " + exprPrefixNode);
-				assert(this.exprPrefixNode.rightChild == null);
-                this.exprPrefixNode.rightChild = this.factorNode;
-                this.addOpNode.leftChild = this.exprPrefixNode;
-                this.exprPrefixNode = addOpNode;
+//	@Override public void exitExpr_prefix(LittleGrammarParser.Expr_prefixContext ctx) { }
+
+	@Override public void enterValidExprPrefix(LittleGrammarParser.ValidExprPrefixContext ctx) {
+		if (ctx.factor() != null) {
+			if (ctx.factor().factor_prefix() != null) {
+				if (ctx.factor().factor_prefix().mulop() != null) {
+//				System.out.printf("FACTORPREFIX>POSTFIX EXPR: %s", ctx.factor_prefix().postfix_expr().getText());
+//				System.out.println("MULOP: " + ctx.factor_prefix().mulop().getText());
+					ASTNode factorNode = new ASTNode(ASTNode.ASTNodeType.MulExpr, ctx.factor().factor_prefix().mulop().getText());
+					ASTNode addOpNode = new ASTNode(ASTNode.ASTNodeType.AddExpr, ctx.addop().getText());
+					factorNode.leftChild = new ASTNode(ASTNode.ASTNodeType.VarRef, ctx.factor().factor_prefix().postfix_expr().getText());
+					factorNode.rightChild = new ASTNode(ASTNode.ASTNodeType.VarRef, ctx.factor().postfix_expr().getText());
+
+					this.inUseASTNodes.add(factorNode);
+//					this.factorNode = factorNode;
+//				System.out.printf("ROOT: %s\nLEFT CHILD: %s\nRIGHT CHILD: %s\n", factorNode.value, factorNode.leftChild.value, factorNode.rightChild.value);
+
+					if (this.exprPrefixNode != null) {
+						System.out.println("-EXPR PREFIX NOT NULL-\nexpr_prefix(): " + ctx.expr_prefix().getText());
+						this.exprPrefixNode.rightChild = factorNode;
+						addOpNode.leftChild = this.exprPrefixNode;
+						ASTree tree = new ASTree(addOpNode);
+						tree.postOrderTraversal(addOpNode);
+					} else {
+						System.out.println("-EXPR PREFIX NULL-");
+						ASTree tree = new ASTree(addOpNode);
+						addOpNode.leftChild = factorNode;
+						tree.postOrderTraversal(addOpNode);
+						this.exprPrefixNode = addOpNode;
+					}
+
+				}
 
 
-			}
-			else if (this.exprPrefixNode == null && ctx.addop() != null && this.factorNode != null) {
-//				ASTNode addOpNode = new ASTNode(ASTNode.ASTNodeType.AddExpr, ctx.addop().getText());
-//				String factorNode = ctx.factor().getText();
-//				System.out.println("EXPR PREFIX==(NULL)\naddop(): " + ctx.addop().getText() + "\nfactor(): " + factorNode);
-                ASTNode addOpNode = new ASTNode(ASTNode.ASTNodeType.AddExpr, ctx.addop().getText());
-                addOpNode.leftChild = this.factorNode;
-				this.exprPrefixNode = addOpNode;
 			}
 		}
+	}
 
-	
-	@Override public void exitExpr_prefix(LittleGrammarParser.Expr_prefixContext ctx) { }
-	
+	@Override public void exitValidExprPrefix(LittleGrammarParser.ValidExprPrefixContext ctx) {
+
+	}
+
+	@Override public void enterNullExprPrefix(LittleGrammarParser.NullExprPrefixContext ctx) {
+
+	}
+
+	@Override public void exitNullExprPrefix(LittleGrammarParser.NullExprPrefixContext ctx) {
+
+	}
+
+
 	@Override public void enterFactor(LittleGrammarParser.FactorContext ctx) {
 		if (ctx.factor_prefix() != null) {
 //			System.out.printf("\n-ENTERFACTOR-\nFACTOR PREFIX: %s\nPOSTFIX_EXPR: %s\n\n", ctx.factor_prefix().getText(), ctx.postfix_expr().getText());
@@ -343,7 +391,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	@Override public void exitPrimary(LittleGrammarParser.PrimaryContext ctx) { }
 	
 	@Override public void enterAddop(LittleGrammarParser.AddopContext ctx) {
-		if (!ctx.getText().equals("") && this.insideExpression) {
+		if (!ctx.getText().equals("")) {
 			System.out.println("-ENTER ADDOP-");
 			ASTNode addOpNode = new ASTNode(ASTNode.ASTNodeType.AddExpr, ctx.getText());
 			this.inUseASTNodes.add(addOpNode);
