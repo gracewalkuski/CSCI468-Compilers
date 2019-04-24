@@ -40,7 +40,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		this.insideAssignment = false;
 		this.insideWhileStatement = false;
 
-		this.ir = new IR();
+		this.ir = new IR(symbolTableList);
 	}
 
 	public ArrayList<SymbolTable> getSymbolTableList() {
@@ -250,7 +250,12 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void exitRead_stmt(LittleGrammarParser.Read_stmtContext ctx) { }
 	
-	@Override public void enterWrite_stmt(LittleGrammarParser.Write_stmtContext ctx) { }
+	@Override public void enterWrite_stmt(LittleGrammarParser.Write_stmtContext ctx) {
+		if ( ctx.id_list() != null ) {
+			//System.out.println("DEBUG" + ctx.id_list().getText());
+			this.ir.generateWrite(ctx.id_list().getText());
+		}
+	}
 	
 	@Override public void exitWrite_stmt(LittleGrammarParser.Write_stmtContext ctx) { }
 	
