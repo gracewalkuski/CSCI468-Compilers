@@ -39,6 +39,7 @@ class SymbolTable {
         }
     }
 
+
     public String lookupVarType(String varName) {
 
         if (this.symbolTable.keySet().contains(varName)) {

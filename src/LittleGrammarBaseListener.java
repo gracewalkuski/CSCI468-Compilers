@@ -27,7 +27,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	private boolean insideDeclaration;
 	private boolean insideExpression;
 	private boolean insideAssignment;
-	private boolean insideWhileStatement;
+	private boolean insideConditional;
 
 	LittleGrammarBaseListener() {
 		this.symbolTableList = new ArrayList<>();
@@ -38,9 +38,9 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		this.insideDeclaration = false;
 		this.insideExpression = false;
 		this.insideAssignment = false;
-		this.insideWhileStatement = false;
+		this.insideConditional = false;
 
-		this.ir = new IR(symbolTableList);
+		this.ir = new IR(this.symbolTableList);
 	}
 
 	public ArrayList<SymbolTable> getSymbolTableList() {
@@ -263,12 +263,15 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	@Override public void exitReturn_stmt(LittleGrammarParser.Return_stmtContext ctx) { }
 	
 	@Override public void enterExpr(LittleGrammarParser.ExprContext ctx) {
-		this.insideExpression = true;
-
+		if (ctx != null) {
+			this.insideExpression = true;
+		}
 	}
 	
 	@Override public void exitExpr(LittleGrammarParser.ExprContext ctx) {
-		this.insideExpression = false;
+		if (ctx != null) {
+			this.insideExpression = false;
+		}
 	}
 	
 	@Override public void enterExpr_prefix(LittleGrammarParser.Expr_prefixContext ctx) {
@@ -308,7 +311,11 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 
 	@Override public void exitPrimaryExpr(LittleGrammarParser.PrimaryExprContext ctx) { }
 
-	@Override public void enterPrimaryID(LittleGrammarParser.PrimaryIDContext ctx) { }
+	@Override public void enterPrimaryID(LittleGrammarParser.PrimaryIDContext ctx) {
+		if (this.insideConditional) {
+
+		}
+	}
 
 	@Override public void exitPrimaryID(LittleGrammarParser.PrimaryIDContext ctx) { }
 
@@ -371,21 +378,31 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void exitElse_part(LittleGrammarParser.Else_partContext ctx) { }
 	
-	@Override public void enterCond(LittleGrammarParser.CondContext ctx) {}
+	@Override public void enterCond(LittleGrammarParser.CondContext ctx) {
+		this.insideConditional = true;
+		if (ctx.expr() != null) {
+
+//			this.ir.insertConditionalExpression(ctx.expr());
+		}
+	}
 	
-	@Override public void exitCond(LittleGrammarParser.CondContext ctx) { }
+	@Override public void exitCond(LittleGrammarParser.CondContext ctx) {
+		this.insideConditional = false;
+
+		if (ctx.expr() != null) {
+			String operator = ctx.compop().getText();
+//			ir.generateConditional(operator);
+			//System.out.println("--------------------inside enterCompop--------------------");
+		}
+	}
 	
 	@Override public void enterCompop(LittleGrammarParser.CompopContext ctx) {
-//		if (this.insideWhileStatement) {
-//			ir.generateGreaterThanComp();
-//			System.out.println("inside enterCompop");
-//		}
+
 	}
 	
 	@Override public void exitCompop(LittleGrammarParser.CompopContext ctx) { }
 	
 	@Override public void enterWhile_stmt(LittleGrammarParser.While_stmtContext ctx) {
-		this.insideWhileStatement = true;
 
 		// when we enter an while statement, create a new block symbol table and
 		// increment our class variable, block
@@ -400,7 +417,6 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	}
 	
 	@Override public void exitWhile_stmt(LittleGrammarParser.While_stmtContext ctx) {
-		this.insideWhileStatement = false;
 	}
 
 	@Override public void enterEveryRule(ParserRuleContext ctx) { }
