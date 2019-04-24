@@ -43,7 +43,6 @@ return_stmt: 'RETURN' expr ';';
 
 //EXPRESSIONS
 expr: expr_prefix factor; //THIS
-//expr: (id | INTLITERAL | FLOATLITERAL) (addop | mulop | compop);
 expr_prefix: expr_prefix factor addop | /*EPSILON*/; //THIS
 factor: factor_prefix postfix_expr; //THIS
 factor_prefix: factor_prefix postfix_expr mulop | /*EPSILON*/; //THIS
@@ -51,7 +50,13 @@ postfix_expr: primary | call_expr; //THIS
 call_expr: id '(' expr_list ')'; //THIS
 expr_list: expr expr_list_tail | /*EPSILON*/; //THIS
 expr_list_tail: ',' expr expr_list_tail | /*EPSILON*/;
-primary: '(' expr ')' | id | INTLITERAL | FLOATLITERAL;
+primary:
+        '(' expr ')' #primaryExpr
+        | id #primaryID
+        | INTLITERAL #primaryINT
+        | FLOATLITERAL #primaryFLOAT
+        ;
+
 addop: '+' | '-';
 mulop: '*' | '/';
 
@@ -62,7 +67,7 @@ cond: expr compop expr;
 compop: '<' | '>' | '=' | '!=' | '<=' | '>=';
 
 //WHILE STATEMENTS
-while_stmt: 'WHILE' '(' cond ')' decl stmt_list 'ENDWHILE';
+while_stmt: 'WHILE' '(' cond ')' stmt_list 'ENDWHILE';
 
 
 //---------------------------------------------------//
