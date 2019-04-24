@@ -1,5 +1,7 @@
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
 
 class IR {
 
@@ -7,14 +9,15 @@ class IR {
     private int labelNum;
     private ArrayList<String> tac;
 
-    private SymbolTable symbolTable;
+    private ArrayList<SymbolTable> symbolTableList;
 
-    public IR () {
+    public IR (ArrayList<SymbolTable> s) {
 
-        regNum = 1;
-        labelNum = 1;
+        this.regNum = 1;
+        this.labelNum = 1;
 
-        tac = new ArrayList();
+        this.tac = new ArrayList();
+        this.symbolTableList = s;
     }
 
     public void beginProgram() {
@@ -70,12 +73,20 @@ class IR {
 
     }
 
-    public void generateWrite(int i) {
+    public void generateWrite(String str) {
+        //seperate string delimited by commas into list
+        List<String> list = parseStringIntoList(str);
 
-    }
-
-    public void generateWrite(float f) {
-
+        for (String s : list) {
+            if (s.equals("newline")){
+                String output = ";WRITES " + s;
+                tac.add(output);
+            }
+            else {
+                String output = ";WRITE " + s;
+                tac.add(output);
+            }
+        }
     }
 
     public void generateMult(int i1, int i2) {
@@ -110,5 +121,12 @@ class IR {
             System.out.println(s);
         }
     }
+
+    //Parse string delimited by commas into a list
+    private List<String> parseStringIntoList(String str){
+        List<String> list = Arrays.asList(str.split("\\s*,\\s*"));
+        return list;
+    }
+    
 
 }

@@ -38,7 +38,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		this.insideExpression = false;
 		this.insideAssignment = false;
 
-		this.ir = new IR();
+		this.ir = new IR(symbolTableList);
 	}
 
 	public ArrayList<SymbolTable> getSymbolTableList() {
@@ -222,15 +222,6 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void enterAssign_stmt(LittleGrammarParser.Assign_stmtContext ctx) {
 		this.insideAssignment = true;
-
-		if ( ctx.assign_expr() != null ) {
-			//call ir to generate store with value and varname
-			//int value = Integer.parseInt(ctx.assign_expr().expr().getText());
-			System.out.println("DEBUG " + ctx.assign_expr().expr().getText());
-			int val = 69;
-			String varName = ctx.assign_expr().id().getText();
-			this.ir.generateStore(val, varName);
-		}
 	}
 	
 	@Override public void exitAssign_stmt(LittleGrammarParser.Assign_stmtContext ctx) {
@@ -246,7 +237,12 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void exitRead_stmt(LittleGrammarParser.Read_stmtContext ctx) { }
 	
-	@Override public void enterWrite_stmt(LittleGrammarParser.Write_stmtContext ctx) { }
+	@Override public void enterWrite_stmt(LittleGrammarParser.Write_stmtContext ctx) {
+		if ( ctx.id_list() != null ) {
+			//System.out.println("DEBUG" + ctx.id_list().getText());
+			this.ir.generateWrite(ctx.id_list().getText());
+		}
+	}
 	
 	@Override public void exitWrite_stmt(LittleGrammarParser.Write_stmtContext ctx) { }
 	
