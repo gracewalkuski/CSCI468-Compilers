@@ -14,10 +14,8 @@ class IR {
     private Stack<Float> mostRecentlyReferencedProgramValues;
     private String mostRecentlyReferencedProgramLabel;
 
-    private LinkedHashMap<Integer, Float> registerToValueTable;
-
-
     private ArrayList<SymbolTable> symbolTableList;
+    private LinkedHashMap<Integer, Float> registerToValueTable;
 
     public IR (ArrayList<SymbolTable> s) {
 
@@ -131,8 +129,17 @@ class IR {
                 tac.add(output);
             }
             else {
-                String output = ";WRITE " + s;
-                tac.add(output);
+                String varType = checkVarType(s, sym);
+                System.out.println("VARTYPE " + varType);
+
+                if (varType.equals("int")) {
+                    String output = ";WRITEI " + s;
+                    tac.add(output);
+                }
+                else { //Else float
+                    String output = ";WRITEF " + s;
+                    tac.add(output);
+                }
             }
         }
     }
@@ -171,9 +178,13 @@ class IR {
     }
 
     //Parse string delimited by commas into a list
-    private List<String> parseStringIntoList(String str){
+    private List<String> parseStringIntoList(String str) {
         List<String> list = Arrays.asList(str.split("\\s*,\\s*"));
         return list;
+    }
+
+    private String checkVarType(String var, SymbolTable sym) {
+        return sym.lookupVarType(var);
     }
     
 
