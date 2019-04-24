@@ -383,7 +383,6 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		this.insideConditional = true;
 		if (ctx.expr() != null) {
 
-			ir.insertConditionalExpression(ctx.expr().)
 		}
 	}
 	
@@ -392,7 +391,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 
 		if (ctx.expr() != null) {
 			String operator = ctx.compop().getText();
-			ir.generateConditional(operator);
+			this.ir.generateConditional(operator);
 			//System.out.println("--------------------inside enterCompop--------------------");
 		}
 	}

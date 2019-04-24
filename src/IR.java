@@ -1,4 +1,4 @@
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.ArrayList;
 
 import java.util.Stack;
@@ -14,9 +14,8 @@ class IR {
     private Stack<Float> mostRecentlyReferencedProgramValues;
     private String mostRecentlyReferencedProgramLabel;
 
-    private LinkedHashMap<Integer, Float> registerToValueTable;
-    private LinkedHashMap<String, Float> variableToValueTable;
-
+    private HashMap<Integer, Float> registerToValueTable;
+    private HashMap<String, Float> variableToValueTable;
 
     private ArrayList<SymbolTable> symbolTableList;
 
@@ -27,6 +26,7 @@ class IR {
 
         mostRecentlyReferencedProgramValues = new Stack();
         registerToValueTable = new LinkedHashMap();
+        variableToValueTable = new LinkedHashMap();
 
         this.tac = new ArrayList();
         this.symbolTableList = s;
@@ -105,7 +105,7 @@ class IR {
         registerToValueTable.put(this.regNum, val);
 
         SymbolTable activeSymbolTable = this.getCurrentSymbolTable();
-        String variableType = activeSymbolTable.get(var);
+        //String variableType = activeSymbolTable.get(var);
 
 
         String s1 = ";STOREI " + val + " " + reg;
@@ -203,7 +203,7 @@ class IR {
     }
 
     private SymbolTable getCurrentSymbolTable() {
-        return this.symbolTableList[this.symbolTableList.size() - 1];
+        return this.symbolTableList.get(this.symbolTableList.size() - 1);
     }
     //Parse string delimited by commas into a list
     private List<String> parseStringIntoList(String str){
