@@ -21,13 +21,13 @@ class IR {
         tac.add(";IR code");
     }
 
-    public void generateLabel(String l) {
-        tac.add(";LABEL " + l);
-    }
+//    public void generateLabel(String l) {
+//        tac.add(";LABEL " + l);
+//    }
 
-    public void generateLabel() {
+    public void generateLabel(String type) {
         //generate labels for if, else, that can be used for jumps
-        tac.add(";LABEL label" + labelNum);
+        tac.add(";LABEL label" + labelNum + type);
         labelNum++;
     }
 

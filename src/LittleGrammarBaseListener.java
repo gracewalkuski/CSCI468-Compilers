@@ -292,11 +292,26 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	@Override public void enterExpr_list_tail(LittleGrammarParser.Expr_list_tailContext ctx) { }
 	
 	@Override public void exitExpr_list_tail(LittleGrammarParser.Expr_list_tailContext ctx) { }
-	
-	@Override public void enterPrimary(LittleGrammarParser.PrimaryContext ctx) {
-	}
-	
-	@Override public void exitPrimary(LittleGrammarParser.PrimaryContext ctx) { }
+
+
+
+	@Override public void enterPrimaryExpr(LittleGrammarParser.PrimaryExprContext ctx) { }
+
+	@Override public void exitPrimaryExpr(LittleGrammarParser.PrimaryExprContext ctx) { }
+
+	@Override public void enterPrimaryID(LittleGrammarParser.PrimaryIDContext ctx) { }
+
+	@Override public void exitPrimaryID(LittleGrammarParser.PrimaryIDContext ctx) { }
+
+	@Override public void enterPrimaryINT(LittleGrammarParser.PrimaryINTContext ctx) { }
+
+	@Override public void exitPrimaryINT(LittleGrammarParser.PrimaryINTContext ctx) { }
+
+	@Override public void enterPrimaryFLOAT(LittleGrammarParser.PrimaryFLOATContext ctx) { }
+
+	@Override public void exitPrimaryFLOAT(LittleGrammarParser.PrimaryFLOATContext ctx) { }
+
+
 	
 	@Override public void enterAddop(LittleGrammarParser.AddopContext ctx) {
 	}
@@ -317,7 +332,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 			SymbolTable newBlockSymTable = new SymbolTable("BLOCK " + block);
 			this.symbolTableList.add(newBlockSymTable);
 			this.currentSymbolTable = newBlockSymTable;
-			this.ir.generateLabel();
+			this.ir.generateLabel("if");
 		}
 	}
 	
@@ -337,7 +352,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void exitElse_part(LittleGrammarParser.Else_partContext ctx) { }
 	
-	@Override public void enterCond(LittleGrammarParser.CondContext ctx) { }
+	@Override public void enterCond(LittleGrammarParser.CondContext ctx) {}
 	
 	@Override public void exitCond(LittleGrammarParser.CondContext ctx) { }
 	
@@ -354,6 +369,8 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 			SymbolTable newBlockSymTable = new SymbolTable("BLOCK " + block);
 			this.symbolTableList.add(newBlockSymTable);
 			this.currentSymbolTable = newBlockSymTable;
+
+			this.ir.generateLabel("while");
 		}
 	}
 	
