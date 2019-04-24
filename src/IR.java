@@ -24,12 +24,14 @@ class IR {
         this.regNum = 0;
         this.labelNum = 1;
 
-        mostRecentlyReferencedProgramValues = new Stack();
-        registerToValueTable = new LinkedHashMap();
-        variableToValueTable = new LinkedHashMap();
+
+        this.mostRecentlyReferencedProgramValues = new Stack();
+        this.registerToValueTable = new HashMap();
+        this.variableToValueTable = new HashMap();
 
         this.tac = new ArrayList();
         this.symbolTableList = s;
+
     }
 
     public void beginProgram() {
@@ -96,7 +98,7 @@ class IR {
         String reg = generateRegister();
 
         //Keep a stack of our most recently reference values
-        mostRecentlyReferencedProgramValues.push((val);
+        mostRecentlyReferencedProgramValues.push(val);
         mostRecentlyReferencedProgramValues.push((float)this.regNum);
 
         this.variableToValueTable.put(var, val);
@@ -163,8 +165,17 @@ class IR {
                 tac.add(output);
             }
             else {
-                String output = ";WRITE " + s;
-                tac.add(output);
+                String varType = checkVarType(s);
+                System.out.println("VARTYPE " + varType);
+
+                if (varType.equals("int")) {
+                    String output = ";WRITEI " + s;
+                    tac.add(output);
+                }
+                else { //Else float
+                    String output = ";WRITEF " + s;
+                    tac.add(output);
+                }
             }
         }
     }
@@ -206,9 +217,14 @@ class IR {
         return this.symbolTableList.get(this.symbolTableList.size() - 1);
     }
     //Parse string delimited by commas into a list
-    private List<String> parseStringIntoList(String str){
+    private List<String> parseStringIntoList(String str) {
         List<String> list = Arrays.asList(str.split("\\s*,\\s*"));
         return list;
+    }
+
+    private String checkVarType(String var) {
+        SymbolTable sym = getCurrentSymbolTable();
+        return sym.lookupVarType(var);
     }
     
 

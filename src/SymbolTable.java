@@ -39,6 +39,20 @@ class SymbolTable {
         }
     }
 
+
+    public String lookupVarType(String varName) {
+
+        if (this.symbolTable.keySet().contains(varName)) {
+            LinkedHashMap<String, String> temp = this.symbolTable.get(varName);
+
+            String[] arr = temp.keySet().toArray(new String[0]);
+            return arr[0];
+        }
+        else {
+            return null;
+        }
+    }
+
     public void prettyPrint() {
 
         System.out.println("Symbol table " + this.scopeName);

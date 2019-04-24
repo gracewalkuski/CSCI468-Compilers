@@ -251,8 +251,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	@Override public void exitRead_stmt(LittleGrammarParser.Read_stmtContext ctx) { }
 	
 	@Override public void enterWrite_stmt(LittleGrammarParser.Write_stmtContext ctx) {
-		if ( ctx.id_list() != null ) {
-			//System.out.println("DEBUG" + ctx.id_list().getText());
+		if ( ctx.id_list() != null && currentSymbolTable != null) {
 			this.ir.generateWrite(ctx.id_list().getText());
 		}
 	}
@@ -383,6 +382,8 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		this.insideConditional = true;
 		if (ctx.expr() != null) {
 
+
+//			this.ir.insertConditionalExpression(ctx.expr());
 		}
 	}
 	
@@ -391,7 +392,8 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 
 		if (ctx.expr() != null) {
 			String operator = ctx.compop().getText();
-			this.ir.generateConditional(operator);
+
+//			ir.generateConditional(operator);
 			//System.out.println("--------------------inside enterCompop--------------------");
 		}
 	}
