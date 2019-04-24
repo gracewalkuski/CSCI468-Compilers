@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.lang.Integer;
 
 /**
  * This class provides an empty implementation of {LittleGrammarListener},
@@ -221,6 +222,15 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void enterAssign_stmt(LittleGrammarParser.Assign_stmtContext ctx) {
 		this.insideAssignment = true;
+
+		if ( ctx.assign_expr() != null ) {
+			//call ir to generate store with value and varname
+			//int value = Integer.parseInt(ctx.assign_expr().expr().getText());
+			System.out.println("DEBUG " + ctx.assign_expr().expr().getText());
+			int val = 69;
+			String varName = ctx.assign_expr().id().getText();
+			this.ir.generateStore(val, varName);
+		}
 	}
 	
 	@Override public void exitAssign_stmt(LittleGrammarParser.Assign_stmtContext ctx) {

@@ -32,7 +32,7 @@ class IR {
     }
 
     private String generateRegister() {
-        String reg = "$T" + regNum + " ";
+        String reg = "$T" + regNum;
         regNum++;
         return reg;
     }
@@ -40,12 +40,17 @@ class IR {
     public void generateVariable(String v) {
     }
 
-    public void generateStore(int i, String var) {
-        String store = ";STOREI " + generateRegister() + var;
-        tac.add(store);
+    public void generateStore(int val, String var) {
+        //Make new register
+        String reg = generateRegister();
+        String s1 = ";STOREI " + val + " " + reg;
+        String s2 = ";STOREI " + reg + " " + var;
+        tac.add(s1);
+        tac.add(s2);
+
     }
 
-    public void generateStore(float f) {
+    public void generateStore(float val, String var) {
 
     }
 
