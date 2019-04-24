@@ -38,6 +38,7 @@ class SymbolTable {
             return null;
         }
     }
+
     public void prettyPrint() {
 
         System.out.println("Symbol table " + this.scopeName);

@@ -15,13 +15,14 @@ class IR {
     private String mostRecentlyReferencedProgramLabel;
 
     private LinkedHashMap<Integer, Float> registerToValueTable;
+    private LinkedHashMap<String, Float> variableToValueTable;
 
 
     private ArrayList<SymbolTable> symbolTableList;
 
     public IR (ArrayList<SymbolTable> s) {
 
-        this.regNum = 1;
+        this.regNum = 0;
         this.labelNum = 1;
 
         mostRecentlyReferencedProgramValues = new Stack();
@@ -52,25 +53,60 @@ class IR {
         tac.add(";LINK");
     }
 
-    public void generateGreaterThanComp() {
+    public void generateConditional(String operator) {
+        System.out.println(mostRecentlyReferencedProgramValues.size());
         float val1 = mostRecentlyReferencedProgramValues.pop();
         float val2 = mostRecentlyReferencedProgramValues.pop();
-        tac.add(";GTI " + val1 + " " + val2 + " " + this.mostRecentlyReferencedProgramLabel);
+        System.out.printf("val1: %s\nval2: %s\n", val1, val2);
+        String partialIR;
+
+        switch(operator) {
+            case ">=":
+                partialIR = ";GE";
+                break;
+            case "<=":
+                partialIR = ";LE";
+                break;
+            case ">":
+                partialIR = ";GT";
+                break;
+            case "<":
+                partialIR = ";LT";
+                break;
+            case "=":
+                partialIR = ";EE";
+                break;
+            case "!=":
+                partialIR = ";NE";
+                break;
+            default:
+                partialIR = "";
+                break;
+        }
+
+
+        tac.add(partialIR + " " + val1 + " " + val2 + " " + this.mostRecentlyReferencedProgramLabel);
     }
 
     public void generateVariable(String v) {
     }
 
-    public void generateStore(int val, String var) {
+    public void generateStore(float val, String var) {
         //Make new register
         String reg = generateRegister();
 
         //Keep a stack of our most recently reference values
-        mostRecentlyReferencedProgramValues.push((float)val);
+        mostRecentlyReferencedProgramValues.push((val);
         mostRecentlyReferencedProgramValues.push((float)this.regNum);
 
+        this.variableToValueTable.put(var, val);
+
         //Keep track of the values our temporaries contain
-        registerToValueTable.put(this.regNum, (float)val);
+        registerToValueTable.put(this.regNum, val);
+
+        SymbolTable activeSymbolTable = this.getCurrentSymbolTable();
+        String variableType = activeSymbolTable.get(var);
+
 
         String s1 = ";STOREI " + val + " " + reg;
         String s2 = ";STOREI " + reg + " " + var;
@@ -99,10 +135,6 @@ class IR {
 
         String s1 = ";STOREI " + val + " " + reg;
         tac.add(s1);
-    }
-
-    public void generateStore(float val, String var) {
-
     }
 
     public void generateLoad(int i) {
@@ -170,6 +202,9 @@ class IR {
         }
     }
 
+    private SymbolTable getCurrentSymbolTable() {
+        return this.symbolTableList[this.symbolTableList.size() - 1];
+    }
     //Parse string delimited by commas into a list
     private List<String> parseStringIntoList(String str){
         List<String> list = Arrays.asList(str.split("\\s*,\\s*"));
