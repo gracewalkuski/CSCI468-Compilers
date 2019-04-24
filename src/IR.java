@@ -1,11 +1,17 @@
-
+import java.util.LinkedHashMap;
 import java.util.ArrayList;
+import java.util.Stack;
 
 class IR {
 
     private int regNum;
     private int labelNum;
     private ArrayList<String> tac;
+    private Stack<Float> mostRecentlyReferencedProgramValues;
+    private String mostRecentlyReferencedProgramLabel;
+
+    private LinkedHashMap<Integer, Float> registerToValueTable;
+
 
     private SymbolTable symbolTable;
 
@@ -15,26 +21,37 @@ class IR {
         labelNum = 1;
 
         tac = new ArrayList();
+
+        mostRecentlyReferencedProgramValues = new Stack();
+        registerToValueTable = new LinkedHashMap();
+
     }
 
     public void beginProgram() {
         tac.add(";IR code");
     }
 
-//    public void generateLabel(String l) {
-//        tac.add(";LABEL " + l);
-//    }
+    private String generateRegister() {
+        String reg = "$T" + ++regNum;
+        return reg;
+    }
 
     public void generateLabel(String type) {
         //generate labels for if, else, that can be used for jumps
-        tac.add(";LABEL label" + labelNum + type);
+        String label = "label" + labelNum + type;
+        tac.add(";LABEL " + label);
+        this.mostRecentlyReferencedProgramLabel = label;
         labelNum++;
     }
 
-    private String generateRegister() {
-        String reg = "$T" + regNum;
-        regNum++;
-        return reg;
+    public void pushFramePointerOntoStack() {
+        tac.add(";LINK");
+    }
+
+    public void generateGreaterThanComp() {
+        float val1 = mostRecentlyReferencedProgramValues.pop();
+        float val2 = mostRecentlyReferencedProgramValues.pop();
+        tac.add(";GTI " + val1 + " " + val2 + " " + this.mostRecentlyReferencedProgramLabel);
     }
 
     public void generateVariable(String v) {
@@ -43,11 +60,41 @@ class IR {
     public void generateStore(int val, String var) {
         //Make new register
         String reg = generateRegister();
+
+        //Keep a stack of our most recently reference values
+        mostRecentlyReferencedProgramValues.push((float)val);
+        mostRecentlyReferencedProgramValues.push((float)this.regNum);
+
+        //Keep track of the values our temporaries contain
+        registerToValueTable.put(this.regNum, (float)val);
+
         String s1 = ";STOREI " + val + " " + reg;
         String s2 = ";STOREI " + reg + " " + var;
         tac.add(s1);
         tac.add(s2);
 
+    }
+
+    public void generateStoreIntoTemporary(int val) {
+        String reg = generateRegister();
+
+        mostRecentlyReferencedProgramValues.push((float)val);
+        //Keep track of the values our temporaries contain
+        registerToValueTable.put(this.regNum, (float)val);
+
+        String s1 = ";STOREI " + val + " " + reg;
+        tac.add(s1);
+    }
+
+    public void generateStoreIntoTemporary(float val) {
+        String reg = generateRegister();
+
+        mostRecentlyReferencedProgramValues.push((float)val);
+        //Keep track of the values our temporaries contain
+        registerToValueTable.put(this.regNum, (float)val);
+
+        String s1 = ";STOREI " + val + " " + reg;
+        tac.add(s1);
     }
 
     public void generateStore(float val, String var) {

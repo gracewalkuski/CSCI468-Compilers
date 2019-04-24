@@ -27,6 +27,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	private boolean insideDeclaration;
 	private boolean insideExpression;
 	private boolean insideAssignment;
+	private boolean insideWhileStatement;
 
 	LittleGrammarBaseListener() {
 		this.symbolTableList = new ArrayList<>();
@@ -37,6 +38,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		this.insideDeclaration = false;
 		this.insideExpression = false;
 		this.insideAssignment = false;
+		this.insideWhileStatement = false;
 
 		this.ir = new IR();
 	}
@@ -199,6 +201,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 
 			//add label to IR
 			this.ir.generateLabel(funcName);
+			this.ir.pushFramePointerOntoStack();
 		}
 	}
 	
@@ -226,7 +229,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		if ( ctx.assign_expr() != null ) {
 			//call ir to generate store with value and varname
 			//int value = Integer.parseInt(ctx.assign_expr().expr().getText());
-			System.out.println("DEBUG " + ctx.assign_expr().expr().getText());
+			//System.out.println("DEBUG " + ctx.assign_expr().expr().getText());
 			int val = 69;
 			String varName = ctx.assign_expr().id().getText();
 			this.ir.generateStore(val, varName);
@@ -238,6 +241,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	}
 	
 	@Override public void enterAssign_expr(LittleGrammarParser.Assign_exprContext ctx) {
+
 	}
 	
 	@Override public void exitAssign_expr(LittleGrammarParser.Assign_exprContext ctx) { }
@@ -256,6 +260,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void enterExpr(LittleGrammarParser.ExprContext ctx) {
 		this.insideExpression = true;
+
 	}
 	
 	@Override public void exitExpr(LittleGrammarParser.ExprContext ctx) {
@@ -303,11 +308,21 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 
 	@Override public void exitPrimaryID(LittleGrammarParser.PrimaryIDContext ctx) { }
 
-	@Override public void enterPrimaryINT(LittleGrammarParser.PrimaryINTContext ctx) { }
+	@Override public void enterPrimaryINT(LittleGrammarParser.PrimaryINTContext ctx) {
+		if (this.insideExpression) {
+			int val = Integer.parseInt(ctx.getText());
+			this.ir.generateStoreIntoTemporary(val);
+		}
+	}
 
 	@Override public void exitPrimaryINT(LittleGrammarParser.PrimaryINTContext ctx) { }
 
-	@Override public void enterPrimaryFLOAT(LittleGrammarParser.PrimaryFLOATContext ctx) { }
+	@Override public void enterPrimaryFLOAT(LittleGrammarParser.PrimaryFLOATContext ctx) {
+		if (this.insideExpression) {
+			float val = Float.parseFloat(ctx.getText());
+			this.ir.generateStoreIntoTemporary(val);
+		}
+	}
 
 	@Override public void exitPrimaryFLOAT(LittleGrammarParser.PrimaryFLOATContext ctx) { }
 
@@ -356,11 +371,17 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void exitCond(LittleGrammarParser.CondContext ctx) { }
 	
-	@Override public void enterCompop(LittleGrammarParser.CompopContext ctx) { }
+	@Override public void enterCompop(LittleGrammarParser.CompopContext ctx) {
+//		if (this.insideWhileStatement) {
+//			ir.generateGreaterThanComp();
+//			System.out.println("inside enterCompop");
+//		}
+	}
 	
 	@Override public void exitCompop(LittleGrammarParser.CompopContext ctx) { }
 	
 	@Override public void enterWhile_stmt(LittleGrammarParser.While_stmtContext ctx) {
+		this.insideWhileStatement = true;
 
 		// when we enter an while statement, create a new block symbol table and
 		// increment our class variable, block
@@ -374,7 +395,9 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		}
 	}
 	
-	@Override public void exitWhile_stmt(LittleGrammarParser.While_stmtContext ctx) { }
+	@Override public void exitWhile_stmt(LittleGrammarParser.While_stmtContext ctx) {
+		this.insideWhileStatement = false;
+	}
 
 	@Override public void enterEveryRule(ParserRuleContext ctx) { }
 	
