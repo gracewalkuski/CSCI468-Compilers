@@ -81,15 +81,13 @@ class IR {
 
     }
 
-    public void generateAdd(int i1. int i2) {
+    public void generateAdd(int i1, int i2) {
 
     }
 
     public void generateAdd(float f1, float f2) {
 
     }
-
-    public void generate
 
     public void exitProgram() {
         //prevents double adding of "RET" & "tiny code"
