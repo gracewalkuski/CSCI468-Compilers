@@ -166,13 +166,12 @@ class IR {
             }
             else {
                 String varType = checkVarType(s);
-                System.out.println("VARTYPE " + varType);
 
-                if (varType.equals("int")) {
+                if (varType.equals("INT")) {
                     String output = ";WRITEI " + s;
                     tac.add(output);
                 }
-                else { //Else float
+                else { //Else type float
                     String output = ";WRITEF " + s;
                     tac.add(output);
                 }
@@ -223,8 +222,16 @@ class IR {
     }
 
     private String checkVarType(String var) {
-        SymbolTable sym = getCurrentSymbolTable();
-        return sym.lookupVarType(var);
+
+        for (SymbolTable st : this.symbolTableList) {
+
+            String type = st.lookupVarType(var);
+
+            if (type != null){
+                return type;
+            }
+        }
+        return null;
     }
     
 
