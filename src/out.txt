@@ -1,0 +1,1204 @@
+Testing input file inputs/step4_testcase2.micro
+1,35c1,116
+< inUseASTNodes size: 0
+< Created VarRef INT a
+< -ENTER FACTOR-
+< -ENTER FACTOR-
+< -ENTER FACTOR-
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< inUseASTNodes size: 6
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: 1 (VarRef)
+< Node Value: a (VarRef)
+< Node Value: * (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: 2 (VarRef)
+< Node Value: a (VarRef)
+< Node Value: * (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: 3 (VarRef)
+< Node Value: a (VarRef)
+< Node Value: * (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: 4 (VarRef)
+< Node Value: a (VarRef)
+< Node Value: * (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+---
+> ;IR code
+> ;LABEL main
+> ;LINK 
+> ;STOREI 1 $T1
+> ;STOREI $T1 a
+> ;STOREI 1 $T2
+> ;STOREI $T2 b
+> ;LABEL label1
+> ;STOREI 80 $T3
+> ;GTI a $T3 label2
+> ;STOREI 1 $T4
+> ;NEI b $T4 label3
+> ;STOREI 1 $T5
+> ;MULTI $T5 a $T6
+> ;STOREI $T6 g
+> ;WRITEI g
+> ;WRITES newline
+> ;LABEL label3
+> ;STOREI 2 $T7
+> ;NEI b $T7 label4
+> ;STOREI 2 $T8
+> ;MULTI $T8 a $T9
+> ;STOREI $T9 p
+> ;WRITEI p
+> ;WRITES newline
+> ;LABEL label4
+> ;STOREI 3 $T10
+> ;NEI b $T10 label5
+> ;STOREI 3 $T11
+> ;MULTI $T11 a $T12
+> ;STOREI $T12 k
+> ;WRITEI k
+> ;WRITES newline
+> ;JUMP label6
+> ;LABEL label5
+> ;STOREI 4 $T13
+> ;MULTI $T13 a $T14
+> ;STOREI $T14 u
+> ;WRITEI u
+> ;WRITES newline
+> ;LABEL label6
+> ;STOREI 1 $T15
+> ;ADDI b $T15 $T16
+> ;STOREI $T16 b
+> ;STOREI 20 $T17
+> ;ADDI a $T17 $T18
+> ;STOREI $T18 a
+> ;JUMP label1
+> ;LABEL label2
+> ;RET
+> ;tiny code
+> var a
+> var b
+> var k
+> var g
+> var p
+> var u
+> str newline "\n"
+> label main 
+> move 1 r0
+> move r0 a
+> move 1 r1
+> move r1 b
+> label label1 
+> move 80 r2
+> cmpi a r2
+> jgt label2
+> move 1 r3
+> cmpi b r3
+> jne label3
+> move 1 r4
+> move r4 r5
+> muli a r5
+> move r5 g
+> sys writei g 
+> sys writes newline
+> label label3 
+> move 2 r6
+> cmpi b r6
+> jne label4
+> move 2 r7
+> move r7 r8
+> muli a r8
+> move r8 p
+> sys writei p 
+> sys writes newline
+> label label4 
+> move 3 r9
+> cmpi b r9
+> jne label5
+> move 3 r10
+> move r10 r11
+> muli a r11
+> move r11 k
+> sys writei k 
+> sys writes newline
+> jmp label6 
+> label label5 
+> move 4 r12
+> move r12 r13
+> muli a r13
+> move r13 u
+> sys writei u 
+> sys writes newline
+> label label6 
+> move 1 r14
+> move b r15
+> addi r14 r15
+> move r15 b
+> move 20 r16
+> move a r17
+> addi r16 r17
+> move r17 a
+> jmp label1 
+> label label2 
+> sys halt
+Testing input file inputs/step4_testcase.micro
+1,15c1,77
+< inUseASTNodes size: 0
+< Created VarRef INT a
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< inUseASTNodes size: 3
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+---
+> ;IR code
+> ;LABEL main
+> ;LINK 
+> ;STOREI 0 $T1
+> ;STOREI $T1 i
+> ;STOREI 0 $T2
+> ;STOREI $T2 a
+> ;STOREI 0 $T3
+> ;STOREI $T3 b
+> ;LABEL label1
+> ;STOREI 10 $T4
+> ;EQI i $T4 label2
+> ;READI p
+> ;STOREI 10 $T5
+> ;LEI p $T5 label3
+> ;STOREI 1 $T6
+> ;ADDI a $T6 $T7
+> ;STOREI $T7 a
+> ;JUMP label4
+> ;LABEL label3
+> ;STOREI 1 $T8
+> ;ADDI b $T8 $T9
+> ;STOREI $T9 b
+> ;LABEL label4
+> ;STOREI 1 $T10
+> ;ADDI i $T10 $T11
+> ;STOREI $T11 i
+> ;JUMP label1
+> ;LABEL label2
+> ;WRITEI a
+> ;WRITES newline
+> ;WRITEI b
+> ;WRITES newline
+> ;RET
+> ;tiny code
+> var a
+> var b
+> var i
+> var p
+> str newline "\n"
+> label main 
+> move 0 r0
+> move r0 i
+> move 0 r1
+> move r1 a
+> move 0 r2
+> move r2 b
+> label label1 
+> move 10 r3
+> cmpi i r3
+> jeq label2
+> sys readi p 
+> move 10 r4
+> cmpi p r4
+> jle label3
+> move 1 r5
+> move a r6
+> addi r5 r6
+> move r6 a
+> jmp label4 
+> label label3 
+> move 1 r7
+> move b r8
+> addi r7 r8
+> move r8 b
+> label label4 
+> move 1 r9
+> move i r10
+> addi r9 r10
+> move r10 i
+> jmp label1 
+> label label2 
+> sys writei a 
+> sys writes newline
+> sys writei b 
+> sys writes newline
+> sys halt
+Testing input file inputs/test_adv.micro
+1,32c1,115
+< inUseASTNodes size: 0
+< Created VarRef INT count
+< Created VarRef FLOAT newapprox
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< inUseASTNodes size: 6
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: 0.5 (VarRef)
+< Node Value: (approx+num/approx) (VarRef)
+< Node Value: * (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: num (VarRef)
+< Node Value: approx (VarRef)
+< Node Value: / (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: - (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: - (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+---
+> ;IR code
+> ;LABEL main
+> ;LINK 
+> ;STOREF 0.0001 $T1
+> ;STOREF $T1 tolerance
+> ;STOREF 7.0 $T2
+> ;STOREF $T2 num
+> ;STOREF num approx
+> ;STOREI 0 $T3
+> ;STOREI $T3 count
+> ;STOREF 0.0 $T4
+> ;STOREF $T4 diff
+> ;STOREI 0 $T5
+> ;STOREI $T5 enough
+> ;LABEL label1
+> ;STOREI 1 $T6
+> ;EQI enough $T6 label2
+> ;STOREI 1 $T7
+> ;ADDI count $T7 $T8
+> ;STOREI $T8 count
+> ;STOREF 0.5 $T9
+> ;DIVF num approx $T10
+> ;ADDF approx $T10 $T11
+> ;MULTF $T9 $T11 $T12
+> ;STOREF $T12 newapprox
+> ;SUBF approx newapprox $T13
+> ;STOREF $T13 diff
+> ;STOREF 0.0 $T14
+> ;LEF diff $T14 label3
+> ;GEF diff tolerance label4
+> ;STOREI 1 $T15
+> ;STOREI $T15 enough
+> ;LABEL label4
+> ;JUMP label5
+> ;LABEL label3
+> ;STOREF 0.0 $T16
+> ;SUBF $T16 tolerance $T17
+> ;LEF diff $T17 label6
+> ;STOREI 1 $T18
+> ;STOREI $T18 enough
+> ;LABEL label6
+> ;LABEL label5
+> ;STOREF newapprox approx
+> ;JUMP label1
+> ;LABEL label2
+> ;WRITEF approx
+> ;WRITEI count
+> ;RET
+> ;tiny code
+> var count
+> var enough
+> var newapprox
+> var approx
+> var num
+> var tolerance
+> var diff
+> label main 
+> move 0.0001 r0
+> move r0 tolerance
+> move 7.0 r1
+> move r1 num
+> move num r2
+> move r2 approx
+> move 0 r3
+> move r3 count
+> move 0.0 r4
+> move r4 diff
+> move 0 r5
+> move r5 enough
+> label label1 
+> move 1 r6
+> cmpi enough r6
+> jeq label2
+> move 1 r7
+> move count r8
+> addi r7 r8
+> move r8 count
+> move 0.5 r9
+> move num r10
+> divr approx r10
+> move approx r11
+> addr r10 r11
+> move r9 r12
+> mulr r11 r12
+> move r12 newapprox
+> move approx r13
+> subr newapprox r13
+> move r13 diff
+> move 0.0 r14
+> cmpr diff r14
+> jle label3
+> move tolerance r15
+> cmpr diff r15
+> jge label4
+> move 1 r16
+> move r16 enough
+> label label4 
+> jmp label5 
+> label label3 
+> move 0.0 r17
+> move r17 r18
+> subr tolerance r18
+> cmpr diff r18
+> jle label6
+> move 1 r19
+> move r19 enough
+> label label6 
+> label label5 
+> move newapprox r2
+> move r2 approx
+> jmp label1 
+> label label2 
+> sys writer approx 
+> sys writei count 
+> sys halt
+Testing input file inputs/test_combination.micro
+1,55c1,68
+< inUseASTNodes size: 0
+< Created VarRef INT a
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< -ENTER FACTOR-
+< inUseASTNodes size: 10
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: a (VarRef)
+< Node Value: b (VarRef)
+< Node Value: * (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: (a*b+c) (VarRef)
+< Node Value: a (VarRef)
+< Node Value: / (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: a (VarRef)
+< Node Value: b (VarRef)
+< Node Value: * (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: b (VarRef)
+< Node Value: b (VarRef)
+< Node Value: * (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: (b*a) (VarRef)
+< Node Value: a (VarRef)
+< Node Value: / (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: b (VarRef)
+< Node Value: a (VarRef)
+< Node Value: * (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+---
+> ;IR code
+> ;LABEL main
+> ;LINK 
+> ;STOREI 20 $T1
+> ;STOREI $T1 a
+> ;STOREI 30 $T2
+> ;STOREI $T2 b
+> ;STOREI 40 $T3
+> ;STOREI $T3 c
+> ;MULTI a b $T4
+> ;MULTI a b $T5
+> ;ADDI $T5 c $T6
+> ;DIVI $T6 a $T7
+> ;STOREI 20 $T8
+> ;ADDI c $T4 $T9
+> ;ADDI $T9 $T7 $T10
+> ;ADDI $T10 $T8 $T11
+> ;STOREI $T11 c
+> ;MULTI b b $T12
+> ;ADDI $T12 a $T13
+> ;STOREI $T13 b
+> ;MULTI b a $T14
+> ;DIVI $T14 a $T15
+> ;STOREI $T15 a
+> ;WRITEI c
+> ;WRITEI b
+> ;WRITEI a
+> ;RET
+> ;tiny code
+> var a
+> var b
+> var c
+> move 20 r0
+> move r0 a
+> move 30 r1
+> move r1 b
+> move 40 r2
+> move r2 c
+> move a r3
+> muli b r3
+> move a r4
+> muli b r4
+> move r4 r5
+> addi c r5
+> move r5 r6
+> divi a r6
+> move 20 r7
+> move c r8
+> addi r3 r8
+> move r8 r9
+> addi r6 r9
+> move r9 r10
+> addi r7 r10
+> move r10 c
+> move b r11
+> muli b r11
+> move r11 r12
+> addi a r12
+> move r12 b
+> move b r13
+> muli a r13
+> move r13 r14
+> divi a r14
+> move r14 a
+> sys writei c
+> sys writei b
+> sys writei a
+> sys halt
+Testing input file inputs/test_expr.micro
+1,164c1,278
+< inUseASTNodes size: 0
+< Created VarRef INT a
+< Created VarRef FLOAT x
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< -ENTER FACTOR-
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< inUseASTNodes size: 34
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: a (VarRef)
+< Node Value: c (VarRef)
+< Node Value: * (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: - (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: - (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: (a+b) (VarRef)
+< Node Value: (d+c) (VarRef)
+< Node Value: * (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: (a+b+c+d) (VarRef)
+< Node Value: a (VarRef)
+< Node Value: / (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: - (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: z (VarRef)
+< Node Value: 2.0 (VarRef)
+< Node Value: / (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: z (VarRef)
+< Node Value: y (VarRef)
+< Node Value: / (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: (x+y+z) (VarRef)
+< Node Value: z (VarRef)
+< Node Value: / (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: t (VarRef)
+< Node Value: t (VarRef)
+< Node Value: * (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: t (VarRef)
+< Node Value: 2.0 (VarRef)
+< Node Value: / (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: z (VarRef)
+< Node Value: 4.0 (VarRef)
+< Node Value: / (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: z (VarRef)
+< Node Value: 5.0 (VarRef)
+< Node Value: / (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: z (VarRef)
+< Node Value: 6.0 (VarRef)
+< Node Value: / (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: z (VarRef)
+< Node Value: 7.0 (VarRef)
+< Node Value: / (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+---
+> ;IR code
+> ;LABEL main
+> ;LINK 
+> ;STOREI 1 $T1
+> ;STOREI $T1 a
+> ;STOREI 2 $T2
+> ;STOREI $T2 b
+> ;STOREI 10 $T3
+> ;STOREI $T3 c
+> ;STOREI 20 $T4
+> ;STOREI $T4 d
+> ;WRITEI a
+> ;WRITES newline
+> ;WRITEI b
+> ;WRITES newline
+> ;WRITEI c
+> ;WRITES newline
+> ;WRITEI d
+> ;WRITES newline
+> ;ADDI a b $T5
+> ;STOREI $T5 a
+> ;WRITEI a
+> ;WRITES newline
+> ;MULTI a c $T6
+> ;STOREI $T6 b
+> ;WRITEI b
+> ;WRITES newline
+> ;STOREI 0 $T7
+> ;SUBI $T7 a $T8
+> ;ADDI $T8 b $T9
+> ;STOREI $T9 c
+> ;WRITEI c
+> ;WRITES newline
+> ;STOREI 0 $T10
+> ;SUBI $T10 d $T11
+> ;STOREI $T11 d
+> ;WRITEI d
+> ;WRITES newline
+> ;ADDI a b $T12
+> ;ADDI d c $T13
+> ;MULTI $T12 $T13 $T14
+> ;ADDI a b $T15
+> ;ADDI $T15 c $T16
+> ;ADDI $T16 d $T17
+> ;DIVI $T17 a $T18
+> ;SUBI $T14 $T18 $T19
+> ;STOREI $T19 a
+> ;WRITEI a
+> ;WRITES newline
+> ;STOREI 10 $T20
+> ;ADDI a $T20 $T21
+> ;STOREI $T21 a
+> ;WRITEI a
+> ;WRITES newline
+> ;STOREI 10 $T22
+> ;ADDI b a $T23
+> ;ADDI $T23 $T22 $T24
+> ;STOREI $T24 b
+> ;WRITEI b
+> ;WRITES newline
+> ;STOREI 0 $T25
+> ;STOREI 10 $T26
+> ;SUBI $T25 $T26 $T27
+> ;STOREI $T27 c
+> ;WRITEI c
+> ;WRITES newline
+> ;STOREF 1.0 $T28
+> ;STOREF $T28 x
+> ;STOREF 2.0 $T29
+> ;STOREF $T29 y
+> ;STOREF 3.14159 $T30
+> ;STOREF $T30 z
+> ;WRITEF x
+> ;WRITES newline
+> ;WRITEF z
+> ;WRITES newline
+> ;WRITEF y
+> ;WRITES newline
+> ;STOREF 2.0 $T31
+> ;DIVF z $T31 $T32
+> ;STOREF $T32 x
+> ;DIVF z y $T33
+> ;STOREF $T33 y
+> ;WRITEF x
+> ;WRITES newline
+> ;WRITEF y
+> ;WRITES newline
+> ;ADDF x y $T34
+> ;ADDF $T34 z $T35
+> ;DIVF $T35 z $T36
+> ;STOREF $T36 t
+> ;WRITEF t
+> ;WRITES newline
+> ;MULTF t t $T37
+> ;STOREF $T37 t
+> ;WRITEF t
+> ;WRITES newline
+> ;STOREF 2.0 $T38
+> ;DIVF t $T38 $T39
+> ;STOREF 4.0 $T40
+> ;DIVF z $T40 $T41
+> ;STOREF 5.0 $T42
+> ;DIVF z $T42 $T43
+> ;STOREF 6.0 $T44
+> ;DIVF z $T44 $T45
+> ;STOREF 7.0 $T46
+> ;DIVF z $T46 $T47
+> ;ADDF t z $T48
+> ;ADDF $T48 t $T49
+> ;ADDF $T49 $T39 $T50
+> ;ADDF $T50 $T41 $T51
+> ;ADDF $T51 $T43 $T52
+> ;ADDF $T52 $T45 $T53
+> ;ADDF $T53 $T47 $T54
+> ;STOREF $T54 t
+> ;WRITEF t
+> ;WRITES newline
+> ;RET
+> ;tiny code
+> var a
+> var b
+> var c
+> var d
+> var x
+> var y
+> var z
+> var t
+> str newline "\n"
+> move 1 r0
+> move r0 a
+> move 2 r1
+> move r1 b
+> move 10 r2
+> move r2 c
+> move 20 r3
+> move r3 d
+> sys writei a
+> sys writes newline
+> sys writei b
+> sys writes newline
+> sys writei c
+> sys writes newline
+> sys writei d
+> sys writes newline
+> move a r4
+> addi b r4
+> move r4 a
+> sys writei a
+> sys writes newline
+> move a r5
+> muli c r5
+> move r5 b
+> sys writei b
+> sys writes newline
+> move 0 r6
+> move r6 r7
+> subi a r7
+> move r7 r8
+> addi b r8
+> move r8 c
+> sys writei c
+> sys writes newline
+> move 0 r9
+> move r9 r10
+> subi d r10
+> move r10 d
+> sys writei d
+> sys writes newline
+> move a r11
+> addi b r11
+> move d r12
+> addi c r12
+> move r11 r13
+> muli r12 r13
+> move a r14
+> addi b r14
+> move r14 r15
+> addi c r15
+> move r15 r16
+> addi d r16
+> move r16 r17
+> divi a r17
+> move r13 r18
+> subi r17 r18
+> move r18 a
+> sys writei a
+> sys writes newline
+> move 10 r19
+> move a r20
+> addi r19 r20
+> move r20 a
+> sys writei a
+> sys writes newline
+> move 10 r21
+> move b r22
+> addi a r22
+> move r22 r23
+> addi r21 r23
+> move r23 b
+> sys writei b
+> sys writes newline
+> move 0 r24
+> move 10 r25
+> move r24 r26
+> subi r25 r26
+> move r26 c
+> sys writei c
+> sys writes newline
+> move 1.0 r27
+> move r27 x
+> move 2.0 r28
+> move r28 y
+> move 3.14159 r29
+> move r29 z
+> sys writer x 
+> sys writes newline
+> sys writer z 
+> sys writes newline
+> sys writer y 
+> sys writes newline
+> move 2.0 r30
+> move z r31
+> divr r30 r31
+> move r31 x
+> move z r32
+> divr y r32
+> move r32 y
+> sys writer x 
+> sys writes newline
+> sys writer y 
+> sys writes newline
+> move x r33
+> addr y r33
+> move r33 r34
+> addr z r34
+> move r34 r35
+> divr z r35
+> move r35 t
+> sys writer t 
+> sys writes newline
+> move t r36
+> mulr t r36
+> move r36 t
+> sys writer t 
+> sys writes newline
+> move 2.0 r37
+> move t r38
+> divr r37 r38
+> move 4.0 r39
+> move z r40
+> divr r39 r40
+> move 5.0 r41
+> move z r42
+> divr r41 r42
+> move 6.0 r43
+> move z r44
+> divr r43 r44
+> move 7.0 r45
+> move z r46
+> divr r45 r46
+> move t r47
+> addr z r47
+> move r47 r48
+> addr t r48
+> move r48 r49
+> addr r38 r49
+> move r49 r50
+> addr r40 r50
+> move r50 r51
+> addr r42 r51
+> move r51 r52
+> addr r44 r52
+> move r52 r53
+> addr r46 r53
+> move r53 t
+> sys writer t 
+> sys writes newline
+> sys halt
+Testing input file inputs/test_if.micro
+1,15c1,57
+< inUseASTNodes size: 0
+< Created VarRef INT i
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< -ENTER ADDOP-
+< inUseASTNodes size: 3
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: - (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+---
+> ;IR code
+> ;LABEL main
+> ;LINK 
+> ;STOREI 7 $T1
+> ;STOREI $T1 num
+> ;STOREI 2 $T2
+> ;STOREI $T2 i
+> ;STOREI 42 $T3
+> ;STOREI $T3 a
+> ;STOREI 5 $T4
+> ;GEI i $T4 label1
+> ;ADDI num a $T5
+> ;STOREI $T5 num
+> ;STOREI 3 $T6
+> ;GEI i $T6 label2
+> ;ADDI num a $T7
+> ;STOREI $T7 num
+> ;LABEL label2
+> ;JUMP label3
+> ;LABEL label1
+> ;SUBI num a $T8
+> ;STOREI $T8 num
+> ;LABEL label3
+> ;WRITEI num
+> ;RET
+> ;tiny code
+> var i
+> var a
+> var num
+> label main 
+> move 7 r0
+> move r0 num
+> move 2 r1
+> move r1 i
+> move 42 r2
+> move r2 a
+> move 5 r3
+> cmpi i r3
+> jge label1
+> move num r4
+> addi a r4
+> move r4 num
+> move 3 r5
+> cmpi i r5
+> jge label2
+> move num r6
+> addi a r6
+> move r6 num
+> label label2 
+> jmp label3 
+> label label1 
+> move num r7
+> subi a r7
+> move r7 num
+> label label3 
+> sys writei num 
+> sys halt
+Testing input file inputs/test_mult.micro
+1,19c1,47
+< inUseASTNodes size: 0
+< Created VarRef INT a
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< inUseASTNodes size: 3
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: a (VarRef)
+< Node Value: c (VarRef)
+< Node Value: * (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: b (VarRef)
+< Node Value: d (VarRef)
+< Node Value: * (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+---
+> ;IR code
+> ;LABEL main
+> ;LINK 
+> ;STOREI 1 $T1
+> ;STOREI $T1 a
+> ;STOREI 2 $T2
+> ;STOREI $T2 b
+> ;READI c
+> ;READI d
+> ;MULTI a c $T3
+> ;MULTI b d $T4
+> ;ADDI $T3 $T4 $T5
+> ;STOREI $T5 e
+> ;WRITEI c
+> ;WRITES newline
+> ;WRITEI d
+> ;WRITES newline
+> ;WRITEI e
+> ;WRITES newline
+> ;RET
+> ;tiny code
+> var a
+> var b
+> var c
+> var d
+> var e
+> str newline "\n"
+> move 1 r0
+> move r0 a
+> move 2 r1
+> move r1 b
+> sys readi c 
+> sys readi d 
+> move a r2
+> muli c r2
+> move b r3
+> muli d r3
+> move r2 r4
+> addi r3 r4
+> move r4 e
+> sys writei c
+> sys writes newline
+> sys writei d
+> sys writes newline
+> sys writei e
+> sys writes newline
+> sys halt
+Testing input file inputs/test_while.micro
+1,24c1,63
+< inUseASTNodes size: 0
+< Created VarRef INT i
+< Created VarRef FLOAT newapprox
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< -ENTER FACTOR-
+< -ENTER ADDOP-
+< inUseASTNodes size: 4
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: 0.5 (VarRef)
+< Node Value: (approx+num/approx) (VarRef)
+< Node Value: * (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: + (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: num (VarRef)
+< Node Value: approx (VarRef)
+< Node Value: / (MulExpr)
+< END LIST POSTORDER TRAVERSAL
+< BEGIN LIST POSTORDER TRAVERSAL
+< Node Value: - (AddExpr)
+< END LIST POSTORDER TRAVERSAL
+---
+> ;IR code
+> ;LABEL main
+> ;LINK 
+> ;STOREF 7.0 $T1
+> ;STOREF $T1 num
+> ;STOREI 100 $T2
+> ;STOREI $T2 i
+> ;STOREI 1 $T3
+> ;STOREI $T3 j
+> ;STOREF num approx
+> ;LABEL label1
+> ;STOREI 0 $T4
+> ;EQI i $T4 label2
+> ;STOREF 0.5 $T5
+> ;DIVF num approx $T6
+> ;ADDF approx $T6 $T7
+> ;MULTF $T5 $T7 $T8
+> ;STOREF $T8 newapprox
+> ;STOREF newapprox approx
+> ;STOREI 1 $T9
+> ;SUBI i $T9 $T10
+> ;STOREI $T10 i
+> ;JUMP label1
+> ;LABEL label2
+> ;WRITEF approx
+> ;RET
+> ;tiny code
+> var i
+> var j
+> var newapprox
+> var approx
+> var num
+> label main 
+> move 7.0 r0
+> move r0 num
+> move 100 r1
+> move r1 i
+> move 1 r2
+> move r2 j
+> move num r3
+> move r3 approx
+> label label1 
+> move 0 r4
+> cmpi i r4
+> jeq label2
+> move 0.5 r5
+> move num r6
+> divr approx r6
+> move approx r7
+> addr r6 r7
+> move r5 r8
+> mulr r7 r8
+> move r8 newapprox
+> move newapprox r3
+> move r3 approx
+> move 1 r9
+> move i r10
+> subi r9 r10
+> move r10 i
+> jmp label1 
+> label label2 
+> sys writer approx 
+> sys halt

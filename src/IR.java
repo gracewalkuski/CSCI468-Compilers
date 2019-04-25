@@ -1,10 +1,11 @@
-import java.util.HashMap;
-import java.util.ArrayList;
+import java.util.*;
 
-import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import java.util.List;
-import java.util.Arrays;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 class IR {
 
@@ -93,25 +94,41 @@ class IR {
     public void generateVariable(String v) {
     }
 
-    public void generateStore(float val, String var) {
+    public void generateStore(String expr, String var) {
         //Make new register
         String reg = generateRegister();
+
+        float val = this.parseThenEvaluateExpression(expr);
 
         //Keep a stack of our most recently reference values
         mostRecentlyReferencedProgramValues.push(val);
         mostRecentlyReferencedProgramValues.push((float)this.regNum);
 
-        this.variableToValueTable.put(var, val);
 
         //Keep track of the values our temporaries contain
-        registerToValueTable.put(this.regNum, val);
+        this.registerToValueTable.put(this.regNum, val);
 
-        SymbolTable activeSymbolTable = this.getCurrentSymbolTable();
-        //String variableType = activeSymbolTable.get(var);
+        //Keep track of the values of our variables
+        this.variableToValueTable.put(var, val);
 
+        String variableType = this.checkVarType(var);
 
-        String s1 = ";STOREI " + val + " " + reg;
-        String s2 = ";STOREI " + reg + " " + var;
+        String storeString = ";STORE";
+
+        switch (variableType) {
+            case "INT":
+                storeString += "I ";
+                break;
+            case "FLOAT":
+                storeString += "F ";
+                break;
+            default:
+                System.out.println("oh.");
+                break;
+        }
+
+        String s1 = storeString + val + " " + reg;
+        String s2 = storeString + reg + " " + var;
         tac.add(s1);
         tac.add(s2);
 
@@ -232,6 +249,50 @@ class IR {
             }
         }
         return null;
+    }
+
+    private float parseThenEvaluateExpression(String expr) {
+
+        String variables = "[a-zA-Z]+";
+
+        // using a set because we dont need to know how many variables are in the equation
+        // just WHICH variables
+        HashSet<String> variableList = new HashSet<>();
+
+        // configure regex to find variable (id) names
+        Pattern pattern = Pattern.compile(variables);
+        Matcher m = pattern.matcher(expr);
+
+        // add the variables to our set
+        while (m.find()) {
+            variableList.add(m.group());
+        }
+
+        // for each variable, replace the variable with its numerical value that
+        // we have saved in variableToValueTable
+        for (String var : variableList) {
+            //System.out.println(var);
+            expr = expr.replaceAll(var, "" + this.variableToValueTable.get(var));
+        }
+
+        // use a javascript engine to handle evaluation of expression
+        ScriptEngine engine = new ScriptEngineManager().getEngineByExtension("js");
+
+        try {
+            // the engine will calculate the result and return an object
+            Object result = engine.eval(expr);
+
+            System.out.println(expr + " = " + result);
+
+            // result is an object. we have to do some object to String to Float trickery
+            // to return the right value
+            return Float.parseFloat(result + "");
+
+        } catch (ScriptException e) {
+            System.out.println("Engine error.");
+        }
+
+        return (float)0;
     }
     
 

@@ -230,9 +230,9 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 			//call ir to generate store with value and varname
 			//int value = Integer.parseInt(ctx.assign_expr().expr().getText());
 			//System.out.println("DEBUG " + ctx.assign_expr().expr().getText());
-			int val = 69;
+			String expr = ctx.assign_expr().expr().getText();
 			String varName = ctx.assign_expr().id().getText();
-			this.ir.generateStore(val, varName);
+			this.ir.generateStore(expr, varName);
 		}
 	}
 	
@@ -263,8 +263,12 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	@Override public void exitReturn_stmt(LittleGrammarParser.Return_stmtContext ctx) { }
 	
 	@Override public void enterExpr(LittleGrammarParser.ExprContext ctx) {
-		if (ctx != null) {
+		if (ctx.expr_prefix() != null && ctx.factor() != null) {
 			this.insideExpression = true;
+//			if (this.insideAssignment) {
+//
+//				System.out.println("EXXXXPPPPPRRR = " + ctx.expr_prefix().getText() + " " + ctx.factor().getText());
+//			}
 		}
 	}
 	
