@@ -11,6 +11,7 @@ class IR {
 
     private int regNum;
     private int labelNum;
+    private String lastReferencedTemporary;
     private ArrayList<String> tac;
     private Stack<Float> mostRecentlyReferencedProgramValues;
     private String mostRecentlyReferencedProgramLabel;
@@ -23,7 +24,7 @@ class IR {
     public IR (ArrayList<SymbolTable> s) {
 
         this.regNum = 0;
-        this.labelNum = 1;
+        this.labelNum = 0;
 
 
         this.mostRecentlyReferencedProgramValues = new Stack();
@@ -44,6 +45,10 @@ class IR {
         return reg;
     }
 
+    public String generateLabel() {
+        return "label" + ++labelNum;
+    }
+
     public void generateLabel(String type) {
         //generate labels for if, else, that can be used for jumps
         String label = "";
@@ -51,8 +56,7 @@ class IR {
             label = type;
         }
         else {
-            label = "label" + labelNum + type;
-            labelNum++;
+            label = "label" + ++labelNum + type;
         }
         tac.add(";LABEL " + label);
         this.mostRecentlyReferencedProgramLabel = label;
@@ -62,39 +66,70 @@ class IR {
         tac.add(";LINK");
     }
 
-    public void generateConditional(String operator) {
-        System.out.println(mostRecentlyReferencedProgramValues.size());
-        float val1 = mostRecentlyReferencedProgramValues.pop();
-        float val2 = mostRecentlyReferencedProgramValues.pop();
-        System.out.printf("val1: %s\nval2: %s\n", val1, val2);
-        String partialIR;
+    public void generateConditional(String conditionalExpr) {
 
-        switch(operator) {
+        String left, right, condition, tempRegister, partialIR, newLabel;
+
+        //###########################################################
+        //Need to evaluate expressions on left or ride side
+            //Store evaluation in register
+
+        //Need to check if left or right side of expr are values or variables
+            //need to store values in temp registers
+            //Need to put variables into final output string
+
+
+
+        //###########################################################
+
+        //Get substrings from conditional expr
+        //Get Variable from left side
+        left = getVariableFromConditionalExpr(conditionalExpr);
+        //Get compop from middle
+        condition = getCompopFromConditionalExpr(conditionalExpr);
+        //Get value from right side
+        right = getValueFromConditionalExpr(conditionalExpr);
+
+        //Check if string contains a decimal for a float
+        if (checkIfStringIsFloat(right)) {
+            System.out.println("DEBUG INSIDE FLOAT CONVERT");
+            tempRegister = generateStoreIntoTemporary(Float.parseFloat(right));
+        }
+        else {//input as an int
+            System.out.println("DEBUG INSIDE INT CONVERT");
+            tempRegister = generateStoreIntoTemporary(Integer.parseInt(right));
+        }
+
+        //Generate new "label#" for out condition
+        newLabel = generateLabel();
+
+        switch(condition) {
             case ">=":
-                partialIR = ";GE";
+                partialIR = ";LTI";
                 break;
             case "<=":
-                partialIR = ";LE";
+                partialIR = ";GTI";
                 break;
             case ">":
-                partialIR = ";GT";
+                partialIR = ";LEI";
                 break;
             case "<":
-                partialIR = ";LT";
+                partialIR = ";GEI";
                 break;
             case "=":
-                partialIR = ";EE";
+                partialIR = ";NEI";
                 break;
             case "!=":
-                partialIR = ";NE";
+                partialIR = ";EQI";
                 break;
             default:
-                partialIR = "";
+                partialIR = "ERROR IN SWITCH";
                 break;
         }
 
+        tac.add(partialIR + " " + left + " " + tempRegister + " " + newLabel);
 
-        tac.add(partialIR + " " + val1 + " " + val2 + " " + this.mostRecentlyReferencedProgramLabel);
+
     }
 
     public void generateVariable(String v) {
@@ -103,12 +138,13 @@ class IR {
     public void generateStore(String expr, String var) {
         //Make new register
         String reg = generateRegister();
+        this.lastReferencedTemporary = reg;
 
         float val = this.parseThenEvaluateExpression(expr);
 
         //Keep a stack of our most recently reference values
         mostRecentlyReferencedProgramValues.push(val);
-        mostRecentlyReferencedProgramValues.push((float)this.regNum);
+//        mostRecentlyReferencedProgramValues.push((float)this.regNum);
 
         //Keep track of the values our temporaries contain
         this.registerToValueTable.put(this.regNum, val);
@@ -148,7 +184,7 @@ class IR {
 
     }
 
-    public void generateStoreIntoTemporary(int val) {
+    public String generateStoreIntoTemporary(int val) {
         String reg = generateRegister();
 
         mostRecentlyReferencedProgramValues.push((float)val);
@@ -157,17 +193,19 @@ class IR {
 
         String s1 = ";STOREI " + val + " " + reg;
         tac.add(s1);
+        return reg;
     }
 
-    public void generateStoreIntoTemporary(float val) {
+    public String generateStoreIntoTemporary(float val) {
         String reg = generateRegister();
 
         mostRecentlyReferencedProgramValues.push((float)val);
         //Keep track of the values our temporaries contain
         registerToValueTable.put(this.regNum, (float)val);
 
-        String s1 = ";STOREI " + val + " " + reg;
+        String s1 = ";STOREF " + val + " " + reg;
         tac.add(s1);
+        return reg;
     }
 
     public void generateLoad(int i) {
@@ -236,7 +274,8 @@ class IR {
             printTAC();
         }
     }
-
+    //###Helper Methods for IR
+    //-------------------------------------------------------------------
     private void printTAC() {
         for (String s : tac) {
             System.out.println(s);
@@ -263,6 +302,57 @@ class IR {
             }
         }
         return null;
+    }
+
+    private boolean checkIfStringIsFloat(String s) {
+        //Check if string contains a decimal for a float
+        if (s.indexOf('.') != -1) {
+            return true;
+        }
+        return false;
+    }
+
+    private String getVariableFromConditionalExpr(String expr) {
+        //returns first match from string
+        String variables = "^[A-Za-z]*";
+        Pattern variablePattern = Pattern.compile(variables);
+        Matcher varSearch = variablePattern.matcher(expr);
+
+        if (varSearch.find()) {
+            return varSearch.group(0);
+        }
+        else {
+            return null;
+        }
+    }
+
+    private String getCompopFromConditionalExpr(String expr) {
+        //returns first match from string
+        String compop = "[<>!=]+";
+        Pattern compopPattern = Pattern.compile(compop);
+        Matcher compopSearch = compopPattern.matcher(expr);
+
+        if (compopSearch.find()) {
+            return compopSearch.group(0);
+        }
+        else {
+            return null;
+        }
+    }
+
+    private String getValueFromConditionalExpr(String expr) {
+        //returns first match from string
+        System.out.println("IN GET VALUE "+expr);
+        String value = "[0-9+.*0-9*]";
+        Pattern valuePattern = Pattern.compile(value);
+        Matcher valueSearch = valuePattern.matcher(expr);
+
+        if (valueSearch.find()) {
+            return valueSearch.group(0);
+        }
+        else {
+            return null;
+        }
     }
 
     private float parseThenEvaluateExpression(String expr) {

@@ -325,8 +325,8 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 
 	@Override public void enterPrimaryINT(LittleGrammarParser.PrimaryINTContext ctx) {
 		if (this.insideExpression && !this.insideAssignment) {
-			int val = Integer.parseInt(ctx.getText());
-			this.ir.generateStoreIntoTemporary(val);
+//			int val = Integer.parseInt(ctx.getText());
+//			this.ir.generateStoreIntoTemporary(val);
 		}
 	}
 
@@ -334,8 +334,8 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 
 	@Override public void enterPrimaryFLOAT(LittleGrammarParser.PrimaryFLOATContext ctx) {
 		if (this.insideExpression && !this.insideAssignment) {
-			float val = Float.parseFloat(ctx.getText());
-			this.ir.generateStoreIntoTemporary(val);
+//			float val = Float.parseFloat(ctx.getText());
+//			this.ir.generateStoreIntoTemporary(val);
 		}
 	}
 
@@ -384,10 +384,9 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void enterCond(LittleGrammarParser.CondContext ctx) {
 		this.insideConditional = true;
-		if (ctx.expr() != null) {
+		if (ctx.expr() != null && ctx.compop() != null) {
 
-
-//			this.ir.insertConditionalExpression(ctx.expr());
+			this.ir.generateConditional(ctx.getText());
 		}
 	}
 	
