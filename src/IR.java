@@ -46,10 +46,16 @@ class IR {
 
     public void generateLabel(String type) {
         //generate labels for if, else, that can be used for jumps
-        String label = "label" + labelNum + type;
+        String label = "";
+        if(type.equals("main")) {
+            label = type;
+        }
+        else {
+            label = "label" + labelNum + type;
+            labelNum++;
+        }
         tac.add(";LABEL " + label);
         this.mostRecentlyReferencedProgramLabel = label;
-        labelNum++;
     }
 
     public void pushFramePointerOntoStack() {
@@ -104,7 +110,6 @@ class IR {
         mostRecentlyReferencedProgramValues.push(val);
         mostRecentlyReferencedProgramValues.push((float)this.regNum);
 
-
         //Keep track of the values our temporaries contain
         this.registerToValueTable.put(this.regNum, val);
 
@@ -114,21 +119,30 @@ class IR {
         String variableType = this.checkVarType(var);
 
         String storeString = ";STORE";
+        String s1, s2;
+        s1 = s2 = "";
 
         switch (variableType) {
             case "INT":
                 storeString += "I ";
+                //Check if INT. Then remove period & #'s for output string
+                String truncateFloat = Float.toString(val);
+                truncateFloat = truncateFloat.substring(0, truncateFloat.indexOf("."));
+                //Use new string formatted as an int in output
+                s1 = storeString + truncateFloat + " " + reg;
                 break;
             case "FLOAT":
                 storeString += "F ";
+                //Keep output as float for output
+                s1 = storeString + val + " " + reg;
                 break;
             default:
                 System.out.println("oh.");
                 break;
         }
 
-        String s1 = storeString + val + " " + reg;
-        String s2 = storeString + reg + " " + var;
+        //Create remaining strings and add to tac
+        s2 = storeString + reg + " " + var;
         tac.add(s1);
         tac.add(s2);
 
@@ -282,7 +296,7 @@ class IR {
             // the engine will calculate the result and return an object
             Object result = engine.eval(expr);
 
-            System.out.println(expr + " = " + result);
+            //System.out.println(expr + " = " + result);
 
             // result is an object. we have to do some object to String to Float trickery
             // to return the right value

@@ -324,7 +324,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	@Override public void exitPrimaryID(LittleGrammarParser.PrimaryIDContext ctx) { }
 
 	@Override public void enterPrimaryINT(LittleGrammarParser.PrimaryINTContext ctx) {
-		if (this.insideExpression) {
+		if (this.insideExpression && !this.insideAssignment) {
 			int val = Integer.parseInt(ctx.getText());
 			this.ir.generateStoreIntoTemporary(val);
 		}
@@ -333,7 +333,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	@Override public void exitPrimaryINT(LittleGrammarParser.PrimaryINTContext ctx) { }
 
 	@Override public void enterPrimaryFLOAT(LittleGrammarParser.PrimaryFLOATContext ctx) {
-		if (this.insideExpression) {
+		if (this.insideExpression && !this.insideAssignment) {
 			float val = Float.parseFloat(ctx.getText());
 			this.ir.generateStoreIntoTemporary(val);
 		}
