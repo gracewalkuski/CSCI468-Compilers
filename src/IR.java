@@ -229,6 +229,10 @@ class IR {
         return reg;
     }
 
+    public void queueMath(String m) {
+        System.out.println("QUEUE MATH " + m);
+    }
+
     public void generateLoad(int i) {
 
     }

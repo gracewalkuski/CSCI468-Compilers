@@ -295,7 +295,20 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	}
 	
 	@Override public void enterExpr_prefix(LittleGrammarParser.Expr_prefixContext ctx) {
-		}
+		if(ctx != null) {
+			//case that expr_prefix().expr_prefix() is null
+			if (ctx.expr_prefix() == null {
+				//push factor
+				//set factor precedence higher than addop currently in queue
+				this.ir.queueMath(ctx.addop().getText());
+				this.ir.queueMath(ctx.factor().getText());
+			}
+			else {//case that expr_prefix().expr_prefix() is not null
+				this.ir.queueMath(ctx.addop().getText());
+				this.ir.queueMath(ctx.factor().getText());
+			}
+		}	
+	}
 
 	@Override public void exitExpr_prefix(LittleGrammarParser.Expr_prefixContext ctx) { }
 
