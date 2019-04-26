@@ -361,6 +361,31 @@ class IR {
     }
 
     private float parseThenEvaluateExpression(String expr) {
+        //#----------------------------------
+        //We dont need to evaulate an expression...
+        //  We just need to tell the computer HOW to evaluate it
+        //  We can take the parameter of this method, "expr"
+        //  and create 3AC code from that, without having to
+        //  solve the output.
+        //
+        //  example:
+        //  expr = 1 + 2
+        //  our generated code:
+        //      ;STOREI 1 $T1
+        //      ;STOREI 2 $T2
+        //      ;ADD $T1 $T2 $T3
+        //
+        //  See? no math involved. Just making 3AC code that will
+        //  be compiled into machine language. Then any computer
+        //  can solve this. Ours doesnt have to
+        //#----------------------------------
+
+        //NEW CODE FOR THIS METHOD BELOW
+
+        
+
+        //NEW CODE FOR THIS METHOD ABOVE
+        //OLD CODE FOR THIS METHOD BELOW
 
         String variables = "[a-zA-Z]+";
 
@@ -380,7 +405,6 @@ class IR {
         // for each variable, replace the variable with its numerical value that
         // we have saved in variableToValueTable
         for (String var : variableList) {
-            //System.out.println(var);
             expr = expr.replaceAll(var, "" + this.variableToValueTable.get(var));
         }
 
@@ -390,8 +414,6 @@ class IR {
         try {
             // the engine will calculate the result and return an object
             Object result = engine.eval(expr);
-
-            //System.out.println(expr + " = " + result);
 
             // result is an object. we have to do some object to String to Float trickery
             // to return the right value
