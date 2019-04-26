@@ -76,7 +76,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	@Override public void enterId(LittleGrammarParser.IdContext ctx) {
 		if (ctx != null && insideStatementList) {
 			if (!ctx.getText().equals("")) {
-				System.out.println("DEBUG ID " + ctx.getText());
+//				System.out.println("DEBUG ID " + ctx.getText());
 			}
 		}
 	}
@@ -295,19 +295,11 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	}
 	
 	@Override public void enterExpr_prefix(LittleGrammarParser.Expr_prefixContext ctx) {
-		if(ctx != null) {
+		if(ctx != null && ctx.factor() != null) {
 			//case that expr_prefix().expr_prefix() is null
-			if (ctx.expr_prefix() == null {
-				//push factor
-				//set factor precedence higher than addop currently in queue
-				this.ir.queueMath(ctx.addop().getText());
-				this.ir.queueMath(ctx.factor().getText());
-			}
-			else {//case that expr_prefix().expr_prefix() is not null
-				this.ir.queueMath(ctx.addop().getText());
-				this.ir.queueMath(ctx.factor().getText());
-			}
-		}	
+
+			this.ir.queueMath(ctx.factor().getText());
+		}
 	}
 
 	@Override public void exitExpr_prefix(LittleGrammarParser.Expr_prefixContext ctx) { }
@@ -374,7 +366,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	@Override public void enterAddop(LittleGrammarParser.AddopContext ctx) {
 		if (ctx != null) {
 			if (!ctx.getText().equals("")) {
-				System.out.println("DEBUG ADDOP " + ctx.getText());
+//				System.out.println("DEBUG ADDOP " + ctx.getText());
 			}
 		}
 	}
@@ -384,7 +376,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	@Override public void enterMulop(LittleGrammarParser.MulopContext ctx) {
 		if (ctx != null) {
 			if (!ctx.getText().equals("")) {
-				System.out.println("DEBUG MULOP " + ctx.getText());
+//				System.out.println("DEBUG MULOP " + ctx.getText());
 			}
 		}
 	}
