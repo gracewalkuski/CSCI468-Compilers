@@ -246,7 +246,12 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void exitAssign_expr(LittleGrammarParser.Assign_exprContext ctx) { }
 	
-	@Override public void enterRead_stmt(LittleGrammarParser.Read_stmtContext ctx) { }
+	@Override public void enterRead_stmt(LittleGrammarParser.Read_stmtContext ctx) {
+		if (ctx != null && ctx.id_list() != null) {
+			System.out.println("DEBUG IN ENTER READ " + ctx.id_list().getText());
+			this.ir.generateRead(ctx.id_list().getText());
+		}
+	}
 	
 	@Override public void exitRead_stmt(LittleGrammarParser.Read_stmtContext ctx) { }
 	

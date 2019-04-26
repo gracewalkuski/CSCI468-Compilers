@@ -231,12 +231,16 @@ class IR {
 
     }
 
-    public void generateRead(int i) {
-
-    }
-
-    public void generateRead(float f) {
-
+    public void generateRead(String str) {
+        //create list from string of variables to print out
+        List<String> list = parseStringIntoList(str);
+        //Loop through all variables in list, generate read code for each
+        for (String s : list) {
+            //create output string
+            String output = ";READI " + s;
+            //add complete string output to tac
+            tac.add(output);
+        }
     }
 
     public void generateWrite(String str) {
