@@ -66,9 +66,17 @@ class IR {
         tac.add(";LINK");
     }
 
+
     public void generateConditional(String conditionalExpr) {
 
-        String left, right, condition, tempRegister, partialIR, newLabel;
+        String left, right, condition, partialIR, newLabel, rightTemp, leftTemp;
+
+        rightTemp = "";
+        leftTemp = "";
+
+        boolean leftIsValue, rightIsValue;
+        leftIsValue = false;
+        rightIsValue = false;
 
         //###########################################################
         //Need to evaluate expressions on left or ride side
@@ -82,22 +90,42 @@ class IR {
 
         //###########################################################
 
-        //Get substrings from conditional expr
-        //Get Variable from left side
-        left = getVariableFromConditionalExpr(conditionalExpr);
         //Get compop from middle
         condition = getCompopFromConditionalExpr(conditionalExpr);
-        //Get value from right side
-        right = getValueFromConditionalExpr(conditionalExpr);
 
-        //Check if string contains a decimal for a float
-        if (checkIfStringIsFloat(right)) {
-            System.out.println("DEBUG INSIDE FLOAT CONVERT");
-            tempRegister = generateStoreIntoTemporary(Float.parseFloat(right));
+
+        //Check if left is a variable, then generate temporary if value
+        left = getVariableFromConditionalExpr(conditionalExpr);
+        if (left != null) {
+            //left is a variable
         }
-        else {//input as an int
-            System.out.println("DEBUG INSIDE INT CONVERT");
-            tempRegister = generateStoreIntoTemporary(Integer.parseInt(right));
+        else {//left is a value
+            left = getValueFromConditionalExpr(conditionalExpr);
+            leftIsValue = true;
+            //Check to see if value is float or int
+            if (checkIfStringIsFloat(left)) {
+                leftTemp = generateStoreIntoTemporary(Float.parseFloat(left));
+            }
+            else {//value is int
+                leftTemp = generateStoreIntoTemporary(Integer.parseInt(left));
+            }
+        }
+
+        //check if right is value, then generate temporary if value
+        right = getValueFromConditionalExpr(conditionalExpr);
+        if (right != null) {
+            //right is value
+            rightIsValue = true;
+            //Check to see if value is float or int
+            if (checkIfStringIsFloat(right)) {
+                rightTemp = generateStoreIntoTemporary(Float.parseFloat(right));
+            }
+            else {//value is int
+                rightTemp = generateStoreIntoTemporary(Integer.parseInt(right));
+            }
+        }
+        else { //right is variable
+            right = getVariableFromConditionalExpr(conditionalExpr);
         }
 
         //Generate new "label#" for out condition
@@ -127,7 +155,28 @@ class IR {
                 break;
         }
 
-        tac.add(partialIR + " " + left + " " + tempRegister + " " + newLabel);
+        String output = partialIR;
+
+        //generate output string
+        if (leftIsValue) {
+            //put temorary of left in output
+            output += " " + leftTemp;
+        }
+        else {//put in variable name of left
+            output += " " + left;
+        }
+        //checking right piece for value or variable
+        if (rightIsValue) {
+            //put temporary of right in output
+            output += " " + rightTemp;
+        }
+        else {
+            //put in right variable name
+            output += " " + right;
+        }
+        output += " " + newLabel;
+
+        tac.add(output);
 
 
     }
@@ -342,7 +391,6 @@ class IR {
 
     private String getValueFromConditionalExpr(String expr) {
         //returns first match from string
-        System.out.println("IN GET VALUE "+expr);
         String value = "[0-9+.*0-9*]";
         Pattern valuePattern = Pattern.compile(value);
         Matcher valueSearch = valuePattern.matcher(expr);
