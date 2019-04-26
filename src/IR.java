@@ -422,7 +422,7 @@ class IR {
         * SHUNTING YARD ALGORITHM BY DIJKSTRA to convert infix
         * notation into postfix expression stack to evaulate
         * order of operations
-        * 
+        *
         *
         * */
 
