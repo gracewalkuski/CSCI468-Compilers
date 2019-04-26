@@ -21,6 +21,9 @@ class IR {
 
     private ArrayList<SymbolTable> symbolTableList;
 
+    //TEMPORARY DEBUG QUEUE
+    public ArrayList<String> debugQueue;
+
     public IR (ArrayList<SymbolTable> s) {
 
         this.regNum = 0;
@@ -30,6 +33,9 @@ class IR {
         this.mostRecentlyReferencedProgramValues = new Stack();
         this.registerToValueTable = new HashMap();
         this.variableToValueTable = new HashMap();
+
+        //TEMPORARY DEBUG QUEUE
+        this.debugQueue = new ArrayList();
 
         this.tac = new ArrayList();
         this.symbolTableList = s;
@@ -291,8 +297,20 @@ class IR {
             tac.add(";tiny code");
 
             printTAC();
+
+            //TEMPORARY DEBUG
+            for (String s : this.debugQueue) {
+                System.out.println(s);
+            }
         }
     }
+
+    //TEMPORARY DEBUG METHOD TO SOLVE WHEN PARTS OF EQUATIONS ARE
+    // DONE IN THE POST ORDER WALK
+    public void debugToQueue(String s) {
+        this.debugQueue.add(s);
+    }
+
     //###Helper Methods for IR
     //-------------------------------------------------------------------
     private void printTAC() {
@@ -378,11 +396,22 @@ class IR {
         //  See? no math involved. Just making 3AC code that will
         //  be compiled into machine language. Then any computer
         //  can solve this. Ours doesnt have to
+        //
+        //  Maybe, everytime out listener comes across "factor" we
+        //  take the left id, right id, and mulop and push to a stack
+        //
+        //  Everytime we see "expr", we know we have already looked at the "factor"
+        //  inside of the "expr". we can then push the "addop" to the stack to perform
+        //  after the "factor" math. The order of operations should be preserved in the
+        //  parse tree by the post-order walk.
+        //
+        //  what about the right part of the factor though? when can we push that to a stack?
+
         //#----------------------------------
 
         //NEW CODE FOR THIS METHOD BELOW
 
-        
+
 
         //NEW CODE FOR THIS METHOD ABOVE
         //OLD CODE FOR THIS METHOD BELOW
