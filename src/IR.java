@@ -108,6 +108,19 @@ class IR {
         left = splitString[0];
         right = splitString[1];
 
+
+
+        //#-------------------------------------------
+        //Check if either left or right side contains an expression
+        //  + Evaluate expression using js engine
+        //      + Create appropriate ADD, SUB, MULT statements
+        //      + Store val in register
+
+        //#-------------------------------------------
+
+
+
+
         //String to hold temporary should left or right be a value
         String temporary;
 
