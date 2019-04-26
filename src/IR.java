@@ -46,11 +46,12 @@ class IR {
     }
 
     public String generateLabel() {
+        //return a label for conditional labels
         return "label" + ++labelNum;
     }
 
     public void generateLabel(String type) {
-        //generate labels for if, else, that can be used for jumps
+        //generate labels for functions like "main"
         String label = "";
         if(type.equals("main")) {
             label = type;
@@ -66,7 +67,6 @@ class IR {
         tac.add(";LINK");
     }
 
-
     public void generateConditional(String conditionalExpr) {
 
         String left, right, condition, partialIR, newLabel;
@@ -74,19 +74,7 @@ class IR {
         //Generate new "label#" for out condition
         newLabel = generateLabel();
 
-        //###########################################################
-        //Need to evaluate expressions on left or ride side
-            //Store evaluation in register
-
-        //Need to check if left or right side of expr are values or variables
-            //need to store values in temp registers
-            //Need to put variables into final output string
-
-
-
-        //###########################################################
-
-        //Get compop from middle
+        //Get compop from middle of string
         condition = getCompopFromConditionalExpr(conditionalExpr);
 
         switch(condition) {
@@ -147,9 +135,6 @@ class IR {
         output += " " + newLabel;
 
         tac.add(output);
-    }
-
-    public void generateVariable(String v) {
     }
 
     public void generateStore(String expr, String var) {
@@ -331,7 +316,9 @@ class IR {
 
     private boolean checkIfStringIsInt(String s) {
         //Check is string is an int
+        //check for a decimal
         if (checkIfStringIsFloat(s)){
+            //string is a float
             return false;
         }
 
