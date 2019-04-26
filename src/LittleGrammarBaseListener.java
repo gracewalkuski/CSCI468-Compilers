@@ -28,6 +28,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	private boolean insideExpression;
 	private boolean insideAssignment;
 	private boolean insideConditional;
+	private boolean insideStatementList;
 
 	LittleGrammarBaseListener() {
 		this.symbolTableList = new ArrayList<>();
@@ -39,6 +40,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		this.insideExpression = false;
 		this.insideAssignment = false;
 		this.insideConditional = false;
+		this.insideStatementList = false;
 
 		this.ir = new IR(this.symbolTableList);
 	}
@@ -71,7 +73,13 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		this.ir.exitProgram();
 	}
 	
-	@Override public void enterId(LittleGrammarParser.IdContext ctx) { }
+	@Override public void enterId(LittleGrammarParser.IdContext ctx) {
+		if (ctx != null && insideStatementList) {
+			if (!ctx.getText().equals("")) {
+				System.out.println("DEBUG ID " + ctx.getText());
+			}
+		}
+	}
 	
 	@Override public void exitId(LittleGrammarParser.IdContext ctx) { }
 	
@@ -211,9 +219,17 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void exitFunc_body(LittleGrammarParser.Func_bodyContext ctx) { }
 	
-	@Override public void enterStmt_list(LittleGrammarParser.Stmt_listContext ctx) { }
+	@Override public void enterStmt_list(LittleGrammarParser.Stmt_listContext ctx) {
+		if (ctx != null) {
+			this.insideStatementList = true;
+		}
+	}
 	
-	@Override public void exitStmt_list(LittleGrammarParser.Stmt_listContext ctx) { }
+	@Override public void exitStmt_list(LittleGrammarParser.Stmt_listContext ctx) {
+		if (ctx != null) {
+			this.insideStatementList = false;
+		}
+	}
 	
 	@Override public void enterStmt(LittleGrammarParser.StmtContext ctx) { }
 	
@@ -284,7 +300,6 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	@Override public void exitExpr_prefix(LittleGrammarParser.Expr_prefixContext ctx) { }
 
 	@Override public void enterFactor(LittleGrammarParser.FactorContext ctx) {
-
 	}
 	
 	@Override public void exitFactor(LittleGrammarParser.FactorContext ctx) { }
@@ -344,11 +359,21 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 
 	
 	@Override public void enterAddop(LittleGrammarParser.AddopContext ctx) {
+		if (ctx != null) {
+			if (!ctx.getText().equals("")) {
+				System.out.println("DEBUG ADDOP " + ctx.getText());
+			}
+		}
 	}
 	
 	@Override public void exitAddop(LittleGrammarParser.AddopContext ctx) { }
 	
 	@Override public void enterMulop(LittleGrammarParser.MulopContext ctx) {
+		if (ctx != null) {
+			if (!ctx.getText().equals("")) {
+				System.out.println("DEBUG MULOP " + ctx.getText());
+			}
+		}
 	}
 	
 	@Override public void exitMulop(LittleGrammarParser.MulopContext ctx) { }

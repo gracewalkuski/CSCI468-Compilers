@@ -397,21 +397,40 @@ class IR {
         //  be compiled into machine language. Then any computer
         //  can solve this. Ours doesnt have to
         //
-        //  Maybe, everytime out listener comes across "factor" we
-        //  take the left id, right id, and mulop and push to a stack
-        //
-        //  Everytime we see "expr", we know we have already looked at the "factor"
-        //  inside of the "expr". we can then push the "addop" to the stack to perform
-        //  after the "factor" math. The order of operations should be preserved in the
-        //  parse tree by the post-order walk.
-        //
-        //  what about the right part of the factor though? when can we push that to a stack?
+        // If we can find out how the listener is preserving order
+        // of operations, and how it follows along we can push that
+        // order of things to a stack, ie:
+        // a + b
+        // c + (a + b)
+        // d + (c + (a + b))
+        // and then do that order
+        /*
+        * test_combination order of operations per given output file
+        *   Equation:
+        *   c + a * b + (a * b + c) / a + 20
+        * Order of math done in provided 3AC
+        *   a * b -> t4     //first a * b pair
+        *   a * b -> t5     //a * b pair in parenthesis
+        *   t5 + c -> t6    //add c to a*b in parenthesis
+        *   t6 / a -> t7    //divide parenthesis by a
+        *   20 -> t8        //store 20
+        *   c + t4 -> t9    //add c to first a * b
+        *   t9 + t7 -> t10  //add c + a * b &  (a * b + c) / a
+        *   t10 + t8 -> t11 //add 20 as final piece
+        *   t11             //is the answer, store in c
+        *
+        * SHUNTING YARD ALGORITHM BY DIJKSTRA to convert infix
+        * notation into postfix expression stack to evaulate
+        * order of operations
+        * 
+        *
+        * */
 
         //#----------------------------------
 
         //NEW CODE FOR THIS METHOD BELOW
 
-
+//        System.out.println("DEBUG IN EXPR SOLVER" + expr);
 
         //NEW CODE FOR THIS METHOD ABOVE
         //OLD CODE FOR THIS METHOD BELOW
