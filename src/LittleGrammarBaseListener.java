@@ -29,6 +29,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	private boolean insideAssignment;
 	private boolean insideConditional;
 	private boolean insideStatementList;
+	private TinyBuilder tb;
 
 	LittleGrammarBaseListener() {
 		this.symbolTableList = new ArrayList<>();
@@ -43,6 +44,8 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		this.insideStatementList = false;
 
 		this.ir = new IR(this.symbolTableList);
+
+		this.tb = new TinyBuilder(ir.getTAC());
 	}
 
 	public ArrayList<SymbolTable> getSymbolTableList() {

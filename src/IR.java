@@ -85,27 +85,29 @@ class IR {
 
         switch(condition) {
             case ">=":
-                partialIR = ";LTI";
+                partialIR = ";LT";
                 break;
             case "<=":
-                partialIR = ";GTI";
+                partialIR = ";GT";
                 break;
             case ">":
-                partialIR = ";LEI";
+                partialIR = ";LE";
                 break;
             case "<":
-                partialIR = ";GEI";
+                partialIR = ";GE";
                 break;
             case "=":
-                partialIR = ";NEI";
+                partialIR = ";NE";
                 break;
             case "!=":
-                partialIR = ";EQI";
+                partialIR = ";EQ";
                 break;
             default:
                 partialIR = "ERROR IN SWITCH";
                 break;
         }
+
+
 
         String output = partialIR;
 
@@ -130,9 +132,16 @@ class IR {
         //String to hold temporary should left or right be a value
         String temporary;
 
+        String sType = "";
+
         for (String s : splitString) {
             if (checkIfStringIsFloat(s)) {
                 //string is a float
+                if (sType.length() == 0) {
+                    sType = "F";
+                }
+
+
                 //create temp register and store into array to use in output
                 temporary = generateStoreIntoTemporary(Float.parseFloat(s));
                 //add temporary to output string
@@ -140,18 +149,33 @@ class IR {
             }
             else if (checkIfStringIsInt(s)) {
                 //string is an int
+                if (sType.length() == 0) {
+                    sType = "I";
+                }
                 //create temp register and store into array to use in output
                 temporary = generateStoreIntoTemporary(Integer.parseInt(s));
                 //add temporary to output string
                 output += " " + temporary;
             }
             else {//String is a variable
+                if (sType.length() == 0) {
+                    String type = checkVarType(s);
+                    if (type.equals("INT")) {
+                        sType = "I";
+                    }
+                    else if (type.equals("FLOAT")) {
+                        sType = "F";
+                    }
+                }
+
                 //add variable name to output
                 output += " " + s;
             }
         }
 
         output += " " + newLabel;
+
+        output = output.substring(0,3) + sType + output.substring(3, output.length());
 
         tac.add(output);
     }
@@ -301,11 +325,6 @@ class IR {
             tac.add(";tiny code");
 
             printTAC();
-
-            //TEMPORARY DEBUG
-            for (String s : this.debugQueue) {
-                System.out.println(s);
-            }
         }
     }
 
@@ -477,6 +496,8 @@ class IR {
 
         return (float)0;
     }
-    
 
+    public ArrayList<String> getTAC() {
+        return this.tac;
+    }
 }
