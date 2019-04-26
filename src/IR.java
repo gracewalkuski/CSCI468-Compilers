@@ -69,14 +69,10 @@ class IR {
 
     public void generateConditional(String conditionalExpr) {
 
-        String left, right, condition, partialIR, newLabel, rightTemp, leftTemp;
+        String left, right, condition, partialIR, newLabel;
 
-        rightTemp = "";
-        leftTemp = "";
-
-        boolean leftIsValue, rightIsValue;
-        leftIsValue = false;
-        rightIsValue = false;
+        //Generate new "label#" for out condition
+        newLabel = generateLabel();
 
         //###########################################################
         //Need to evaluate expressions on left or ride side
@@ -92,44 +88,6 @@ class IR {
 
         //Get compop from middle
         condition = getCompopFromConditionalExpr(conditionalExpr);
-
-
-        //Check if left is a variable, then generate temporary if value
-        left = getVariableFromConditionalExpr(conditionalExpr);
-        if (left != null) {
-            //left is a variable
-        }
-        else {//left is a value
-            left = getValueFromConditionalExpr(conditionalExpr);
-            leftIsValue = true;
-            //Check to see if value is float or int
-            if (checkIfStringIsFloat(left)) {
-                leftTemp = generateStoreIntoTemporary(Float.parseFloat(left));
-            }
-            else {//value is int
-                leftTemp = generateStoreIntoTemporary(Integer.parseInt(left));
-            }
-        }
-
-        //check if right is value, then generate temporary if value
-        right = getValueFromConditionalExpr(conditionalExpr);
-        if (right != null) {
-            //right is value
-            rightIsValue = true;
-            //Check to see if value is float or int
-            if (checkIfStringIsFloat(right)) {
-                rightTemp = generateStoreIntoTemporary(Float.parseFloat(right));
-            }
-            else {//value is int
-                rightTemp = generateStoreIntoTemporary(Integer.parseInt(right));
-            }
-        }
-        else { //right is variable
-            right = getVariableFromConditionalExpr(conditionalExpr);
-        }
-
-        //Generate new "label#" for out condition
-        newLabel = generateLabel();
 
         switch(condition) {
             case ">=":
@@ -157,28 +115,38 @@ class IR {
 
         String output = partialIR;
 
-        //generate output string
-        if (leftIsValue) {
-            //put temorary of left in output
-            output += " " + leftTemp;
+        //Get left and right string around the compop. but not compop
+        String[] splitString = conditionalExpr.split("[<>!=]+");
+        left = splitString[0];
+        right = splitString[1];
+
+        //String to hold temporary should left or right be a value
+        String temporary;
+
+        for (String s : splitString) {
+            if (checkIfStringIsFloat(s)) {
+                //string is a float
+                //create temp register and store into array to use in output
+                temporary = generateStoreIntoTemporary(Float.parseFloat(s));
+                //add temporary to output string
+                output += " " + temporary;
+            }
+            else if (checkIfStringIsInt(s)) {
+                //string is an int
+                //create temp register and store into array to use in output
+                temporary = generateStoreIntoTemporary(Integer.parseInt(s));
+                //add temporary to output string
+                output += " " + temporary;
+            }
+            else {//String is a variable
+                //add variable name to output
+                output += " " + s;
+            }
         }
-        else {//put in variable name of left
-            output += " " + left;
-        }
-        //checking right piece for value or variable
-        if (rightIsValue) {
-            //put temporary of right in output
-            output += " " + rightTemp;
-        }
-        else {
-            //put in right variable name
-            output += " " + right;
-        }
+
         output += " " + newLabel;
 
         tac.add(output);
-
-
     }
 
     public void generateVariable(String v) {
@@ -361,18 +329,17 @@ class IR {
         return false;
     }
 
-    private String getVariableFromConditionalExpr(String expr) {
-        //returns first match from string
-        String variables = "^[A-Za-z]*";
-        Pattern variablePattern = Pattern.compile(variables);
-        Matcher varSearch = variablePattern.matcher(expr);
+    private boolean checkIfStringIsInt(String s) {
+        //Check is string is an int
+        if (checkIfStringIsFloat(s)){
+            return false;
+        }
 
-        if (varSearch.find()) {
-            return varSearch.group(0);
-        }
-        else {
-            return null;
-        }
+        String intRegex = "[0-9]+";
+        Pattern pattern = Pattern.compile(intRegex);
+        Matcher intSearch = pattern.matcher(s);
+
+        return intSearch.find();
     }
 
     private String getCompopFromConditionalExpr(String expr) {
@@ -383,20 +350,6 @@ class IR {
 
         if (compopSearch.find()) {
             return compopSearch.group(0);
-        }
-        else {
-            return null;
-        }
-    }
-
-    private String getValueFromConditionalExpr(String expr) {
-        //returns first match from string
-        String value = "[0-9+.*0-9*]";
-        Pattern valuePattern = Pattern.compile(value);
-        Matcher valueSearch = valuePattern.matcher(expr);
-
-        if (valueSearch.find()) {
-            return valueSearch.group(0);
         }
         else {
             return null;
