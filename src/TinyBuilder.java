@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 class TinyBuilder {
 
     public ArrayList<String> tac;                               // the incoming three address code (generated in the IR class)
-    ArrayList<String> tinyCode = new ArrayList<String>();       // the resulting tiny code, each line of code is a string in the arraylist
+    public ArrayList<String> tinyCode = new ArrayList<String>();// the resulting tiny code, each line of code is a string in the arraylist
     public ArrayList<String> vars= new ArrayList<String>();     // variables that have been initialized
     public int nextAvailableRegister;                           // increments to get the next register
     public HashMap<String, String> tempToReg = new HashMap<>(); // maps temporaries to registers
