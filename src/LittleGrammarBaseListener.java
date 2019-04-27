@@ -45,7 +45,6 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 
 		this.ir = new IR(this.symbolTableList);
 
-		this.tb = new TinyBuilder(ir.getTAC());
 	}
 
 	public ArrayList<SymbolTable> getSymbolTableList() {

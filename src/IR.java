@@ -325,6 +325,8 @@ class IR {
             tac.add(";tiny code");
 
             printTAC();
+            TinyBuilder tb = new TinyBuilder(tac);
+
         }
     }
 
