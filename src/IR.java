@@ -308,16 +308,17 @@ class IR {
             val = Float.parseFloat(value);
 
         }
-        // Check if value is in a register first
-        if (value.contains(".")) {
-            register = isValueInRegister(val);
-
-        }
-        // Check if value is in a register first
-        else if (value.matches("\\d+")) {
-            register = isValueInRegister(val);
-
-        }
+        // TODO UNCOMMENT FOR REGISTER REUSE
+//        // Check if value is in a register first
+//        if (value.contains(".")) {
+//            register = isValueInRegister(val);
+//
+//        }
+//        // Check if value is in a register first
+//        else if (value.matches("\\d+")) {
+//            register = isValueInRegister(val);
+//
+//        }
 
         // if value IS in a register
         if (register != -1) {
