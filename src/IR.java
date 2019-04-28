@@ -17,19 +17,25 @@ class IR {
 
     private HashMap<Integer, Float> registerToValueTable;
     private HashMap<String, Float> variableToValueTable;
+    private HashMap<String, String> scopeNameToLabelName;
 
     private ArrayList<SymbolTable> symbolTableList;
+
+    private boolean enteredProgram;
 
     //TEMPORARY DEBUG QUEUE
     public ArrayList<String> debugQueue;
 
     public IR (ArrayList<SymbolTable> s) {
 
+        this.enteredProgram = false;
+
         this.regNum = 0;
         this.labelNum = 0;
 
         this.registerToValueTable = new HashMap();
         this.variableToValueTable = new HashMap();
+        this.scopeNameToLabelName = new HashMap();
 
         //TEMPORARY DEBUG QUEUE
         this.debugQueue = new ArrayList();
@@ -40,6 +46,7 @@ class IR {
     }
 
     public void beginProgram() {
+        this.enteredProgram = true;
         tac.add(";IR code");
     }
 
@@ -49,22 +56,53 @@ class IR {
     }
 
     public String generateLabel() {
-        //return a label for conditional labels
-        return "label" + ++labelNum;
-    }
 
-    public void generateLabel(String type) {
-        //generate labels for functions like "main"
-        String label = "";
-        if(type.equals("main")) {
-            label = type;
+        if (this.enteredProgram) {
+            SymbolTable currentSymbolTable = this.getCurrentSymbolTable();
+            if (currentSymbolTable == null) {
+                System.out.println("Current Symbol Table NULL, making global label");
+                this.labelNum += 1;
+                String newLabel = "label" + this.labelNum + "null";
+
+                this.scopeNameToLabelName.put("GLOBAL", newLabel);
+
+                tac.add(";LABEL " + newLabel);
+                //return a newLabel for conditional labels
+                return newLabel;
+            }
+            String existingLabel = this.scopeNameToLabelName.get(currentSymbolTable.getScopeName());
+            if (existingLabel == null) {
+                this.labelNum += 1;
+                String newLabel = "label" + this.labelNum + currentSymbolTable.getScopeName();
+
+                //System.out.println("LABEL: " + newLabel + "\nSCOPE NAME: " + currentSymbolTable.getScopeName());
+                this.scopeNameToLabelName.put(currentSymbolTable.getScopeName(), newLabel);
+
+                tac.add(";LABEL " + newLabel);
+                //return a newLabel for conditional labels
+                return newLabel;
+            } else {
+                tac.add(";LABEL " + existingLabel);
+                return existingLabel;
+            }
         }
         else {
-            label = "label" + ++labelNum + type;
+            return "";
         }
-        tac.add(";LABEL " + label);
-        this.mostRecentlyReferencedProgramLabel = label;
     }
+
+//    public void generateLabel(String type) {
+//        //generate labels for functions like "main"
+//        String label = "";
+//        if(type.equals("main")) {
+//            label = type;
+//        }
+//        else {
+//            label = "label" + ++labelNum + type;
+//        }
+//        tac.add(";LABEL " + label);
+//        this.mostRecentlyReferencedProgramLabel = label;
+//    }
 
     public void pushFramePointerOntoStack() {
         tac.add(";LINK");
@@ -308,17 +346,19 @@ class IR {
             val = Float.parseFloat(value);
 
         }
-        // TODO UNCOMMENT FOR REGISTER REUSE
-//        // Check if value is in a register first
-//        if (value.contains(".")) {
-//            register = isValueInRegister(val);
-//
-//        }
-//        // Check if value is in a register first
-//        else if (value.matches("\\d+")) {
-//            register = isValueInRegister(val);
-//
-//        }
+
+        /*TODO UNCOMMENT FOR REGISTER REUSE
+        // Check if value is in a register first
+        if (value.contains(".")) {
+            register = isValueInRegister(val);
+
+        }
+        // Check if value is in a register first
+        else if (value.matches("\\d+")) {
+            register = isValueInRegister(val);
+
+        }
+        */
 
         // if value IS in a register
         if (register != -1) {
@@ -742,7 +782,6 @@ class IR {
 
     }
 
-
     public void exitProgram() {
         //prevents double adding of "RET" & "tiny code"
         if (tac.size() != 0) {
@@ -771,7 +810,11 @@ class IR {
     }
 
     private SymbolTable getCurrentSymbolTable() {
-        return this.symbolTableList.get(this.symbolTableList.size() - 1);
+        if (this.symbolTableList.size() != 0) {
+            return this.symbolTableList.get(this.symbolTableList.size() - 1);
+        }
+        else
+            return null;
     }
 
     //Parse string delimited by commas into a list
@@ -1010,6 +1053,7 @@ class IR {
             return 0;
         }
     }
+
     private String evaluatePostfix(String expr) {
         Stack<String> stack = new Stack<>();
         String[] tokens = expr.split("\\s+");;

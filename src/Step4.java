@@ -56,6 +56,9 @@ public class Step4 {
             // retrieve a list of symbol tables that our listener has constructed
             ArrayList<SymbolTable> symbolTableList = listener.getSymbolTableList();
 
+            for (SymbolTable s : symbolTableList) {
+                s.prettyPrint();
+            }
 
         } catch (DeclarationError de) {
             // this error is thrown if a variable is inserted more than once into a symbol table

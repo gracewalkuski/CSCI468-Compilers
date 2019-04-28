@@ -53,6 +53,10 @@ class SymbolTable {
         }
     }
 
+    public String getScopeName() {
+        return this.scopeName;
+    }
+
     public void prettyPrint() {
 
         System.out.println("Symbol table " + this.scopeName);

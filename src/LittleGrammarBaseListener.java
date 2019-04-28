@@ -219,7 +219,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 			this.currentSymbolTable = funcSymbolTable;
 
 			//add label to IR
-			this.ir.generateLabel(funcName);
+			this.ir.generateLabel();
 			this.ir.pushFramePointerOntoStack();
 		}
 	}
@@ -442,13 +442,18 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		// increment our class variable, block
 		if (ctx.cond() != null) {
 			this.block += 1;
-			SymbolTable newBlockSymTable = new SymbolTable("BLOCK " + block);
+			SymbolTable newBlockSymTable = new SymbolTable("IF(ENTER)" + block);
 			this.symbolTableList.add(newBlockSymTable);
 			this.currentSymbolTable = newBlockSymTable;
+
 		}
 	}
 	
-	@Override public void exitIf_stmt(LittleGrammarParser.If_stmtContext ctx) { }
+	@Override public void exitIf_stmt(LittleGrammarParser.If_stmtContext ctx) {
+		if (ctx.stmt_list() != null) {
+			this.ir.generateLabel();
+		}
+	}
 	
 	@Override public void enterElse_part(LittleGrammarParser.Else_partContext ctx) {
 
@@ -456,13 +461,17 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		// increment our class variable, block
 		if (ctx.decl() != null) {
 			this.block += 1;
-			SymbolTable newBlockSymTable = new SymbolTable("BLOCK " + block);
+			SymbolTable newBlockSymTable = new SymbolTable("ELSE(ENTER)" + block);
 			this.symbolTableList.add(newBlockSymTable);
 			this.currentSymbolTable = newBlockSymTable;
 		}
 	}
 	
-	@Override public void exitElse_part(LittleGrammarParser.Else_partContext ctx) { }
+	@Override public void exitElse_part(LittleGrammarParser.Else_partContext ctx) {
+		if (ctx.decl() != null) {
+			this.ir.generateLabel();
+		}
+	}
 	
 	@Override public void enterCond(LittleGrammarParser.CondContext ctx) {
 		this.insideConditional = true;
@@ -495,15 +504,21 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		// increment our class variable, block
 		if (ctx.cond() != null) {
 			this.block += 1;
-			SymbolTable newBlockSymTable = new SymbolTable("BLOCK " + block);
+			SymbolTable newBlockSymTable = new SymbolTable("WHILE(ENTER)" + block);
 			this.symbolTableList.add(newBlockSymTable);
 			this.currentSymbolTable = newBlockSymTable;
 
-			this.ir.generateLabel("while");
+			this.ir.generateLabel();
+
 		}
 	}
 	
 	@Override public void exitWhile_stmt(LittleGrammarParser.While_stmtContext ctx) {
+
+		if (ctx.cond() != null) {
+			this.ir.generateLabel();
+
+		}
 	}
 
 	@Override public void enterEveryRule(ParserRuleContext ctx) { }
