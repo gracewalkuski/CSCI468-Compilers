@@ -13,7 +13,6 @@ class IR {
     private int labelNum;
     private String lastReferencedTemporary;
     private ArrayList<String> tac;
-    private Stack<Float> mostRecentlyReferencedProgramValues;
     private String mostRecentlyReferencedProgramLabel;
 
     private HashMap<Integer, Float> registerToValueTable;
@@ -29,8 +28,6 @@ class IR {
         this.regNum = 0;
         this.labelNum = 0;
 
-
-        this.mostRecentlyReferencedProgramValues = new Stack();
         this.registerToValueTable = new HashMap();
         this.variableToValueTable = new HashMap();
 
@@ -116,8 +113,6 @@ class IR {
         left = splitString[0];
         right = splitString[1];
 
-
-
         //#-------------------------------------------
         //Check if either left or right side contains an expression
         //  + Evaluate expression using js engine
@@ -125,9 +120,6 @@ class IR {
         //      + Store val in register
 
         //#-------------------------------------------
-
-
-
 
         //String to hold temporary should left or right be a value
         String temporary;
@@ -180,16 +172,12 @@ class IR {
         tac.add(output);
     }
 
-    public void generateStore(String expr, String var) {
+    public void generateStoreOLD(String expr, String var) {
         //Make new register
         String reg = generateRegister();
         this.lastReferencedTemporary = reg;
 
         float val = this.parseThenEvaluateExpression(expr);
-
-        //Keep a stack of our most recently reference values
-        mostRecentlyReferencedProgramValues.push(val);
-//        mostRecentlyReferencedProgramValues.push((float)this.regNum);
 
         //Keep track of the values our temporaries contain
         this.registerToValueTable.put(this.regNum, val);
@@ -229,10 +217,152 @@ class IR {
 
     }
 
+//    public void generateStore(String value, String var) {
+//
+//        String storeString = ";STORE";
+//        String s1, s2, reg;
+//        s1 = s2 = "";
+//        int register = -1;
+//        float val;
+//
+//        // Check if value is a variable
+//        if (value.matches("[a-zA-Z]+")) {
+//            val = this.variableToValueTable.get(value);
+//
+//        }
+//        // Else we know its a digit, parse it into a float
+//        else {
+//            val = Float.parseFloat(value);
+//        }
+//
+//        // Check if value is in a register first
+//        if (value.contains(".")) {
+//            register = isValueInRegister(val);
+//
+//        }
+//        // Check if value is in a register first
+//        else if (value.matches("\\d+")) {
+//            register = isValueInRegister(Integer.parseInt(value));
+//
+//        }
+//
+//        // if value IS in a register
+//        if (register != -1) {
+//            reg = "$T" + register;
+//            System.out.println("REGISTER: " + reg);
+//
+//        }
+//        //Else we make new register
+//        else {
+//            reg = generateRegister();
+//            this.lastReferencedTemporary = reg;
+//
+//            //Keep track of the values our temporaries contain
+//            this.registerToValueTable.put(this.regNum, val);
+//        }
+//
+//        //Keep track of the values of our variables
+//        this.variableToValueTable.put(var, val);
+//
+//        String variableType = this.checkVarType(var);
+//
+////        switch (variableType) {
+////            case "INT":
+////                storeString += "I ";
+////                //Check if INT. Then remove period & #'s for output string
+////                String truncateFloat = Float.toString(val);
+////                truncateFloat = truncateFloat.substring(0, truncateFloat.indexOf("."));
+////                //Use new string formatted as an int in output
+////                s1 = storeString + truncateFloat + " " + reg;
+////                break;
+////            case "FLOAT":
+////                storeString += "F ";
+////                //Keep output as float for output
+////                s1 = storeString + val + " " + reg;
+////                break;
+////            default:
+////                System.out.println("oh.");
+////                break;
+////        }
+//
+//        //Create remaining strings and add to tac
+//        s2 = storeString + reg + " " + var;
+//        tac.add(s1);
+//        tac.add(s2);
+//    }
+
+    public void generateStore(String value, String var) {
+
+        String storeString = ";STORE";
+        String s1, s2, reg;
+        s1 = s2 = "";
+        int register = -1;
+        float val;
+
+        // Check if value is a variable
+        if (value.matches("[a-zA-Z]+")) {
+            val = this.variableToValueTable.get(value);
+
+        }
+        else {
+            val = Float.parseFloat(value);
+
+        }
+        // Check if value is in a register first
+        if (value.contains(".")) {
+            register = isValueInRegister(val);
+
+        }
+        // Check if value is in a register first
+        else if (value.matches("\\d+")) {
+            register = isValueInRegister(val);
+
+        }
+
+        // if value IS in a register
+        if (register != -1) {
+            reg = "$T" + register;
+            System.out.println("REGISTER REUSED: " + reg);
+
+        }
+        //Else we make new register
+        else {
+            reg = generateRegister();
+            this.lastReferencedTemporary = reg;
+
+            //Keep track of the values our temporaries contain
+            this.registerToValueTable.put(this.regNum, val);
+        }
+
+        //Keep track of the values of our variables
+        this.variableToValueTable.put(var, val);
+
+        String variableType = this.checkVarType(var);
+
+        switch(variableType) {
+            case "FLOAT":
+                storeString += "F ";
+                break;
+            case "INT":
+                storeString += "I ";
+                break;
+            default:
+                System.out.println("so broke.");
+        }
+        if (register == -1) {
+            s1 = storeString + val + " " + reg;
+            tac.add(s1);
+        }
+        //Create remaining strings and add to tac
+        s2 = storeString + reg + " " + var;
+        tac.add(s2);
+
+    }
+
+
     public String generateStoreIntoTemporary(int val) {
         String reg = generateRegister();
 
-        mostRecentlyReferencedProgramValues.push((float)val);
         //Keep track of the values our temporaries contain
         registerToValueTable.put(this.regNum, (float)val);
 
@@ -244,7 +374,6 @@ class IR {
     public String generateStoreIntoTemporary(float val) {
         String reg = generateRegister();
 
-        mostRecentlyReferencedProgramValues.push((float)val);
         //Keep track of the values our temporaries contain
         registerToValueTable.put(this.regNum, (float)val);
 
@@ -301,21 +430,317 @@ class IR {
         }
     }
 
-    public void generateMult(int i1, int i2) {
+    public float generateMultFloat(String v1, String v2) {
+        String mult = ";MULTF ";
+//        System.out.printf("\ngenerateMultFloat\nv1: %s\nv2: %s\n", v1, v2);
+
+        float value1 = 0f;
+        float value2 = 0f;
+
+        if (v1.matches("[a-zA-Z]+")) {
+            mult += v1 + " ";
+            value1 = this.variableToValueTable.get(v1);
+
+        }
+        else {
+            value1 = Float.parseFloat(v1);
+            String newTemp = generateStoreIntoTemporary(value1);
+            mult += newTemp + " ";
+        }
+
+        if (v2.matches("[a-zA-Z]+")) {
+            mult += v2 + " ";
+            value2 = this.variableToValueTable.get(v2);
+        }
+        else {
+            value2 = Float.parseFloat(v2);
+            String newTemp = generateStoreIntoTemporary(value2);
+            mult += newTemp + " ";
+        }
+
+        mult += this.generateRegister();
+
+        float result = value1 * value2;
+        //this.expressionStack.push(result + "");
+
+        tac.add(mult);
+        return result;
+    }
+
+    public int generateMultInt(String v1, String v2) {
+        String mult = ";MULTI ";
+//        System.out.printf("\ngenerateMultInt\nv1: %s\nv2: %s\n", v1, v2);
+
+        int value1 = 0;
+        int value2 = 0;
+
+        if (v1.matches("[a-zA-Z]+")) {
+            mult += v1 + " ";
+            value1 = this.variableToValueTable.get(v1).intValue();
+        }
+        else {
+            value1 = Integer.parseInt(v1);
+            String newTemp = generateStoreIntoTemporary(value1);
+            mult += newTemp + " ";
+        }
+
+        if (v2.matches("[a-zA-Z]+")) {
+            mult += v2 + " ";
+            value2 = this.variableToValueTable.get(v2).intValue();
+
+        }
+        else {
+            value2 = Integer.parseInt(v2);
+            String newTemp = generateStoreIntoTemporary(value2);
+            mult += newTemp + " ";
+        }
+
+        mult += this.generateRegister();
+
+        int result = value1 * value2;
+
+//        System.out.printf("\nvalue 1: %s\nvalue 2: %s\nresult: %s\n", value1, value2, result);
+
+
+        //this.expressionStack.push(result + "");
+        this.registerToValueTable.put(this.regNum, (float)result);
+
+
+        tac.add(mult);
+        return result;
+    }
+
+    public float generateDivFloat(String v1, String v2) {
+        String div = ";DIVF ";
+//        System.out.printf("\ngenerateDivFloat\nv1: %s\nv2: %s\n", v1, v2);
+
+        float value1 = 0f;
+        float value2 = 0f;
+
+        if (v1.matches("[a-zA-Z]+")) {
+            div += v1 + " ";
+            value1 = this.variableToValueTable.get(v1);
+
+        }
+        else {
+            value1 = Float.parseFloat(v1);
+            String newTemp = generateStoreIntoTemporary(value1);
+            div += newTemp + " ";
+        }
+
+        if (v2.matches("[a-zA-Z]+")) {
+            div += v2 + " ";
+            value2 = this.variableToValueTable.get(v2);
+        }
+        else {
+            value2 = Float.parseFloat(v2);
+            String newTemp = generateStoreIntoTemporary(value2);
+            div += newTemp + " ";
+        }
+
+        div += this.generateRegister();
+
+        float result = value1 / value2;
+        //this.expressionStack.push(result + "");
+
+        tac.add(div);
+        return result;
 
     }
 
-    public void generateMult(float f1, float f2) {
+    public int generateDivInt(String v1, String v2) {
+        String div = ";DIVI ";
+//        System.out.printf("\ngenerateDivInt\nv1: %s\nv2: %s\n", v1, v2);
+
+        int value1 = 0;
+        int value2 = 0;
+
+        if (v1.matches("[a-zA-Z]+")) {
+            div += v1 + " ";
+            value1 = this.variableToValueTable.get(v1).intValue();
+        }
+        else {
+            value1 = Integer.parseInt(v1);
+            String newTemp = generateStoreIntoTemporary(value1);
+            div += newTemp + " ";
+        }
+
+        if (v2.matches("[a-zA-Z]+")) {
+            div += v2 + " ";
+            value2 = this.variableToValueTable.get(v2).intValue();
+        }
+        else {
+            value2 = Integer.parseInt(v2);
+            String newTemp = generateStoreIntoTemporary(value2);
+            div += newTemp + " ";
+        }
+
+        div += this.generateRegister();
+
+        int result = value1 / value2;
+        //this.expressionStack.push(result + "");
+        this.registerToValueTable.put(this.regNum, (float)result);
+
+
+        tac.add(div);
+        return result;
 
     }
 
-    public void generateAdd(int i1, int i2) {
+    public float generateAddFloat(String v1, String v2) {
+        String add = ";ADDF ";
+//        System.out.printf("\ngenerateADDF\nv1: %s\nv2: %s\n", v1, v2);
+
+        float value1 = 0f;
+        float value2 = 0f;
+
+        if (v1.matches("[a-zA-Z]+")) {
+            add += v1 + " ";
+            value1 = this.variableToValueTable.get(v1);
+
+        }
+        else {
+            value1 = Float.parseFloat(v1);
+            String newTemp = generateStoreIntoTemporary(value1);
+            add += newTemp + " ";
+        }
+
+        if (v2.matches("[a-zA-Z]+")) {
+            add += v2 + " ";
+            value2 = this.variableToValueTable.get(v2);
+        }
+        else {
+            value2 = Float.parseFloat(v2);
+            String newTemp = generateStoreIntoTemporary(value2);
+            add += newTemp + " ";
+        }
+
+        add += this.generateRegister();
+
+        float result = value1 + value2;
+        //this.expressionStack.push(result + "");
+
+        tac.add(add);
+        return result;
 
     }
 
-    public void generateAdd(float f1, float f2) {
+    public int generateAddInt(String v1, String v2) {
+        String add = ";ADDI ";
+//        System.out.printf("\ngenerateAddInt\nv1: %s\nv2: %s\n", v1, v2);
+
+        int value1 = 0;
+        int value2 = 0;
+
+        if (v1.matches("[a-zA-Z]+")) {
+            add += v1 + " ";
+            value1 = this.variableToValueTable.get(v1).intValue();
+        }
+        else {
+            value1 = Integer.parseInt(v1);
+            String newTemp = generateStoreIntoTemporary(value1);
+            add += newTemp + " ";
+        }
+
+        if (v2.matches("[a-zA-Z]+")) {
+            add += v2 + " ";
+            value2 = this.variableToValueTable.get(v2).intValue();
+        }
+        else {
+            value2 = Integer.parseInt(v2);
+            String newTemp = generateStoreIntoTemporary(value2);
+            add += newTemp + " ";
+        }
+
+        add += this.generateRegister();
+
+        int result = value1 + value2;
+        //this.expressionStack.push(result + "");
+        this.registerToValueTable.put(this.regNum, (float)result);
+
+
+        tac.add(add);
+        return result;
 
     }
+
+    public float generateSubFloat(String v1, String v2) {
+        String sub = ";SUBF ";
+//        System.out.printf("\ngenerateADDF\nv1: %s\nv2: %s\n", v1, v2);
+
+        float value1 = 0f;
+        float value2 = 0f;
+
+        if (v1.matches("[a-zA-Z]+")) {
+            sub += v1 + " ";
+            value1 = this.variableToValueTable.get(v1);
+
+        }
+        else {
+            value1 = Float.parseFloat(v1);
+            String newTemp = generateStoreIntoTemporary(value1);
+            sub += newTemp + " ";
+        }
+
+        if (v2.matches("[a-zA-Z]+")) {
+            sub += v2 + " ";
+            value2 = this.variableToValueTable.get(v2);
+        }
+        else {
+            value2 = Float.parseFloat(v2);
+            String newTemp = generateStoreIntoTemporary(value2);
+            sub += newTemp + " ";
+        }
+
+        sub += this.generateRegister();
+
+        float result = value1 - value2;
+        //this.expressionStack.push(result + "");
+
+        tac.add(sub);
+        return result;
+
+    }
+
+    public int generateSubInt(String v1, String v2) {
+        String sub = ";SUBI ";
+//        System.out.printf("\ngenerateAddInt\nv1: %s\nv2: %s\n", v1, v2);
+
+        int value1 = 0;
+        int value2 = 0;
+
+        if (v1.matches("[a-zA-Z]+")) {
+            sub += v1 + " ";
+            value1 = this.variableToValueTable.get(v1).intValue();
+        }
+        else {
+            value1 = Integer.parseInt(v1);
+            String newTemp = generateStoreIntoTemporary(value1);
+            sub += newTemp + " ";
+        }
+
+        if (v2.matches("[a-zA-Z]+")) {
+            sub += v2 + " ";
+            value2 = this.variableToValueTable.get(v2).intValue();
+        }
+        else {
+            value2 = Integer.parseInt(v2);
+            String newTemp = generateStoreIntoTemporary(value2);
+            sub += newTemp + " ";
+        }
+
+        sub += this.generateRegister();
+
+        int result = value1 - value2;
+        //this.expressionStack.push(result + "");
+        this.registerToValueTable.put(this.regNum, (float)result);
+
+
+        tac.add(sub);
+        return result;
+
+    }
+
 
     public void exitProgram() {
         //prevents double adding of "RET" & "tiny code"
@@ -347,6 +772,7 @@ class IR {
     private SymbolTable getCurrentSymbolTable() {
         return this.symbolTableList.get(this.symbolTableList.size() - 1);
     }
+
     //Parse string delimited by commas into a list
     private List<String> parseStringIntoList(String str) {
         List<String> list = Arrays.asList(str.split("\\s*,\\s*"));
@@ -403,6 +829,17 @@ class IR {
         }
     }
 
+    private Integer isValueInRegister(float value) {
+        for (Map.Entry<Integer, Float> entry : this.registerToValueTable.entrySet()) {
+            if (Objects.equals(value, entry.getValue())) {
+                //System.out.printf("Found register with value. Register: %s", entry.getKey());
+                return entry.getKey();
+            }
+        }
+        //value not in register
+        return -1;
+    }
+
     private float parseThenEvaluateExpression(String expr) {
         //#----------------------------------
         //We dont need to evaulate an expression...
@@ -455,7 +892,6 @@ class IR {
 
         //NEW CODE FOR THIS METHOD BELOW
 
-//        System.out.println("DEBUG IN EXPR SOLVER" + expr);
 
         //NEW CODE FOR THIS METHOD ABOVE
         //OLD CODE FOR THIS METHOD BELOW
@@ -497,6 +933,134 @@ class IR {
         }
 
         return (float)0;
+    }
+
+    public void parseExpressionAndAssign(String id, String expr) {
+        Stack<String> outputStack = new Stack<>();
+        Stack<String[]> operatorStack = new Stack<>();
+
+
+        String[] tokens = expr.split("(?<=[-+*\\/])|(?=[-+*\\/])");
+
+        if (tokens.length > 1) {
+
+            for (String token : tokens) {
+                // if token is a number
+                if (token.matches("[0-9]+\\.*[0-9]*|[a-zA-Z]+")) {
+                    outputStack.push(token);
+                    outputStack.push(" ");
+                } else if (token.matches("[*/+-]")) {
+                    int precedence = this.getPrecedence(token);
+                    while (operatorStack.size() > 0 && Integer.parseInt(operatorStack.peek()[1]) > precedence && !operatorStack.peek()[0].equals("(")) {
+                        outputStack.push(operatorStack.pop()[0]);
+                        outputStack.push(" ");
+                    }
+
+                    operatorStack.push(new String[]{token, precedence + ""});
+                } else if (token.matches("[(]")) {
+                    outputStack.push(token);
+                    outputStack.push(" ");
+                } else if (token.matches("[)]")) {
+                    while (operatorStack.size() > 0 && !operatorStack.peek()[0].equals("(")) {
+                        outputStack.push(operatorStack.pop()[0]);
+                        outputStack.push(" ");
+                    }
+                    if (operatorStack.size() > 0 && operatorStack.peek()[0].equals(")")) {
+                        System.out.println("DISCARDING LEFT PAREN (");
+                        operatorStack.pop();
+                    }
+                }
+            }
+
+            while (operatorStack.size() != 0) {
+                //System.out.println("After while loop, popping everything to output queue");
+                outputStack.push(operatorStack.pop()[0]);
+                outputStack.push(" ");
+            }
+
+            String postfixNotation = combineStringStack(outputStack);
+            System.out.println("POSTFIX NOTATION: " + postfixNotation);
+            String result = evaluatePostfix(postfixNotation);
+
+            this.generateStore(result, id);
+        }
+        else {
+            this.generateStore(expr, id);
+
+        }
+
+    }
+
+    public String combineStringStack(Stack stack) {
+        String postfix = "";
+        while (stack.size() != 0) {
+            //System.out.println("Combining String");
+            postfix = stack.pop() + postfix;
+            //System.out.println("Postfix = " + postfix);
+        }
+        return postfix;
+    }
+
+    private int getPrecedence(String operator) {
+        if (operator.equals("*") || operator.equals("/")) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+    private String evaluatePostfix(String expr) {
+        Stack<String> stack = new Stack<>();
+        String[] tokens = expr.split("\\s+");;
+
+//        System.out.println("IN EVAL POSTFIX, TOKENS: ");
+//        for (String token: tokens) {
+//            System.out.println(token);
+//        }
+
+        for (int i = 0; i < tokens.length; i++) {
+            String token = tokens[i];
+            //System.out.printf("TOKEN: %s\n", token);
+            if (token.matches("[*/+-]")) {
+                String number1 = stack.pop();
+                String number2 = stack.pop();
+
+                if (number1.contains(".") || number2.contains(".")) {
+                    switch (token) {
+                        case "*":
+                            stack.push(this.generateMultFloat(number2, number1) + "");
+                            break;
+                        case "/":
+                            stack.push(this.generateDivFloat(number2, number1) + "");
+                            break;
+                        case "+":
+                            stack.push(this.generateAddFloat(number2, number1) + "");
+                            break;
+                        case "-":
+                            stack.push(this.generateSubFloat(number2, number1) + "");
+                            break;
+                    }
+                } else {
+                    switch (token) {
+                        case "*":
+                            stack.push(this.generateMultInt(number2, number1) + "");
+                            break;
+                        case "/":
+                            stack.push(this.generateDivInt(number2, number1) + "");
+                            break;
+                        case "+":
+                            stack.push(this.generateAddInt(number2, number1) + "");
+                            break;
+                        case "-":
+                            stack.push(this.generateSubInt(number2, number1) + "");
+                            break;
+                    }
+                }
+            } else {
+                stack.push((tokens[i]));
+            }
+        }
+        return stack.pop();
     }
 
     public ArrayList<String> getTAC() {

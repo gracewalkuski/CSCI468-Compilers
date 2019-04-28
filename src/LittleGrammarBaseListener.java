@@ -5,9 +5,8 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.lang.Integer;
+import java.util.PriorityQueue;
+import java.util.Stack;
 
 /**
  * This class provides an empty implementation of {LittleGrammarListener},
@@ -22,11 +21,16 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	private ArrayList<SymbolTable> symbolTableList;
 	private String currentVarType;
 	private SymbolTable currentSymbolTable;
+	private Stack<String> outputStack;
+	private Stack<String[]> operatorStack;
+//	private Stack<String> expressionStack;
+
 	private IR ir;
 
 	private boolean insideDeclaration;
 	private boolean insideExpression;
 	private boolean insideAssignment;
+	private boolean insideFactor; //maybe useless
 	private boolean insideConditional;
 	private boolean insideStatementList;
 	private TinyBuilder tb;
@@ -36,6 +40,9 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		this.currentSymbolTable = null;
 		this.block = 0;
 		this.currentVarType = null;
+
+		this.outputStack = new Stack<>();
+		this.operatorStack = new Stack<>();
 
 		this.insideDeclaration = false;
 		this.insideExpression = false;
@@ -73,7 +80,11 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void exitProgram(LittleGrammarParser.ProgramContext ctx) {
 		this.ir.exitProgram();
-	}
+		if (ctx != null) {
+
+			}
+		}
+
 	
 	@Override public void enterId(LittleGrammarParser.IdContext ctx) {
 		if (ctx != null && insideStatementList) {
@@ -151,11 +162,9 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		if (ctx.id() != null && this.insideDeclaration) {
 			String id = ctx.id().getText();
 			this.currentSymbolTable.insert(id, this.currentVarType, "");
-			//System.out.println("Created VarRef " + currentVarType + " " + id);
 		}
 		if (ctx.id() != null && this.insideExpression) {
 			String id = ctx.id().getText();
-			//System.out.println("Created VarRef " + currentVarType + " " + id);
 		}
 	}
 	
@@ -242,27 +251,52 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	@Override public void exitBase_stmt(LittleGrammarParser.Base_stmtContext ctx) { }
 	
 	@Override public void enterAssign_stmt(LittleGrammarParser.Assign_stmtContext ctx) {
-		this.insideAssignment = true;
 
 		if ( ctx.assign_expr() != null ) {
+			this.insideAssignment = true;
+//			System.out.println("Enter");
+//			System.out.printf("EXPR %s\nvariable: %s\n", ctx.assign_expr().expr().getText(), ctx.assign_expr().id().getText());
+
+			// TODO - commented this out
 			//call ir to generate store with value and varname
-			//int value = Integer.parseInt(ctx.assign_expr().expr().getText());
-			//System.out.println("DEBUG " + ctx.assign_expr().expr().getText());
-			String expr = ctx.assign_expr().expr().getText();
-			String varName = ctx.assign_expr().id().getText();
-			this.ir.generateStore(expr, varName);
+//			String expr = ctx.assign_expr().expr().getText();
+//			String varName = ctx.assign_expr().id().getText();
+//			this.ir.generateStoreOLD(expr, varName);
 		}
 	}
 	
 	@Override public void exitAssign_stmt(LittleGrammarParser.Assign_stmtContext ctx) {
-		this.insideAssignment = false;
+		if (ctx.assign_expr() != null && ctx.assign_expr().id() != null && this.insideAssignment) {
+
+//			if (ctx.assign_expr().expr().getText().matches("[0-9]+")) {
+//				//System.out.printf("Only one child?\n\t%s", ctx.assign_expr().expr().getText());
+//				this.ir.generateStore(ctx.assign_expr().expr().getText(), ctx.assign_expr().id().getText());
+//			}
+			if (this.outputStack.size() == 1) {
+				this.ir.generateStore(this.outputStack.pop(), ctx.assign_expr().id().getText());
+
+			}
+			this.insideAssignment = false;
+//			System.out.println("Exit");
+//			System.out.printf("EXPR %s\nvariable: %s\n", ctx.assign_expr().expr().getText(), ctx.assign_expr().id().getText());
+
+//			System.out.printf("GENERATE STORE\nVariable: %s\nValue: %s\n", ctx.assign_expr().id().getText(), this.expressionStack.peek());
+			//this.ir.generateStore(this.expressionStack.pop(), ctx.assign_expr().id().getText());
+//			this.ir.generateStore(this.outputStack.pop().value, ctx.assign_expr().id().getText());		}
+		}
 	}
 	
 	@Override public void enterAssign_expr(LittleGrammarParser.Assign_exprContext ctx) {
+		if (ctx.id() != null && ctx.expr().factor().postfix_expr().primary() != null) {
+			//System.out.printf("ENTER ASSIGN EXPR\nID: %s\nEXPR: %s\n", ctx.id().getText(), ctx.expr().getText());
+			this.ir.parseExpressionAndAssign(ctx.id().getText(), ctx.expr().getText());
+			}
+		}
+
+	
+	@Override public void exitAssign_expr(LittleGrammarParser.Assign_exprContext ctx) {
 
 	}
-	
-	@Override public void exitAssign_expr(LittleGrammarParser.Assign_exprContext ctx) { }
 	
 	@Override public void enterRead_stmt(LittleGrammarParser.Read_stmtContext ctx) {
 		if (ctx != null && ctx.id_list() != null) {
@@ -286,12 +320,14 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void enterExpr(LittleGrammarParser.ExprContext ctx) {
 		if (ctx.expr_prefix() != null && ctx.factor() != null) {
-			this.insideExpression = true;//
+			this.insideExpression = true;
 		}
 	}
 	
 	@Override public void exitExpr(LittleGrammarParser.ExprContext ctx) {
 		if (ctx != null) {
+			//System.out.println("Factor: " + ctx.factor().getText());
+
 			this.insideExpression = false;
 		}
 	}
@@ -300,22 +336,43 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		if(ctx != null && ctx.factor() != null) {
 			//case that expr_prefix().expr_prefix() is null
 
-			this.ir.queueMath(ctx.factor().getText());
+			//this.ir.queueMath(ctx.factor().getText());
 		}
 	}
 
-	@Override public void exitExpr_prefix(LittleGrammarParser.Expr_prefixContext ctx) { }
+	@Override public void exitExpr_prefix(LittleGrammarParser.Expr_prefixContext ctx) {
+		if (ctx.expr_prefix() == null) {
+
+		}
+		else if (ctx.expr_prefix() != null) {
+
+		}
+	}
 
 	@Override public void enterFactor(LittleGrammarParser.FactorContext ctx) {
+		this.insideFactor = true;
+		if (ctx.postfix_expr() != null) {
+
+		}
+
 	}
 	
-	@Override public void exitFactor(LittleGrammarParser.FactorContext ctx) { }
+	@Override public void exitFactor(LittleGrammarParser.FactorContext ctx) {
+		this.insideFactor = false;
+
+	}
 	
-	@Override public void enterFactor_prefix(LittleGrammarParser.Factor_prefixContext ctx) { }
+	@Override public void enterFactor_prefix(LittleGrammarParser.Factor_prefixContext ctx) {
+		if (ctx.postfix_expr() != null && ctx.mulop() != null && insideAssignment) {
+		}
+	}
 	
 	@Override public void exitFactor_prefix(LittleGrammarParser.Factor_prefixContext ctx) { }
 	
-	@Override public void enterPostfix_expr(LittleGrammarParser.Postfix_exprContext ctx) { }
+	@Override public void enterPostfix_expr(LittleGrammarParser.Postfix_exprContext ctx) {
+		if (ctx.primary() != null && insideAssignment && ctx.primary().getChildCount() == 1) {
+}
+	}
 	
 	@Override public void exitPostfix_expr(LittleGrammarParser.Postfix_exprContext ctx) { }
 	
@@ -331,59 +388,53 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void exitExpr_list_tail(LittleGrammarParser.Expr_list_tailContext ctx) { }
 
-
-
 	@Override public void enterPrimaryExpr(LittleGrammarParser.PrimaryExprContext ctx) { }
 
 	@Override public void exitPrimaryExpr(LittleGrammarParser.PrimaryExprContext ctx) { }
 
 	@Override public void enterPrimaryID(LittleGrammarParser.PrimaryIDContext ctx) {
-		if (this.insideConditional) {
+//		primaryHandler(ctx.getText());
+//		primaryNodeHandler(ctx.getText());
 
-		}
 	}
 
 	@Override public void exitPrimaryID(LittleGrammarParser.PrimaryIDContext ctx) { }
 
 	@Override public void enterPrimaryINT(LittleGrammarParser.PrimaryINTContext ctx) {
-		if (this.insideExpression && !this.insideAssignment) {
-//			int val = Integer.parseInt(ctx.getText());
-//			this.ir.generateStoreIntoTemporary(val);
-		}
+//		primaryHandler(ctx.getText());
+//		primaryNodeHandler(ctx.getText());
+
 	}
 
 	@Override public void exitPrimaryINT(LittleGrammarParser.PrimaryINTContext ctx) { }
 
 	@Override public void enterPrimaryFLOAT(LittleGrammarParser.PrimaryFLOATContext ctx) {
-		if (this.insideExpression && !this.insideAssignment) {
-//			float val = Float.parseFloat(ctx.getText());
-//			this.ir.generateStoreIntoTemporary(val);
-		}
+//		primaryHandler(ctx.getText());
+//		primaryNodeHandler(ctx.getText());
 	}
 
 	@Override public void exitPrimaryFLOAT(LittleGrammarParser.PrimaryFLOATContext ctx) { }
 
-
-	
 	@Override public void enterAddop(LittleGrammarParser.AddopContext ctx) {
-		if (ctx != null) {
-			if (!ctx.getText().equals("")) {
-//				System.out.println("DEBUG ADDOP " + ctx.getText());
-			}
+		if (!ctx.getText().equals("")) {
+//			this.pushOperator(new String[]{ctx.getText(), 0});
+
 		}
 	}
 	
 	@Override public void exitAddop(LittleGrammarParser.AddopContext ctx) { }
 	
 	@Override public void enterMulop(LittleGrammarParser.MulopContext ctx) {
-		if (ctx != null) {
-			if (!ctx.getText().equals("")) {
-//				System.out.println("DEBUG MULOP " + ctx.getText());
-			}
+		if (!ctx.getText().equals("")) {
+//			this.pushOperator(new String[]{ctx.getText(), 1});
 		}
+
 	}
 	
-	@Override public void exitMulop(LittleGrammarParser.MulopContext ctx) { }
+	@Override public void exitMulop(LittleGrammarParser.MulopContext ctx) {
+		if (!ctx.getText().equals("")) {
+		}
+	}
 	
 	@Override public void enterIf_stmt(LittleGrammarParser.If_stmtContext ctx) {
 
@@ -462,4 +513,140 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	@Override public void visitTerminal(TerminalNode node) { }
 	
 	@Override public void visitErrorNode(ErrorNode node) { }
+//	private void primaryHandler(String primary) {
+//		if (this.insideAssignment && !primary.equals("")) {
+//			if (this.expressionStack.size() != 0 && this.expressionStack.peek().matches("[*/+-]") && this.insideExpression) {
+//
+//				String operator = this.expressionStack.pop();
+//
+//				String value1 = this.expressionStack.pop();
+//				String value2 = primary;
+//				ASTNode root;
+//				if (operator.equals("*") || operator.equals("/")) {
+//					root = new ASTNode(ASTNode.ASTNodeType.MulExpr, operator, 20);
+//				} else {
+//					root = new ASTNode(ASTNode.ASTNodeType.AddExpr, operator, 10);
+//				}
+//				ASTNode lc = new ASTNode(ASTNode.ASTNodeType.VarRef, value1, 5);
+//				ASTNode rc = new ASTNode(ASTNode.ASTNodeType.VarRef, value2, 5);
+//				root.leftChild = lc;
+//				root.rightChild = rc;
+//
+//				this.partialExpressionNodes.add(root);
+//
+//
+////				System.out.println("EXPRESSION STACK BEFORE");
+////				for (String s : this.expressionStack) {
+////					System.out.println(s);
+////				}
+////				switch(operator) {
+////					case "*":
+////						if (value1.contains(".") || value2.contains(".")) {
+////							this.ir.generateMultFloat(value1, value2);
+////
+////						}
+////						else {
+////							this.ir.generateMultInt(value1, value2);
+////						}
+////						break;
+////
+////					case "/":
+////						if (value1.contains(".") || value2.contains(".")) {
+////							this.ir.generateDivFloat(value1, value2);
+////						}
+////						else {
+////							this.ir.generateDivInt(value1, value2);
+////						}
+////						break;
+////
+////					case "+":
+////						if (value1.contains(".") || value2.contains(".")) {
+////							this.ir.generateAddFloat(value1, value2);
+////
+////						}
+////						else {
+////							this.ir.generateAddInt(value1, value2);
+////						}
+////						break;
+////					case "-":
+////
+////						if (value1.contains(".") || value2.contains(".")) {
+////							this.ir.generateSubFloat(value1, value2);
+////
+////						}
+////						else {
+////							this.ir.generateSubInt(value1, value2);
+////						}
+////						break;
+////					default:
+////						System.out.println("CTX GET TEXT NOT * / + -");
+////				}
+//////
+//////				System.out.println("EXPRESSION STACK AFTER");
+//////				for (String s : this.expressionStack) {
+//////					System.out.println(s);
+//////				}
+//////
+//////
+////			}
+//			}
+//			else {
+//				this.expressionStack.push(primary);
+//			}
+//
+//
+//		}
+//	}
+	private void primaryNodeHandler(String primary) {
+		if (this.insideAssignment && !primary.equals("")) {
+			System.out.printf("\nPushing new primary node: %s\n", primary);
+//			this.outputStack.push(new ASTNode(ASTNode.ASTNodeType.VarRef, primary, 5));
+			this.outputStack.push(primary);
+		}
+	}
+
+	private void pushOperator(String[] operatorAndPrecendence) {
+		String operator = operatorAndPrecendence[0];
+		int precedence = Integer.parseInt(operatorAndPrecendence[1]);
+
+		while (Integer.parseInt(this.operatorStack.peek()[1]) > precedence && !this.operatorStack.peek()[0].equals("(")) {
+			this.outputStack.push(this.operatorStack.pop()[0]);
+		}
+
+		this.operatorStack.push(new String[]{operator, precedence + ""});
+
+	}
+
+	private int evaluatePostfix(String expr) {
+		Stack<Integer> stack = new Stack<>();
+		String[] tokens = expr.split("\\s+");
+		for (int i = 0; i < tokens.length; i++) {
+			String token = tokens[i];
+			//System.out.printf("TOKEN: %s\n", token);
+			if (token.matches("[*/+-]")) {
+				int number1 = stack.pop();
+				int number2 = stack.pop();
+
+				switch(token) {
+					case "*":
+						stack.push(number2 * number1);
+						break;
+					case "/":
+						stack.push(number2 / number1);
+						break;
+					case "+":
+						stack.push(number2 + number1);
+						break;
+					case "-":
+						stack.push(number2 - number1);
+						break;
+				}
+			} else {
+				stack.push(Integer.parseInt(tokens[i]));
+			}
+		}
+		return stack.pop();
+	}
+
+
 }
