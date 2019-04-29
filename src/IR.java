@@ -386,11 +386,16 @@ class IR {
                 break;
             case "INT":
                 storeString += "I ";
+
                 break;
             default:
                 System.out.println("so broke.");
         }
-        if (register == -1) {
+        if (register == -1 && variableType.equals("INT")) {
+            s1 = storeString + (int)val + " " + reg;
+            tac.add(s1);
+        }
+        else if (register == -1) {
             s1 = storeString + val + " " + reg;
             tac.add(s1);
         }
