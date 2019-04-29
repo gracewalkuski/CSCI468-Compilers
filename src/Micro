@@ -5,6 +5,8 @@ java -jar ../lib/antlr-4.7.2-complete.jar -o ../gen LittleGrammar.g4
 
 javac -d ../gen/ SymbolTable.java
 cp -f LittleGrammarBaseListener.java ../gen/
+cp -f TinyBuilder.java ../gen/
+
 
 javac -d ../gen/ Step4.java ../gen/LittleGrammar*.java
 
