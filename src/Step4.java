@@ -46,19 +46,19 @@ public class Step4 {
             LittleGrammarBaseListener listener = new LittleGrammarBaseListener();
             // add the listener to our parser
             parser.addParseListener(listener);
-            // create a tree by running our parser with the starting rule program()
-            ParseTree tree = parser.program();
+//            // create a tree by running our parser with the starting rule program()
+//            ParseTree tree = parser.program();
 
             ParseTreeWalker walker = new ParseTreeWalker();
             // walk through our tree with our listener using the ANTLR walker
-            walker.walk(listener, tree);
+            walker.walk(listener, parser.program());
 
             // retrieve a list of symbol tables that our listener has constructed
             ArrayList<SymbolTable> symbolTableList = listener.getSymbolTableList();
 
-            for (SymbolTable s : symbolTableList) {
-                s.prettyPrint();
-            }
+//            for (SymbolTable s : symbolTableList) {
+//                s.prettyPrint();
+//            }
 
         } catch (DeclarationError de) {
             // this error is thrown if a variable is inserted more than once into a symbol table

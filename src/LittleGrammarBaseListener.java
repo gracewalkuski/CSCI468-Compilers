@@ -27,12 +27,16 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 
 	private IR ir;
 
+	private boolean beganGeneratingLabels;
+
 	private boolean insideDeclaration;
 	private boolean insideExpression;
 	private boolean insideAssignment;
 	private boolean insideFactor; //maybe useless
 	private boolean insideConditional;
 	private boolean insideStatementList;
+
+
 	private TinyBuilder tb;
 
 	LittleGrammarBaseListener() {
@@ -40,6 +44,8 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 		this.currentSymbolTable = null;
 		this.block = 0;
 		this.currentVarType = null;
+
+        this.beganGeneratingLabels = false;
 
 		this.outputStack = new Stack<>();
 		this.operatorStack = new Stack<>();
@@ -219,7 +225,7 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 			this.currentSymbolTable = funcSymbolTable;
 
 			//add label to IR
-			this.ir.generateLabel();
+			//this.ir.generateLabel();
 			this.ir.pushFramePointerOntoStack();
 		}
 	}
@@ -451,7 +457,6 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void exitIf_stmt(LittleGrammarParser.If_stmtContext ctx) {
 		if (ctx.stmt_list() != null) {
-			this.ir.generateLabel();
 		}
 	}
 	
@@ -469,7 +474,6 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 	
 	@Override public void exitElse_part(LittleGrammarParser.Else_partContext ctx) {
 		if (ctx.decl() != null) {
-			this.ir.generateLabel();
 		}
 	}
 	
@@ -508,110 +512,51 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 			this.symbolTableList.add(newBlockSymTable);
 			this.currentSymbolTable = newBlockSymTable;
 
-			this.ir.generateLabel();
-
 		}
 	}
 	
 	@Override public void exitWhile_stmt(LittleGrammarParser.While_stmtContext ctx) {
 
 		if (ctx.cond() != null) {
-			this.ir.generateLabel();
 
 		}
 	}
 
 	@Override public void enterEveryRule(ParserRuleContext ctx) { }
 	
-	@Override public void exitEveryRule(ParserRuleContext ctx) { }
+	@Override public void exitEveryRule(ParserRuleContext ctx) {
+	}
 	
-	@Override public void visitTerminal(TerminalNode node) { }
+	@Override public void visitTerminal(TerminalNode node) {
+		//System.out.println(node.getSymbol().getText());
+        String token = node.getSymbol().getText();
+
+        if (token.contains("PROGRAM") && this.beganGeneratingLabels == false) {
+            this.beganGeneratingLabels = true;
+        }
+
+        else if (this.beganGeneratingLabels) {
+        	//System.out.println(token);
+            if (token.contains("FUNCTION")) {
+                this.ir.generateLabel();
+            } else if (token.contains("ENDWHILE")) {
+				this.ir.generateLabel();
+			} else if (token.contains("WHILE")) {
+                this.ir.generateLabel();
+            } else if (token.contains("IF")) {
+                this.ir.generateLabel();
+            } else if (token.contains("ELSE")) {
+                this.ir.generateLabel();
+            } else if (token.contains("PROGRAM")) {
+                this.beganGeneratingLabels = false;
+            }
+        }
+
+		//System.out.println("TERM " + node.getSymbol().getText());
+	}
 	
 	@Override public void visitErrorNode(ErrorNode node) { }
-//	private void primaryHandler(String primary) {
-//		if (this.insideAssignment && !primary.equals("")) {
-//			if (this.expressionStack.size() != 0 && this.expressionStack.peek().matches("[*/+-]") && this.insideExpression) {
-//
-//				String operator = this.expressionStack.pop();
-//
-//				String value1 = this.expressionStack.pop();
-//				String value2 = primary;
-//				ASTNode root;
-//				if (operator.equals("*") || operator.equals("/")) {
-//					root = new ASTNode(ASTNode.ASTNodeType.MulExpr, operator, 20);
-//				} else {
-//					root = new ASTNode(ASTNode.ASTNodeType.AddExpr, operator, 10);
-//				}
-//				ASTNode lc = new ASTNode(ASTNode.ASTNodeType.VarRef, value1, 5);
-//				ASTNode rc = new ASTNode(ASTNode.ASTNodeType.VarRef, value2, 5);
-//				root.leftChild = lc;
-//				root.rightChild = rc;
-//
-//				this.partialExpressionNodes.add(root);
-//
-//
-////				System.out.println("EXPRESSION STACK BEFORE");
-////				for (String s : this.expressionStack) {
-////					System.out.println(s);
-////				}
-////				switch(operator) {
-////					case "*":
-////						if (value1.contains(".") || value2.contains(".")) {
-////							this.ir.generateMultFloat(value1, value2);
-////
-////						}
-////						else {
-////							this.ir.generateMultInt(value1, value2);
-////						}
-////						break;
-////
-////					case "/":
-////						if (value1.contains(".") || value2.contains(".")) {
-////							this.ir.generateDivFloat(value1, value2);
-////						}
-////						else {
-////							this.ir.generateDivInt(value1, value2);
-////						}
-////						break;
-////
-////					case "+":
-////						if (value1.contains(".") || value2.contains(".")) {
-////							this.ir.generateAddFloat(value1, value2);
-////
-////						}
-////						else {
-////							this.ir.generateAddInt(value1, value2);
-////						}
-////						break;
-////					case "-":
-////
-////						if (value1.contains(".") || value2.contains(".")) {
-////							this.ir.generateSubFloat(value1, value2);
-////
-////						}
-////						else {
-////							this.ir.generateSubInt(value1, value2);
-////						}
-////						break;
-////					default:
-////						System.out.println("CTX GET TEXT NOT * / + -");
-////				}
-//////
-//////				System.out.println("EXPRESSION STACK AFTER");
-//////				for (String s : this.expressionStack) {
-//////					System.out.println(s);
-//////				}
-//////
-//////
-////			}
-//			}
-//			else {
-//				this.expressionStack.push(primary);
-//			}
-//
-//
-//		}
-//	}
+
 	private void primaryNodeHandler(String primary) {
 		if (this.insideAssignment && !primary.equals("")) {
 			System.out.printf("\nPushing new primary node: %s\n", primary);
@@ -619,49 +564,5 @@ public class LittleGrammarBaseListener implements LittleGrammarListener {
 			this.outputStack.push(primary);
 		}
 	}
-
-	private void pushOperator(String[] operatorAndPrecendence) {
-		String operator = operatorAndPrecendence[0];
-		int precedence = Integer.parseInt(operatorAndPrecendence[1]);
-
-		while (Integer.parseInt(this.operatorStack.peek()[1]) > precedence && !this.operatorStack.peek()[0].equals("(")) {
-			this.outputStack.push(this.operatorStack.pop()[0]);
-		}
-
-		this.operatorStack.push(new String[]{operator, precedence + ""});
-
-	}
-
-	private int evaluatePostfix(String expr) {
-		Stack<Integer> stack = new Stack<>();
-		String[] tokens = expr.split("\\s+");
-		for (int i = 0; i < tokens.length; i++) {
-			String token = tokens[i];
-			//System.out.printf("TOKEN: %s\n", token);
-			if (token.matches("[*/+-]")) {
-				int number1 = stack.pop();
-				int number2 = stack.pop();
-
-				switch(token) {
-					case "*":
-						stack.push(number2 * number1);
-						break;
-					case "/":
-						stack.push(number2 / number1);
-						break;
-					case "+":
-						stack.push(number2 + number1);
-						break;
-					case "-":
-						stack.push(number2 - number1);
-						break;
-				}
-			} else {
-				stack.push(Integer.parseInt(tokens[i]));
-			}
-		}
-		return stack.pop();
-	}
-
 
 }
