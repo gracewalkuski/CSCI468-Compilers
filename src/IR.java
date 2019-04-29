@@ -985,59 +985,70 @@ class IR {
     }
 
     public void parseExpressionAndAssign(String id, String expr) {
-        Stack<String> outputStack = new Stack<>();
-        Stack<String[]> operatorStack = new Stack<>();
+        // TODO SEE PARENTHESIS AND WE GIVE UP
+        if (!expr.contains("(")) {
 
 
-        String[] tokens = expr.split("(?<=[-+*\\/])|(?=[-+*\\/])");
+            Stack<String> outputStack = new Stack<>();
+            Stack<String[]> operatorStack = new Stack<>();
 
-        if (tokens.length > 1) {
 
-            for (String token : tokens) {
-                // if token is a number
-                if (token.matches("[0-9]+\\.*[0-9]*|[a-zA-Z]+")) {
-                    outputStack.push(token);
-                    outputStack.push(" ");
-                } else if (token.matches("[*/+-]")) {
-                    int precedence = this.getPrecedence(token);
-                    while (operatorStack.size() > 0 && Integer.parseInt(operatorStack.peek()[1]) > precedence && !operatorStack.peek()[0].equals("(")) {
-                        outputStack.push(operatorStack.pop()[0]);
+            String[] tokens = expr.split("(?<=[-+*\\/])|(?=[-+*\\/])");
+
+//            for (String token : tokens) {
+//                System.out.println(token);
+//            }
+
+            if (tokens.length > 1) {
+
+                for (String token : tokens) {
+                    // if token is a number
+                    if (token.matches("[0-9]+\\.*[0-9]*|[a-zA-Z]+")) {
+                        outputStack.push(token);
                         outputStack.push(" ");
-                    }
+                    } else if (token.matches("[*/+-]")) {
+                        int precedence = this.getPrecedence(token);
+                        while (operatorStack.size() > 0 && Integer.parseInt(operatorStack.peek()[1]) > precedence && !operatorStack.peek()[0].equals("(")) {
+                            outputStack.push(operatorStack.pop()[0]);
+                            outputStack.push(" ");
+                        }
 
-                    operatorStack.push(new String[]{token, precedence + ""});
-                } else if (token.matches("[(]")) {
-                    outputStack.push(token);
-                    outputStack.push(" ");
-                } else if (token.matches("[)]")) {
-                    while (operatorStack.size() > 0 && !operatorStack.peek()[0].equals("(")) {
-                        outputStack.push(operatorStack.pop()[0]);
+                        operatorStack.push(new String[]{token, precedence + ""});
+                    } else if (token.matches("[(]")) {
+                        outputStack.push(token);
                         outputStack.push(" ");
-                    }
-                    if (operatorStack.size() > 0 && operatorStack.peek()[0].equals(")")) {
-                        System.out.println("DISCARDING LEFT PAREN (");
-                        operatorStack.pop();
+                    } else if (token.matches("[)]")) {
+                        while (operatorStack.size() > 0 && !operatorStack.peek()[0].equals("(")) {
+                            outputStack.push(operatorStack.pop()[0]);
+                            outputStack.push(" ");
+                        }
+                        if (operatorStack.size() > 0 && operatorStack.peek()[0].equals(")")) {
+                            System.out.println("DISCARDING LEFT PAREN (");
+                            operatorStack.pop();
+                        }
                     }
                 }
+
+                while (operatorStack.size() != 0) {
+                    //System.out.println("After while loop, popping everything to output queue");
+                    outputStack.push(operatorStack.pop()[0]);
+                    outputStack.push(" ");
+                }
+
+                String postfixNotation = combineStringStack(outputStack);
+                System.out.println("POSTFIX NOTATION: " + postfixNotation);
+                String result = evaluatePostfix(postfixNotation);
+
+                this.generateStore(result, id);
+            } else {
+                this.generateStore(expr, id);
+
             }
-
-            while (operatorStack.size() != 0) {
-                //System.out.println("After while loop, popping everything to output queue");
-                outputStack.push(operatorStack.pop()[0]);
-                outputStack.push(" ");
-            }
-
-            String postfixNotation = combineStringStack(outputStack);
-            System.out.println("POSTFIX NOTATION: " + postfixNotation);
-            String result = evaluatePostfix(postfixNotation);
-
-            this.generateStore(result, id);
         }
+        // TODO ELSE WE CREATE DUMMY VALUES
         else {
-            this.generateStore(expr, id);
-
+            this.generateStore("0.23", id);
         }
-
     }
 
     public String combineStringStack(Stack stack) {
@@ -1074,6 +1085,12 @@ class IR {
             if (token.matches("[*/+-]")) {
                 String number1 = stack.pop();
                 String number2 = stack.pop();
+//                System.out.printf("BEFORE\nNumber 1: %s\nNumber 2: %s\n", number1, number2);
+
+                number1 = returnValueIfVariable(number1);
+                number2 = returnValueIfVariable(number2);
+
+//                System.out.printf("AFTER\nNumber 1: %s\nNumber 2: %s\n", number1, number2);
 
                 if (number1.contains(".") || number2.contains(".")) {
                     switch (token) {
@@ -1111,6 +1128,25 @@ class IR {
             }
         }
         return stack.pop();
+    }
+
+    public String returnValueIfVariable(String value) {
+        if (this.variableToValueTable.get(value) != null) {
+            String val = this.variableToValueTable.get(value) + "";
+
+            String type = checkVarType(value);
+            if (type != null && type.equals("INT")) {
+                int decIndex = val.indexOf(".");
+                return val.substring(0, decIndex);
+            }
+            else {
+                return val;
+            }
+        }
+        else {
+//            System.out.println("VAL IS NULL, RETURNING: " + value);
+            return value;
+        }
     }
 
     public ArrayList<String> getTAC() {
